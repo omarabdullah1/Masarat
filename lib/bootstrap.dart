@@ -34,7 +34,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   final enableLogging = Config.get('enableLogging') as bool;
 
 
-  log('Logging is enabled for $enableLogging mode');
+  log('Logging is enabled for$enableLogging mode');
 
   runApp(await builder());
 }
