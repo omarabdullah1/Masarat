@@ -19,8 +19,10 @@ dev_dependencies:
   bloc_test: ^9.1.7
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.1
   mocktail: ^1.0.4
   very_good_analysis: ^6.0.0
+
 
 flutter:
   uses-material-design: true
