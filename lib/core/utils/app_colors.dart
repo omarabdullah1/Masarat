@@ -13,5 +13,6 @@ class AppColors{
   static Color withe    = Colors.white;
   static Color txtColor = HexColor('#272727');
   static Color blue     = HexColor('#11A6A1');
+  static Color gery200     = HexColor('#C4D2CE');
 
 }
