@@ -8,6 +8,8 @@ import 'package:masarat/core/utils/constants.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 
 class ProfessionalTracksApp extends StatelessWidget {
+  const ProfessionalTracksApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
