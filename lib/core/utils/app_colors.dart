@@ -14,5 +14,10 @@ class AppColors{
   static Color txtColor = HexColor('#272727');
   static Color blue     = HexColor('#11A6A1');
   static Color gery200     = HexColor('#C4D2CE');
+  static Color gray   = HexColor('#747877');
+  static Color orange   = HexColor('#F4A01E');
+  static Color lighterGray     = HexColor('#E0E3E1');
+  static const Color moreLighterGray = Color(0xFFF5F5F5);
+
 
 }
