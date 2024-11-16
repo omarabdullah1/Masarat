@@ -24,64 +24,82 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Directionality(
       textDirection: TextDirection.rtl, // Ensure RTL for Arabic
       child: CustomScaffold(
-
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5.w),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Gap(60.h),
-              SvgPicture.asset(
-                AppImage.iconAppWithTextGreen,
-                height: 60.h,
-                semanticsLabel: 'Professional Tracks Logo',
-              ),
+              _buildLogo(),
               Gap(40.h),
-              CustomText(
-                text: 'هل نسيت كلمة السر؟',
-                style: TextStyles.font24GreenBold,
-                textAlign: TextAlign.center,
-              ),
+              _buildTitle(),
               Gap(10.h),
-              CustomText(
-                text:
-                    'من فضلك قم بإدخال البريد الإلكتروني ثم توجه إلى الرابط المرسل\n'
-                    'لإعادة تعيين كلمة السر الخاصة بك',
-                style: TextStyles.font12GrayLight,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.visible,
-              ),
-              Gap(10.h),
-              Align(
-                alignment: Alignment.centerRight,
-                child: CustomText(
-                  text: 'البريد الإلكتروني',
-                  style: TextStyles.font12GrayRegular,
-                ),
-              ),
-              Gap(5.h),
-              AppTextFormField(
-                hintText: "example@email.com",
-                validator: AppValidator.emailValidator,
-                backgroundColor: AppColors.withe,
-              ),
-              Gap(15.h),
-              Padding(
-                padding:   EdgeInsets. symmetric( horizontal: 15.0.w),
-                child: CustomButton(
-                  onTap: () {
-                    // Handle forgot password logic
-                  },
-                  height: 45.h,
-                  labelText: 'إرسال رابط لإعادة تعيين كلمة السر',
-                  textFontSize: 16.sp,
-                  textColor: AppColors.withe,
-                ),
-              ),
+              _buildInstructions(),
+              Gap(20.h),
+              _buildEmailField(),
+              Gap(25.h),
+              _buildSubmitButton(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLogo() {
+    return SvgPicture.asset(
+      AppImage.iconAppWithTextGreen,
+      height: 60.h,
+      semanticsLabel: 'Professional Tracks Logo',
+    );
+  }
+
+  Widget _buildTitle() {
+    return CustomText(
+      text: 'هل نسيت كلمة السر؟',
+      style: TextStyles.font24GreenBold,
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildInstructions() {
+    return CustomText(
+      text:
+      'من فضلك قم بإدخال البريد الإلكتروني ثم توجه إلى الرابط المرسل\n'
+          'لإعادة تعيين كلمة السر الخاصة بك',
+      style: TextStyles.font12GrayLight,
+      textAlign: TextAlign.center,
+      overflow: TextOverflow.visible,
+    );
+  }
+
+  Widget _buildEmailField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          text: 'البريد الإلكتروني',
+          style: TextStyles.font12GrayRegular,
+        ),
+        Gap(5.h),
+        AppTextFormField(
+          hintText: "example@email.com",
+          validator: AppValidator.emailValidator,
+          backgroundColor: AppColors.withe,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return CustomButton(
+      onTap: () {
+        // Handle forgot password logic
+      },
+      height: 45.h,
+      labelText: 'إرسال رابط لإعادة تعيين كلمة السر',
+      textFontSize: 16.sp,
+      textColor: AppColors.withe,
     );
   }
 }
