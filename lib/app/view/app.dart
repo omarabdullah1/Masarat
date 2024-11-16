@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/counter/counter.dart';
-import 'package:masarat/features/auth/presentation/pages/onboading_screen.dart';
+import 'package:masarat/features/auth/presentation/pages/onboarding_screen.dart';
 import 'package:masarat/l10n/l10n.dart';
 
 class App extends StatelessWidget {

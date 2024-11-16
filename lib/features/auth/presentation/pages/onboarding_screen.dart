@@ -10,9 +10,7 @@ import 'package:masarat/core/widgets/custom_button.dart';
 class ProfessionalTracksApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return   Scaffold(
         backgroundColor: const Color(0xFF00A7A0),
         body: SafeArea(
           child: Center(
@@ -120,7 +118,7 @@ class ProfessionalTracksApp extends StatelessWidget {
             ),
           ),
         ),
-      ),
+
     );
   }
 
