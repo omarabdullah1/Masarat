@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/constants.dart';
 
@@ -39,7 +40,7 @@ class CustomButton extends StatelessWidget {
         backgroundColor: buttonColor ?? AppColors.primary,
 
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(14.r),
             side: BorderSide(color: borderColor ??AppColors.primary, width: borderWidth),
           ),
 
@@ -55,7 +56,7 @@ class CustomButton extends StatelessWidget {
               style: TextStyle(
                   color: textColor,
                   fontSize: textFontSize,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeightHelper. bold,
                   fontFamily: Constants.fontName),
             ),
           ),
