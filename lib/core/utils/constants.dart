@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class Constants{
+  static const   String fontName ='Montserrat';
   static void showDialogError({required BuildContext context,required String  msg ,}){
     showDialog(
         context: context,
