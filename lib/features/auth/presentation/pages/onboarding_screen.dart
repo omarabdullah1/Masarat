@@ -13,7 +13,7 @@ class ProfessionalTracksApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF00A7A0),
+      backgroundColor: AppColors.primary,
       body: SafeArea(
         child: Center(
           child: Column(
