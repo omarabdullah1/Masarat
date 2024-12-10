@@ -17,7 +17,7 @@ class CustomButton extends StatelessWidget {
     this.width,
     this.height,
     this.icon,
-    this.labelText2, this.borderColor, this.borderWidth=0,
+    this.labelText2, this.borderColor, this.borderWidth=0, this.fontWeight,   this.radius,
   });
 
   final void Function()? onTap;
@@ -31,21 +31,24 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final double  borderWidth;
   final IconData? icon;
+  final double? radius;
+
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onTap,
+
       style: ElevatedButton.styleFrom(
         backgroundColor: buttonColor ?? AppColors.primary,
-
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14.r),
+            borderRadius: BorderRadius.circular(radius?? 14.r),
             side: BorderSide(color: borderColor ??AppColors.primary, width: borderWidth),
           ),
 
         fixedSize: Size(width ?? 318.w, height ?? 57.h),
-      ),
+       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -56,8 +59,8 @@ class CustomButton extends StatelessWidget {
               style: TextStyle(
                   color: textColor,
                   fontSize: textFontSize,
-                  fontWeight: FontWeightHelper. bold,
-                  fontFamily: Constants.fontName),
+                  fontWeight: fontWeight??FontWeightHelper. bold,
+                  fontFamily: Constants.fontName,),
             ),
           ),
           if (labelText2 != null) ...[
@@ -66,8 +69,9 @@ class CustomButton extends StatelessWidget {
               style: TextStyle(
                   color: textColor,
                   fontSize: textFontSize,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: Constants.fontName),
+                  fontWeight:fontWeight?? FontWeight.w500,
+                  fontFamily: Constants.fontName,
+              ),
             ),
           ],
         ],

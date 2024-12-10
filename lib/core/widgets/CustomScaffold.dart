@@ -6,48 +6,57 @@ import 'package:masarat/core/utils/assets_mangment.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class CustomScaffold extends StatelessWidget {
-  final Widget body;
-  final String? title;
-  final bool? haveAppBar;
-  final Color? backgroundColor;
-  final List<Widget>? actions;
-  final Widget? drawer;
-  final bool showBackButton;
-  final void Function()? onTap;
-  final Widget? floatingActionButton;
-  final Widget? bottomNavigationBar;
 
   const CustomScaffold({
-    Key? key,
+    super.key,
     required this.body,
     this.title,
-    this.backgroundColor  ,
+    this.backgroundColor,
     this.drawer,
     this.actions = const [],
     this.showBackButton = true,
     this.onTap,
     this.floatingActionButton,
-    this.bottomNavigationBar, this.haveAppBar,
-  }) : super(key: key);
+    this.bottomNavigationBar,
+    this.haveAppBar,
+    this.backgroundColorAppColor,
+    this.drawerIconColor,    this.centerTitle=true, this.titleColor,
+  });
+  final Widget body;
+  final String? title;
+  final bool? haveAppBar;
+  final Color? backgroundColor;
+  final Color? titleColor;
+  final Color? drawerIconColor;
+  final Color? backgroundColorAppColor;
+  final List<Widget>? actions;
+  final Widget? drawer;
+  final bool showBackButton;
+  final bool centerTitle;
+  final void Function()? onTap;
+  final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
 
   @override
   Widget build(BuildContext context) {
     final canGoBack = Navigator.of(context).canPop();
 
     return Scaffold(
-      backgroundColor: backgroundColor??AppColors.background,
-      appBar: haveAppBar!=null?PreferredSize(
-        preferredSize: Size.fromHeight(70.h),
-        child: AppBar(
+      backgroundColor: backgroundColor ?? AppColors.background,
+      appBar: haveAppBar != null ? PreferredSize(
+        preferredSize: Size.fromHeight(40.h),
 
+        child: AppBar(
+          elevation: 0,
+centerTitle:  centerTitle,
           automaticallyImplyLeading: false,
           leading: _buildLeading(context, canGoBack),
           title: _buildTitle(context),
           actions: actions,
-          backgroundColor: Colors.white,
-          elevation: 4, // Slight elevation for better visual appeal
+          backgroundColor: backgroundColorAppColor ?? Colors.white,
+
         ),
-      ):null,
+      ) : null,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -64,21 +73,26 @@ class CustomScaffold extends StatelessWidget {
   Widget? _buildLeading(BuildContext context, bool canGoBack) {
     if (drawer != null) {
       return Builder(
-        builder: (context) => IconButton(
-          icon: SvgPicture.asset(
-            AppImage.menuIcon,
-            height: 20.h,
-            width: 20.w,
-          ),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
+        builder: (context) =>
+            IconButton(
+              icon: SvgPicture.asset(
+                AppImage.menuIcon,
+                height: 30.h,
+                width: 30.w,
+                color:drawerIconColor,
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
       );
     } else if (showBackButton || canGoBack) {
       return IconButton(
         onPressed: () => Navigator.of(context).pop(),
         icon: Icon(
           Icons.arrow_back_ios,
-          color: Theme.of(context).iconTheme.color,
+          color: Theme
+              .of(context)
+              .iconTheme
+              .color,
           size: 20.sp,
         ),
       );
@@ -98,10 +112,11 @@ class CustomScaffold extends StatelessWidget {
         children: [
           CustomText(
             text: title!,
-            style: Theme.of(context)
+            style: Theme
+                .of(context)
                 .textTheme
                 .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold),
+                ?.copyWith(fontWeight: FontWeight.bold,color: titleColor),
           ),
           const SizedBox(width: 4),
           const Icon(Icons.keyboard_arrow_down),
@@ -109,7 +124,8 @@ class CustomScaffold extends StatelessWidget {
       )
           : Text(
         title!,
-        style: Theme.of(context)
+        style: Theme
+            .of(context)
             .textTheme
             .titleLarge
             ?.copyWith(fontWeight: FontWeight.bold),

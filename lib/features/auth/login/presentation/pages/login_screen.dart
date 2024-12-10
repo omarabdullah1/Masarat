@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:masarat/config/app_route.dart';
+import 'package:masarat/config/app_router.dart';
 import 'package:masarat/core/constants/validators.dart';
 import 'package:masarat/core/theme/styles.dart';
 import 'package:masarat/core/utils/app_colors.dart';
@@ -15,7 +18,8 @@ import 'package:masarat/features/auth/login/presentation/pages/forgot_password_s
 import 'package:masarat/features/auth/signup/presentation/pages/sign_up_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({required this.isTrainer, super.key});
+   final bool isTrainer;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -177,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return CustomButton(
       height: 45.h,
       onTap: () {
-        // Handle login logic
+         context.go(AppRoute.trainingCoursesTrainer);
       },
       labelText: 'تسجيل الدخول',
       textFontSize: 16.sp,

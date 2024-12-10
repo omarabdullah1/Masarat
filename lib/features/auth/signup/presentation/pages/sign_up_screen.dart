@@ -27,6 +27,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       textDirection: TextDirection.rtl, // Arabic RTL support
       child: CustomScaffold(
         backgroundColor: AppColors.background,
+        haveAppBar: true,
+
         body: Column(
           children: [
             // Fixed Header
@@ -42,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Gap(20.h),
                       _buildFormFields(),
                       Gap(20.h),
-                      _buildSignUpButton(),
+                      _buildEditButton(),
                     ],
                   ),
                 ),
@@ -121,7 +123,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     Widget? suffixIcon,
     bool? enabled,
     bool isObscureText = false,
-  }) {
+  })
+  {
     return Padding(
       padding: EdgeInsets.only(bottom: 10.h),
       child: Column(
@@ -184,7 +187,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildSignUpButton() {
+  Widget _buildEditButton() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: CustomButton(

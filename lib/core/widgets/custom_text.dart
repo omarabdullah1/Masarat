@@ -18,12 +18,15 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: style,
-      textAlign: textAlign ?? TextAlign.start,
-      maxLines: maxLines,
-      overflow: overflow ?? TextOverflow.ellipsis,
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        text,
+        style: style,
+        textAlign: textAlign ?? TextAlign.start,
+        maxLines: maxLines,
+        overflow: overflow ?? TextOverflow.ellipsis,
+      ),
     );
   }
 }

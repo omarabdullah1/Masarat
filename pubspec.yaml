@@ -14,11 +14,16 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.19.0
-  flutter_svg: ^2.0.14
+  flutter_svg: ^2.0.16
   # adapting screen and font size
   flutter_screenutil: ^5.9.3
   gap: ^3.0.1
-
+  go_router: ^14.6.2
+  dropdown_button2: ^3.0.0-beta.20
+  youtube_player_flutter: ^9.1.1
+  flutter_inappwebview: ^6.1.5
+  cached_network_image: ^3.4.1
+  flutter_blurhash: ^0.8.2
 dev_dependencies:
   bloc_test: ^9.1.7
   flutter_test:
@@ -28,12 +33,13 @@ dev_dependencies:
   very_good_analysis: ^6.0.0
 
 
+
 flutter:
   uses-material-design: true
   generate: true
   assets:
     - assets/fonts/
-    #- assets/images/
+    - assets/images/
     - assets/icons/
   fonts:
     - family: Montserrat
