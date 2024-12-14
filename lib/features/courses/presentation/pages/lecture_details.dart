@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/core/utils/app_colors.dart';
+import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class LectureDetailsScreen extends StatefulWidget {
@@ -45,34 +46,39 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("المحاضرة الأولى: أساسيات المحاسبة"),
-        backgroundColor: Colors.teal,
-      ),
+    return CustomScaffold(
+      haveAppBar: true,
+      backgroundColorAppColor: AppColors.background,
+      backgroundColor: AppColors.background,
+      drawerIconColor: AppColors.primary,
+    title:"المحاضرة الأولى: أساسيات المحاسبة" ,
+      
       body: Column(
         children: [
           // YouTube Player
-          YoutubePlayer(
-            controller: _controller,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.teal,
-            progressColors: const ProgressBarColors(
-              playedColor: Colors.teal,
-              handleColor: Colors.tealAccent,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: YoutubePlayer(
+              controller: _controller,
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: Colors.teal,
+              progressColors: const ProgressBarColors(
+                playedColor: Colors.teal,
+                handleColor: Colors.tealAccent,
+              ),
+              onReady: () {
+                setState(() {
+                  _isPlayerReady = true;
+                });
+              },
+              onEnded: (data) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Video has ended!'),
+                  ),
+                );
+              },
             ),
-            onReady: () {
-              setState(() {
-                _isPlayerReady = true;
-              });
-            },
-            onEnded: (data) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Video has ended!'),
-                ),
-              );
-            },
           ),
           const SizedBox(height: 10),
           // Download Button

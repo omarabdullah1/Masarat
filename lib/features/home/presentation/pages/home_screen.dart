@@ -121,7 +121,7 @@ class HomeScreen extends StatelessWidget {
                   buttonColor: AppColors.withe,
                   textColor: AppColors.primary,
                   onTap: () {
-                 context.go('/home/myLibrary');
+                    context.goNamed(AppRoute.myLibrary);
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => MyLibrary(),))
                   },
                   textFontSize: 14.sp,

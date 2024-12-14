@@ -181,8 +181,11 @@ class _LoginScreenState extends State<LoginScreen> {
     return CustomButton(
       height: 45.h,
       onTap: () {
-         context.go(AppRoute.trainingCoursesTrainer);
-      },
+        if (widget.isTrainer) {
+          context.go(AppRoute.trainingCoursesTrainer);
+        }else{
+          context.go(AppRoute.home);
+        }     },
       labelText: 'تسجيل الدخول',
       textFontSize: 16.sp,
       textColor: AppColors.withe,

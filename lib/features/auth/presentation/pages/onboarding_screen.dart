@@ -70,7 +70,7 @@ class ProfessionalTracksApp extends StatelessWidget {
                       textFontSize: 22.sp,
                       borderWidth: 2.w,
                       onTap: () {
-                        print('Ddddddddddddddddd');
+
                         context.go(AppRoute. login,extra: true);
 
                       },
@@ -80,7 +80,9 @@ class ProfessionalTracksApp extends StatelessWidget {
                       labelText: 'متدرب',
                       buttonColor: AppColors.withe,
                       textColor: AppColors.primary,
-                      onTap: () {},
+                      onTap: () {
+                        context.go(AppRoute. login,extra: false);
+                      },
                       textFontSize: 22.sp,
                     ),
                     Gap(16.h),

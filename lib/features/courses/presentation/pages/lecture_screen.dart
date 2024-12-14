@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/utils/app_colors.dart';
+import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class  LectureScreen extends StatelessWidget {
@@ -10,18 +11,16 @@ class  LectureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.teal),
-          onPressed: () => Navigator.pop(context),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
+    return CustomScaffold(
+      haveAppBar: true,
+      backgroundColorAppColor: AppColors.background,
+      backgroundColor: AppColors.background,
+      drawerIconColor: AppColors.primary,
+
+
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding:   EdgeInsets.all(16.0.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
