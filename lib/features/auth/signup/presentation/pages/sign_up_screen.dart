@@ -6,13 +6,13 @@ import 'package:masarat/core/constants/validators.dart';
 import 'package:masarat/core/theme/styles.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/assets_mangment.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/app_text_form_field.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -27,6 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       textDirection: TextDirection.rtl, // Arabic RTL support
       child: CustomScaffold(
         backgroundColor: AppColors.background,
+        haveAppBar: true,
         body: Column(
           children: [
             // Fixed Header
@@ -37,12 +38,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.w),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Gap(20.h),
                       _buildFormFields(),
                       Gap(20.h),
-                      _buildSignUpButton(),
+                      _buildEditButton(),
                     ],
                   ),
                 ),
@@ -71,8 +71,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
         Gap(10.h),
         CustomText(
-          text:
-              'من فضلك قم بإدخال جميع البيانات\nالمطلوبة حتى تتمكن من إنشاء حساب بنجاح',
+          text: 'من فضلك قم بإدخال جميع البيانات\n'
+              'المطلوبة حتى تتمكن من إنشاء حساب بنجاح',
           style: TextStyles.font12GrayLight,
           textAlign: TextAlign.center,
         ),
@@ -85,24 +85,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Column(
       children: [
         _buildFormField(
-            label: 'الاسم بالكامل',
-            hintText: 'أدخل الاسم الكامل',
-            validator: AppValidator.emptyValidator),
-        _buildFormField(
-            label: 'رقم التواصل',
-            hintText: 'أدخل رقم التواصل',
-            validator: AppValidator.phoneValidator),
-        _buildFormField(
-            label: 'الدرجة العلمية',
-            hintText: 'أدخل الدرجة العلمية',
-            validator: AppValidator.emptyValidator,
-            suffixIcon:IconButton(onPressed: (){}, icon: Icon(Icons.upload),),
-          enabled: false
+          label: 'الاسم بالكامل',
+          hintText: 'أدخل الاسم الكامل',
+          validator: AppValidator.emptyValidator,
         ),
         _buildFormField(
-            label: 'الهوية',
-            hintText: 'أدخل رقم الهوية',
-            validator: AppValidator.emptyValidator),
+          label: 'رقم التواصل',
+          hintText: 'أدخل رقم التواصل',
+          validator: AppValidator.phoneValidator,
+        ),
+        _buildFormField(
+          label: 'الدرجة العلمية',
+          hintText: 'أدخل الدرجة العلمية',
+          validator: AppValidator.emptyValidator,
+          suffixIcon: IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.upload),
+          ),
+          enabled: false,
+        ),
+        _buildFormField(
+          label: 'الهوية',
+          hintText: 'أدخل رقم الهوية',
+          validator: AppValidator.emptyValidator,
+        ),
         _buildPasswordField(),
         _buildFormField(
           label: 'تأكيد كلمة السر',
@@ -138,8 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           AppTextFormField(
             hintText: hintText,
             validator: validator,
-            enabled:enabled ,
-
+            enabled: enabled,
             backgroundColor: AppColors.withe,
             isObscureText: isObscureText,
             suffixIcon: suffixIcon,
@@ -164,7 +169,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           Gap(5.h),
           AppTextFormField(
-            hintText: "أدخل كلمة السر",
+            hintText: 'أدخل كلمة السر',
             isObscureText: isPasswordObscured,
             validator: AppValidator.passwordValidator,
             backgroundColor: AppColors.withe,
@@ -184,7 +189,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildSignUpButton() {
+  Widget _buildEditButton() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: CustomButton(

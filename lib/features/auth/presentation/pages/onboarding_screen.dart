@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/assets_mangment.dart';
 import 'package:masarat/core/utils/constants.dart';
@@ -66,14 +68,18 @@ class ProfessionalTracksApp extends StatelessWidget {
                       borderColor: AppColors.withe,
                       textFontSize: 22.sp,
                       borderWidth: 2.w,
-                      onTap: () {},
+                      onTap: () {
+                        context.go(AppRoute.login, extra: true);
+                      },
                     ),
                     Gap(16.h),
                     CustomButton(
                       labelText: 'متدرب',
                       buttonColor: AppColors.withe,
                       textColor: AppColors.primary,
-                      onTap: () {},
+                      onTap: () {
+                        context.go(AppRoute.login, extra: false);
+                      },
                       textFontSize: 22.sp,
                     ),
                     Gap(16.h),

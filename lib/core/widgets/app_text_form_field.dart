@@ -5,6 +5,21 @@ import 'package:masarat/core/theme/styles.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 
 class AppTextFormField extends StatelessWidget {
+  const AppTextFormField({
+    required this.hintText,
+    required this.validator,
+    super.key,
+    this.contentPadding,
+    this.focusedBorder,
+    this.enabledBorder,
+    this.inputTextStyle,
+    this.hintStyle,
+    this.isObscureText,
+    this.suffixIcon,
+    this.backgroundColor,
+    this.controller,
+    this.enabled,
+  });
   final EdgeInsetsGeometry? contentPadding;
   final InputBorder? focusedBorder;
   final InputBorder? enabledBorder;
@@ -17,25 +32,11 @@ class AppTextFormField extends StatelessWidget {
   final Color? backgroundColor;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
-  const AppTextFormField({
-    super.key,
-    this.contentPadding,
-    this.focusedBorder,
-    this.enabledBorder,
-    this.inputTextStyle,
-    this.hintStyle,
-    required this.hintText,
-    this.isObscureText,
-    this.suffixIcon,
-    this.backgroundColor,
-    this.controller,
-    required this.validator, this.enabled,
-  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      enabled:enabled ,
+      enabled: enabled,
       controller: controller,
       decoration: InputDecoration(
         isDense: true,
@@ -43,22 +44,22 @@ class AppTextFormField extends StatelessWidget {
             EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
         focusedBorder: focusedBorder ??
             OutlineInputBorder(
-              borderSide:   BorderSide(
-                color: AppColors . primary,
+              borderSide: BorderSide(
+                color: AppColors.primary,
                 width: 1.3,
               ),
               borderRadius: BorderRadius.circular(12.r),
             ),
         enabledBorder: enabledBorder ??
             OutlineInputBorder(
-              borderSide:   BorderSide(
+              borderSide: BorderSide(
                 color: AppColors.lighterGray,
                 width: 1.3,
               ),
               borderRadius: BorderRadius.circular(12.r),
             ),
         disabledBorder: OutlineInputBorder(
-          borderSide:   BorderSide(
+          borderSide: BorderSide(
             color: AppColors.lighterGray,
             width: 1.3,
           ),

@@ -1,1 +1,1 @@
-export 'view/app.dart';
+export 'view/masarat_app.dart';
