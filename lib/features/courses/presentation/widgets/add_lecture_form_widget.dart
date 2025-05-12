@@ -2,23 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 
 class AddLectureFormWidget extends StatelessWidget {
+  const AddLectureFormWidget({
+    required this.courseNameController,
+    required this.contentController,
+    required this.sourceController,
+    required this.addLecture,
+    super.key,
+  });
   final TextEditingController courseNameController;
   final TextEditingController contentController;
   final TextEditingController sourceController;
   final VoidCallback addLecture;
 
-  const AddLectureFormWidget({
-    Key? key,
-    required this.courseNameController,
-    required this.contentController,
-    required this.sourceController,
-    required this.addLecture,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

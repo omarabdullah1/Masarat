@@ -1,17 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/assets_mangment.dart';
-import 'package:masarat/core/widgets/CustomDrawer.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
+import 'package:masarat/core/widgets/custom_drawer.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
+import 'package:masarat/core/widgets/custom_text.dart';
 
-import '../../../../core/widgets/custom_text.dart';
-
-class  PricingScreen extends StatelessWidget {
+class PricingScreen extends StatelessWidget {
   const PricingScreen({super.key});
 
   @override
@@ -22,7 +23,7 @@ class  PricingScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       drawerIconColor: AppColors.primary,
       drawer: const CustomDrawer(),
-      body:   SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -42,10 +43,11 @@ class  PricingScreen extends StatelessWidget {
               style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            Gap( 8.h),
+            Gap(8.h),
             Text(
-              'هذه الباقات مخصصة للخبرة التي تتراوح بين سنة كحد أدنى إلى خمس سنوات خبرة',
-              style: TextStyle(fontSize: 12.sp,color:AppColors.gray),
+              'هذه الباقات مخصصة للخبرة التي تتراوح بين سنة كحد أدنى '
+              'إلى خمس سنوات خبرة',
+              style: TextStyle(fontSize: 12.sp, color: AppColors.gray),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20.h),
@@ -87,78 +89,78 @@ class  PricingScreen extends StatelessWidget {
 }
 
 class PackageCard extends StatelessWidget {
-  final String price;
-  final List<String> benefits;
-
-  const PackageCard({super.key,
+  const PackageCard({
     required this.price,
     required this.benefits,
+    super.key,
   });
+  final String price;
+  final List<String> benefits;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-
       children: [
-
-
         Badge(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-
-          alignment:  Alignment .   topCenter,
-          backgroundColor:Colors.orange ,
-          offset: Offset(-55.w, -5) ,
-
-          label:Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: Colors.orange,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            'الأكثر مبيعاً',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.bold,
+          alignment: Alignment.topCenter,
+          backgroundColor: Colors.orange,
+          offset: Offset(-55.w, -5),
+          label: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'الأكثر مبيعاً',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ) ,
           child: Container(
-
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.r),
-                border: Border.all(color: AppColors.lighterGray)),
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(color: AppColors.lighterGray),
+            ),
             child: Padding(
-              padding:   EdgeInsets.all(16.0.r),
-
+              padding: EdgeInsets.all(16.0.r),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(child: SvgPicture.asset( AppImage.twoStar  )),
-                    Text(
-                      'باقة سيرة ذاتية وصفحة لينكدإن - مبتدئ الخبرة',
-
-                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-                      textDirection: TextDirection.rtl,
-
-
-                    ),
-                    Gap(2.h),
-                    Divider(
-                      height: 2.h,
-                      color: AppColors.lighterGray,
-                      endIndent: 57,
-                    ),
-                    SizedBox(height: 8.h),
+                  Center(child: SvgPicture.asset(AppImage.twoStar)),
+                  Text(
+                    'باقة سيرة ذاتية وصفحة لينكدإن - مبتدئ الخبرة',
+                    style:
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    textDirection: TextDirection.rtl,
+                  ),
+                  Gap(2.h),
+                  Divider(
+                    height: 2.h,
+                    color: AppColors.lighterGray,
+                    endIndent: 57,
+                  ),
+                  SizedBox(height: 8.h),
                   Text.rich(
                     TextSpan(
                       text: price,
-                      style:   TextStyle(fontSize: 28.sp, color: AppColors.primary, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 28.sp,
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                       children: [
-                          TextSpan(
+                        TextSpan(
                           text: ' ريال',
-                          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.normal,color: Colors.black),
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     ),
@@ -170,35 +172,41 @@ class PackageCard extends StatelessWidget {
                     color: AppColors.lighterGray,
                     endIndent: 57,
                   ),
-                    SizedBox(height: 3.h),
+                  SizedBox(height: 3.h),
                   ...benefits.map(
-                        (benefit) => Row(
+                    (benefit) => Row(
                       textDirection: TextDirection.rtl,
                       children: [
-                          Icon(Icons.check, color: AppColors.primary, size: 20.sp),
-                          SizedBox(width: 8.w),
+                        Icon(
+                          Icons.check,
+                          color: AppColors.primary,
+                          size: 20.sp,
+                        ),
+                        SizedBox(width: 8.w),
                         Expanded(
                           child: Text(
                             benefit,
                             textDirection: TextDirection.rtl,
-                            style:   TextStyle(fontSize: 12.sp, color: AppColors.gray),
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: AppColors.gray,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                    SizedBox(height: 20.h),
-
+                  SizedBox(height: 20.h),
                   CustomButton(
                     height: 27.h,
                     radius: 58.r,
                     labelText: 'اشترك الآن',
                     buttonColor: AppColors.withe,
                     textColor: AppColors.primary,
-                    borderColor:AppColors.primary ,
+                    borderColor: AppColors.primary,
                     onTap: () {},
                     textFontSize: 14.sp,
-                    fontWeight:FontWeightHelper.light,
+                    fontWeight: FontWeightHelper.light,
                   ),
                 ],
               ),

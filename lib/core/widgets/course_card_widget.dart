@@ -6,25 +6,32 @@ import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
-class CourseCard extends StatelessWidget { // Optional text for the secondary action
+class CourseCard extends StatelessWidget {
+  // Optional text for the secondary action
 
-  const  CourseCard({super.key,
+  const CourseCard({
     required this.title,
     required this.hours,
     required this.lectures,
-      this.progress,
-    required this.actions, this.price,this.image, this.onSecondaryAction,
-    this.secondaryActionText, this.havePrice=false,
+    required this.actions,
+    super.key,
+    this.progress,
+    this.price,
+    this.image,
+    this.onSecondaryAction,
+    this.secondaryActionText,
+    this.havePrice = false,
   });
   final String title;
   final String hours;
   final String? image;
   final String lectures;
-  final double ?progress;
-    final String? price;
-    final bool  havePrice;
+  final double? progress;
+  final String? price;
+  final bool havePrice;
   final List<Widget> actions;
-  final VoidCallback? onSecondaryAction; // Optional secondary action (e.g., "Watch First Lecture")
+  final VoidCallback? onSecondaryAction;
+  // Optional secondary action (e.g., "Watch First Lecture")
   final String? secondaryActionText;
 
   @override
@@ -48,65 +55,74 @@ class CourseCard extends StatelessWidget { // Optional text for the secondary ac
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(text:
-                      title,
+                      CustomText(
+                        text: title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 12.sp,
                         ),
                       ),
                       Gap(5.h),
-                      if(havePrice )...[
-                        CustomText(text:
-                        price!,
+                      if (havePrice) ...[
+                        CustomText(
+                          text: price!,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12.sp,
                           ),
                         ),
                       ],
-
                       Gap(8.h),
-                      CustomText(text: hours, style: TextStyle(
+                      CustomText(
+                        text: hours,
+                        style: TextStyle(
                           color: AppColors.gery200,
                           fontWeight: FontWeightHelper.light,
-                          fontSize: 10.sp,)),
-                      CustomText(text:lectures,
-                          style: TextStyle(
-                              color: AppColors.gery200,
-                              fontWeight: FontWeightHelper.light,
-                              fontSize: 10.sp)),
-                     if(progress!= null)...[ Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomText(
-                            text: 'مستوي الاكتمال',
-                            style: TextStyle(
+                          fontSize: 10.sp,
+                        ),
+                      ),
+                      CustomText(
+                        text: lectures,
+                        style: TextStyle(
+                          color: AppColors.gery200,
+                          fontWeight: FontWeightHelper.light,
+                          fontSize: 10.sp,
+                        ),
+                      ),
+                      if (progress != null) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomText(
+                              text: 'مستوي الاكتمال',
+                              style: TextStyle(
                                 color: AppColors.gery200,
                                 fontWeight: FontWeightHelper.light,
-                                fontSize: 10.sp),
-                          ),
-                          Text(
-                            '${(progress! * 100).toInt()}%',
-                            style:
-                                const TextStyle(fontSize: 12, color: Colors.teal),
-                          ),
-                        ],
-                      ),],
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                            Text(
+                              '${(progress! * 100).toInt()}%',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.teal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                       Gap(8.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: actions, // Render dynamic actions.
                       ),
-
-
                       Gap(4.h),
                     ],
                   ),
                 ),
                 Gap(16.w),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(8),
                   child: Image.network(
                     'https://www.gstatic.com/earth/social/00_generic_facebook-001.jpg',
                     // Replace with your image URL
@@ -122,15 +138,13 @@ class CourseCard extends StatelessWidget { // Optional text for the secondary ac
               CustomButton(
                 height: 27.h,
                 radius: 58.r,
-                labelText:secondaryActionText!,
+                labelText: secondaryActionText!,
                 buttonColor: AppColors.background,
-                textColor: AppColors.gray ,
+                textColor: AppColors.gray,
                 onTap: onSecondaryAction,
                 textFontSize: 10.sp,
-                fontWeight:FontWeightHelper.light,
+                fontWeight: FontWeightHelper.light,
               ),
-
-
             ],
           ],
         ),

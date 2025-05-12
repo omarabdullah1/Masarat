@@ -6,10 +6,9 @@ import 'package:masarat/core/utils/assets_mangment.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class CustomScaffold extends StatelessWidget {
-
   const CustomScaffold({
-    super.key,
     required this.body,
+    super.key,
     this.title,
     this.backgroundColor,
     this.drawer,
@@ -20,7 +19,9 @@ class CustomScaffold extends StatelessWidget {
     this.bottomNavigationBar,
     this.haveAppBar,
     this.backgroundColorAppColor,
-    this.drawerIconColor,    this.centerTitle=true, this.titleColor,
+    this.drawerIconColor,
+    this.centerTitle = true,
+    this.titleColor,
   });
   final Widget body;
   final String? title;
@@ -43,20 +44,20 @@ class CustomScaffold extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: backgroundColor ?? AppColors.background,
-      appBar: haveAppBar != null ? PreferredSize(
-        preferredSize: Size.fromHeight(40.h),
-
-        child: AppBar(
-          elevation: 0,
-centerTitle:  centerTitle,
-          automaticallyImplyLeading: false,
-          leading: _buildLeading(context, canGoBack),
-          title: _buildTitle(context),
-          actions: actions,
-          backgroundColor: backgroundColorAppColor ?? Colors.white,
-
-        ),
-      ) : null,
+      appBar: haveAppBar != null
+          ? PreferredSize(
+              preferredSize: Size.fromHeight(40.h),
+              child: AppBar(
+                elevation: 0,
+                centerTitle: centerTitle,
+                automaticallyImplyLeading: false,
+                leading: _buildLeading(context, canGoBack),
+                title: _buildTitle(context),
+                actions: actions,
+                backgroundColor: backgroundColorAppColor ?? Colors.white,
+              ),
+            )
+          : null,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -73,26 +74,24 @@ centerTitle:  centerTitle,
   Widget? _buildLeading(BuildContext context, bool canGoBack) {
     if (drawer != null) {
       return Builder(
-        builder: (context) =>
-            IconButton(
-              icon: SvgPicture.asset(
-                AppImage.menuIcon,
-                height: 30.h,
-                width: 30.w,
-                color:drawerIconColor,
-              ),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
+        builder: (context) => IconButton(
+          icon: SvgPicture.asset(
+            AppImage.menuIcon,
+            height: 30.h,
+            width: 30.w,
+            colorFilter: drawerIconColor != null
+                ? ColorFilter.mode(drawerIconColor!, BlendMode.srcIn)
+                : null,
+          ),
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        ),
       );
     } else if (showBackButton || canGoBack) {
       return IconButton(
         onPressed: () => Navigator.of(context).pop(),
         icon: Icon(
           Icons.arrow_back_ios,
-          color: Theme
-              .of(context)
-              .iconTheme
-              .color,
+          color: Theme.of(context).iconTheme.color,
           size: 20.sp,
         ),
       );
@@ -108,28 +107,26 @@ centerTitle:  centerTitle,
       onTap: onTap,
       child: onTap != null
           ? Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CustomText(
-            text: title!,
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold,color: titleColor),
-          ),
-          const SizedBox(width: 4),
-          const Icon(Icons.keyboard_arrow_down),
-        ],
-      )
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomText(
+                  text: title!,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: titleColor,
+                      ),
+                ),
+                const SizedBox(width: 4),
+                const Icon(Icons.keyboard_arrow_down),
+              ],
+            )
           : Text(
-        title!,
-        style: Theme
-            .of(context)
-            .textTheme
-            .titleLarge
-            ?.copyWith(fontWeight: FontWeight.bold),
-      ),
+              title!,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
     );
   }
 }

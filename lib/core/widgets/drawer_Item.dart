@@ -6,42 +6,39 @@ import 'package:masarat/core/utils/constants.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class DrawerItem extends StatelessWidget {
+  const DrawerItem({
+    required this.title,
+    required this.onTap,
+    super.key,
+  });
   final String title;
 
   final VoidCallback onTap;
 
-  const DrawerItem({
-    Key? key,
-    required this.title,
-
-    required this.onTap,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return 
-    InkWell(
-
+    return InkWell(
       onTap: onTap,
-   child:
-   Padding(
-     padding:   EdgeInsets.only( right:24.w,top: 5.h ),
-     child: Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: 
-     SizedBox(
-      height: 30.h,
-         child: CustomText(
-          textAlign: TextAlign.start,
-          text: title,style: TextStyle(
-            color: AppColors.withe,
-            fontSize: 19.sp,
-            fontWeight: FontWeightHelper.regular ,
-            fontFamily: Constants.fontName,),),
-        // leading: Icon(icon,color: AppColors.drawerIconColor),
-     
-      ),),
-   ),
-       );
+      child: Padding(
+        padding: EdgeInsets.only(right: 24.w, top: 5.h),
+        child: Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: SizedBox(
+            height: 30.h,
+            child: CustomText(
+              textAlign: TextAlign.start,
+              text: title,
+              style: TextStyle(
+                color: AppColors.withe,
+                fontSize: 19.sp,
+                fontWeight: FontWeightHelper.regular,
+                fontFamily: Constants.fontName,
+              ),
+            ),
+            // leading: Icon(icon,color: AppColors.drawerIconColor),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:masarat/features/courses/presentation/widgets/lecture_item_widget.dart';
 
 class LectureListWidget extends StatelessWidget {
-
   const LectureListWidget({
-    super.key,
     required this.lectures,
     required this.onDeleteLecture,
+    super.key,
   });
   final List<String> lectures;
-  final Function(int) onDeleteLecture;
+  final void Function(int) onDeleteLecture;
 
   @override
   Widget build(BuildContext context) {

@@ -6,9 +6,9 @@ import 'package:masarat/core/constants/validators.dart';
 import 'package:masarat/core/theme/styles.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/assets_mangment.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/app_text_form_field.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -27,7 +27,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Gap(60.h),
               _buildLogo(),
@@ -64,8 +63,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Widget _buildInstructions() {
     return CustomText(
-      text:
-      'من فضلك قم بإدخال البريد الإلكتروني ثم توجه إلى الرابط المرسل\n'
+      text: 'من فضلك قم بإدخال البريد الإلكتروني ثم توجه إلى الرابط المرسل\n'
           'لإعادة تعيين كلمة السر الخاصة بك',
       style: TextStyles.font12GrayLight,
       textAlign: TextAlign.center,
@@ -83,7 +81,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
         Gap(5.h),
         AppTextFormField(
-          hintText: "example@email.com",
+          hintText: 'example@email.com',
           validator: AppValidator.emailValidator,
           backgroundColor: AppColors.withe,
         ),

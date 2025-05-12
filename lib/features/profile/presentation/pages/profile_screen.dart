@@ -6,15 +6,15 @@ import 'package:masarat/core/constants/validators.dart';
 import 'package:masarat/core/theme/styles.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/assets_mangment.dart';
-import 'package:masarat/core/widgets/CustomDrawer.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/app_text_form_field.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
+import 'package:masarat/core/widgets/custom_drawer.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({required this.isTrainer, super.key});
-  final  bool isTrainer;
+  final bool isTrainer;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -26,54 +26,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        haveAppBar: true,
-        backgroundColorAppColor: AppColors.background,
-        backgroundColor:  AppColors. background,
-        drawerIconColor: AppColors.primary,
-        actions: [
+      haveAppBar: true,
+      backgroundColorAppColor: AppColors.background,
+      backgroundColor: AppColors.background,
+      drawerIconColor: AppColors.primary,
+      actions: [
         IconButton(
-        onPressed: () => Navigator.of(context).pop(),
-    icon: Icon(
-    Icons. arrow_forward_ios_sharp,
-    color: Theme
-        .of(context)
-        .iconTheme
-        .color,
-    size: 20.sp,
-    ),
-    ),
-        ],
-        drawer: const CustomDrawer(),
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(
+            Icons.arrow_forward_ios_sharp,
+            color: Theme.of(context).iconTheme.color,
+            size: 20.sp,
+          ),
+        ),
+      ],
+      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Profile Image and Edit Icon
-              Stack(
+            Stack(
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 50,
                   backgroundImage: NetworkImage(
                     'https://via.placeholder.com/150', // Replace with actual image URL
                   ),
                 ),
                 Positioned(
-
                   right: 0,
                   top: 0,
                   child: CircleAvatar(
                     radius: 16,
                     backgroundColor: Colors.teal,
                     child: SvgPicture.asset(
-                       AppImage.editIcon,
-
+                      AppImage.editIcon,
                     ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 10),
-            const  CustomText(
-              text: "عبدالله محمد جبريل",
+            const CustomText(
+              text: 'عبدالله محمد جبريل',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
@@ -89,55 +84,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
               validator: AppValidator.phoneValidator,
             ),
 
-
             _buildFormField(
               label: 'البريد الإلكتروني',
               hintText: 'Example@gmail.com',
               validator: AppValidator.emailValidator,
             ),
-            if(widget.isTrainer)...[
+            if (widget.isTrainer) ...[
               _buildFormField(
-              label: 'رقم التواصل',
-              hintText: 'أدخل رقم التواصل',
-              validator: AppValidator.phoneValidator,
-            ),
+                label: 'رقم التواصل',
+                hintText: 'أدخل رقم التواصل',
+                validator: AppValidator.phoneValidator,
+              ),
               _buildFormField(
-              label: 'الجنسية',
-              hintText: 'أدخل الجنسية',
-              validator: AppValidator. emptyValidator
-            ),
+                label: 'الجنسية',
+                hintText: 'أدخل الجنسية',
+                validator: AppValidator.emptyValidator,
+              ),
               _buildFormField(
-              label: 'الدولة التي تعيش بها',
-              hintText: 'أدخل الدولة التي تعيش بها',
-              validator: AppValidator.emptyValidator,
-            ),
+                label: 'الدولة التي تعيش بها',
+                hintText: 'أدخل الدولة التي تعيش بها',
+                validator: AppValidator.emptyValidator,
+              ),
               _buildFormField(
-              label: 'المحافظة',
-              hintText: 'أدخل المحافظة',
-              validator: AppValidator.emptyValidator,
-            ),_buildFormField(
-              label: 'المؤهل العلمي',
-              hintText: 'أدخل المؤهل العلمي',
-              validator: AppValidator.emptyValidator,
-            ),_buildFormField(
-              label: 'التخصص',
-              hintText: 'أدخل التخصص',
-              validator: AppValidator.emptyValidator,
-            ),_buildFormField(
-              label: 'الجهه التي تعمل بها',
-              hintText: 'أدخل الجهه التي تعمل بها',
-              validator: AppValidator.emptyValidator,
-            ),
-            ]else...[
+                label: 'المحافظة',
+                hintText: 'أدخل المحافظة',
+                validator: AppValidator.emptyValidator,
+              ),
               _buildFormField(
-                  label: 'المؤهل العلمي',
-                  hintText: 'أدخل الدرجة العلمية',
-                  validator: AppValidator.emptyValidator,
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.upload),
-                  ),
-                  enabled: false),
+                label: 'المؤهل العلمي',
+                hintText: 'أدخل المؤهل العلمي',
+                validator: AppValidator.emptyValidator,
+              ),
+              _buildFormField(
+                label: 'التخصص',
+                hintText: 'أدخل التخصص',
+                validator: AppValidator.emptyValidator,
+              ),
+              _buildFormField(
+                label: 'الجهه التي تعمل بها',
+                hintText: 'أدخل الجهه التي تعمل بها',
+                validator: AppValidator.emptyValidator,
+              ),
+            ] else ...[
+              _buildFormField(
+                label: 'المؤهل العلمي',
+                hintText: 'أدخل الدرجة العلمية',
+                validator: AppValidator.emptyValidator,
+                suffixIcon: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.upload),
+                ),
+                enabled: false,
+              ),
             ],
 
             _buildPasswordField(),
@@ -151,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // Handle account deletion
               },
               child: const Text(
-                "حذف الحساب نهائياً",
+                'حذف الحساب نهائياً',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.red,
@@ -166,8 +164,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // Reusable Input Field Widget
-  Widget buildTextField(String label, String placeholder,
-      {bool isPassword = false}) {
+  Widget buildTextField(
+    String label,
+    String placeholder, {
+    bool isPassword = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -245,7 +246,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Gap(5.h),
           AppTextFormField(
-            hintText: "أدخل كلمة السر",
+            hintText: 'أدخل كلمة السر',
             isObscureText: isPasswordObscured,
             validator: AppValidator.passwordValidator,
             backgroundColor: AppColors.withe,

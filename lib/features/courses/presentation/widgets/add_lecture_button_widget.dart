@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 
 class AddLectureButtonWidget extends StatelessWidget {
-
   const AddLectureButtonWidget({
-    super.key,
     required this.isAddingLecture,
     required this.toggleAddLecture,
+    super.key,
   });
   final bool isAddingLecture;
   final VoidCallback toggleAddLecture;
@@ -16,11 +15,11 @@ class AddLectureButtonWidget extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: toggleAddLecture,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(AppColors.withe),
-        foregroundColor: MaterialStateProperty.all(AppColors.primary),
-        elevation: MaterialStateProperty.all(0),
-        side: MaterialStateProperty.all(BorderSide(color: AppColors.primary)),
-        shape: MaterialStateProperty.all(
+        backgroundColor: WidgetStateProperty.all(AppColors.withe),
+        foregroundColor: WidgetStateProperty.all(AppColors.primary),
+        elevation: WidgetStateProperty.all(0),
+        side: WidgetStateProperty.all(BorderSide(color: AppColors.primary)),
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
         ),
       ),

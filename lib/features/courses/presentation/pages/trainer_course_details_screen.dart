@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/widgets/CustomDrawer.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
-import 'package:masarat/core/widgets/custom_button.dart';
+import 'package:masarat/core/widgets/custom_drawer.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:masarat/features/courses/presentation/widgets/add_lecture_button_widget.dart';
 import 'package:masarat/features/courses/presentation/widgets/add_lecture_form_widget.dart';
 import 'package:masarat/features/courses/presentation/widgets/lecture_list_widget.dart';
+
 class TrainerCourseDetailsScreen extends StatefulWidget {
-  final String courseId;
   const TrainerCourseDetailsScreen({required this.courseId, super.key});
+  final String courseId;
 
   @override
-  _TrainerCourseDetailsScreenState createState() =>
+  State<TrainerCourseDetailsScreen> createState() =>
       _TrainerCourseDetailsScreenState();
 }
 
-class _TrainerCourseDetailsScreenState extends State<TrainerCourseDetailsScreen> {
+class _TrainerCourseDetailsScreenState
+    extends State<TrainerCourseDetailsScreen> {
   // State variables
-  bool isAddingLecture = false; // Controls visibility of the "Add Lecture" widget
-  final List<String> lectures = []; // Holds the list of lectures
-
+  bool isAddingLecture = false;
+  // Controls visibility of the "Add Lecture" widget
+  final List<String> lectures = [];
+  // Holds the list of lectures
   final TextEditingController courseNameController = TextEditingController();
+
   final TextEditingController contentController = TextEditingController();
+
   final TextEditingController sourceController = TextEditingController();
 
   void addLecture() {
@@ -56,7 +58,6 @@ class _TrainerCourseDetailsScreenState extends State<TrainerCourseDetailsScreen>
       backgroundColor: AppColors.background,
       drawerIconColor: AppColors.primary,
       drawer: const CustomDrawer(),
-
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -86,7 +87,7 @@ class _TrainerCourseDetailsScreenState extends State<TrainerCourseDetailsScreen>
               sourceController: sourceController,
               addLecture: addLecture,
             ),
-            SizedBox(height: 16.h),
+          SizedBox(height: 16.h),
           LectureListWidget(
             lectures: lectures,
             onDeleteLecture: (index) {
@@ -95,7 +96,6 @@ class _TrainerCourseDetailsScreenState extends State<TrainerCourseDetailsScreen>
               });
             },
           ),
-
         ],
       ),
     );

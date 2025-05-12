@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/widgets/CustomDrawer.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
+import 'package:masarat/core/widgets/custom_drawer.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
-class  AboutUsScreen extends StatelessWidget {
-  const  AboutUsScreen({super.key});
+class AboutUsScreen extends StatelessWidget {
+  const AboutUsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,8 @@ class  AboutUsScreen extends StatelessWidget {
       drawerIconColor: AppColors.primary,
       haveAppBar: true,
       drawer: const CustomDrawer(),
-
       body: Padding(
-        padding:   EdgeInsets.all(16.0.r),
+        padding: EdgeInsets.all(16.0.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -47,11 +46,10 @@ class  AboutUsScreen extends StatelessWidget {
               child: ListView(
                 children: aboutUs.map((info) {
                   return ListTile(
-
                     leading: CustomText(
-                      text:info,
+                      text: info,
                       textAlign: TextAlign.right,
-                      style:   TextStyle(
+                      style: TextStyle(
                         fontSize: 12.sp,
                         color: Colors.black87,
                       ),

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
 
 class CustomDropdownButton extends StatelessWidget {
   final List<String> items;
@@ -13,8 +13,9 @@ class CustomDropdownButton extends StatelessWidget {
   final Color textColor;
   final Color dropdownColor;
 
-  CustomDropdownButton({
+  const CustomDropdownButton({
     required this.items,
+    super.key,
     this.hintText = 'Select Item',
     this.onChanged,
     this.height = 50.0,
@@ -32,7 +33,6 @@ class CustomDropdownButton extends StatelessWidget {
         isExpanded: true,
         hint: Row(
           children: [
-
             const SizedBox(width: 4),
             Expanded(
               child: Text(
@@ -92,8 +92,8 @@ class CustomDropdownButton extends StatelessWidget {
           offset: const Offset(-20, 0),
           scrollbarTheme: ScrollbarThemeData(
             radius: const Radius.circular(40),
-            thickness: MaterialStateProperty.all(6),
-            thumbVisibility: MaterialStateProperty.all(true),
+            thickness: WidgetStateProperty.all(6),
+            thumbVisibility: WidgetStateProperty.all(true),
           ),
         ),
         menuItemStyleData: const MenuItemStyleData(

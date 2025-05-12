@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 class LectureDetailsScreen extends StatefulWidget {
- final String lectureId;
-  const LectureDetailsScreen({Key? key,   required this.lectureId }) : super(key: key);
+  const LectureDetailsScreen({required this.lectureId, super.key});
+  final String lectureId;
 
   @override
   State<LectureDetailsScreen> createState() => _LectureDetailsScreenState();
@@ -14,8 +15,31 @@ class LectureDetailsScreen extends StatefulWidget {
 
 class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
   late YoutubePlayerController _controller;
-  late PlayerState _playerState;
-  late YoutubeMetaData _videoMetaData;
+  late PlayerState _playerState = PlayerState.unknown;
+  late YoutubeMetaData _videoMetaData = const YoutubeMetaData();
+
+  String getVideoTitle() {
+    return _videoMetaData.title.isNotEmpty ? _videoMetaData.title : 'No Title';
+  }
+
+  String getPlayerStateDescription() {
+    switch (_playerState) {
+      case PlayerState.playing:
+        return 'Playing';
+      case PlayerState.paused:
+        return 'Paused';
+      case PlayerState.ended:
+        return 'Ended';
+      case PlayerState.buffering:
+        return 'Buffering';
+      case PlayerState.cued:
+        return 'Cued';
+      case PlayerState.unknown:
+        return 'Unknown';
+      case PlayerState.unStarted:
+        throw UnimplementedError();
+    }
+  }
 
   bool _isPlayerReady = false;
 
@@ -51,8 +75,7 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
       backgroundColorAppColor: AppColors.background,
       backgroundColor: AppColors.background,
       drawerIconColor: AppColors.primary,
-    title:"المحاضرة الأولى: أساسيات المحاسبة" ,
-      
+      title: 'المحاضرة الأولى: أساسيات المحاسبة',
       body: Column(
         children: [
           // YouTube Player
@@ -91,17 +114,19 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
                 ),
               );
             },
-
             icon: const Icon(Icons.download),
-            label:   Text("تحميل المصادر",style: TextStyle(fontSize: 12.sp),),
+            label: Text(
+              'تحميل المصادر',
+              style: TextStyle(fontSize: 12.sp),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.withe,
               foregroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(  8.r),
-                side: BorderSide(color:  AppColors.primary, width: 1.h),
+                borderRadius: BorderRadius.circular(8.r),
+                side: BorderSide(color: AppColors.primary, width: 1.h),
               ),
-              minimumSize:   Size(145.w, 40.h),
+              minimumSize: Size(145.w, 40.h),
             ),
           ),
           const SizedBox(height: 10),
@@ -110,21 +135,28 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
             child: ListView.builder(
               itemCount: 8, // Number of lectures
               itemBuilder: (context, index) {
-                return  Padding(
-                  padding:   EdgeInsets.symmetric(vertical: 4.0.h ,horizontal: 20.w),
-                  child:  Container(
+                return Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 4.0.h, horizontal: 20.w),
+                  child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: index == 0?AppColors.primary: Colors.grey[300]! ),
+                      border: Border.all(
+                        color:
+                            index == 0 ? AppColors.primary : Colors.grey[300]!,
+                      ),
                       borderRadius: BorderRadius.circular(4.r),
-
                     ),
                     width: double.infinity,
-
-                    height:32.h,
-                    child:  Align(alignment: AlignmentDirectional.centerStart, child: Padding(
-                      padding:   EdgeInsets.all(4.0.r),
-                      child: CustomText(text: 'المحاضرة ${index + 1}: أساسيات المحاسبة', ),
-                    )),
+                    height: 32.h,
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Padding(
+                        padding: EdgeInsets.all(4.0.r),
+                        child: CustomText(
+                          text: 'المحاضرة ${index + 1}: أساسيات المحاسبة',
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },

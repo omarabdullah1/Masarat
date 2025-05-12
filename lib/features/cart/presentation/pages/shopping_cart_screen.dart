@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/widgets/CustomDrawer.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/course_card_widget.dart';
+import 'package:masarat/core/widgets/custom_drawer.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class ShoppingCartScreen extends StatelessWidget {
@@ -13,17 +15,16 @@ class ShoppingCartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-
       haveAppBar: true,
       drawer: const CustomDrawer(),
       backgroundColorAppColor: AppColors.background,
       backgroundColor: AppColors.background,
       drawerIconColor: AppColors.primary,
-
       body: Column(
         children: [
           Center(
-            child: CustomText(text: 'سلة المشتريات',
+            child: CustomText(
+              text: 'سلة المشتريات',
               style: TextStyle(
                 color: AppColors.primary,
                 fontSize: 22.sp,
@@ -33,7 +34,7 @@ class ShoppingCartScreen extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding:   EdgeInsets.symmetric(vertical: 10.h),
+              padding: EdgeInsets.symmetric(vertical: 10.h),
               child: ListView.builder(
                 itemCount: 10,
                 itemBuilder: (context, index) {
@@ -54,7 +55,10 @@ class ShoppingCartScreen extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
                         ),
                         child: const Text(
                           'حذف من السلة',
@@ -68,20 +72,20 @@ class ShoppingCartScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding:   EdgeInsets.all(16.0.r),
+            padding: EdgeInsets.all(16.0.r),
             child: ElevatedButton(
               onPressed: () {
                 // Logic for payment
-                print('Proceed to Payment');
+                log('Proceed to Payment');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.r),
                 ),
-                padding:   EdgeInsets.symmetric(vertical: 12.h),
+                padding: EdgeInsets.symmetric(vertical: 12.h),
               ),
-              child:   Center(
+              child: Center(
                 child: Text(
                   'ادفع الآن',
                   style: TextStyle(fontSize: 16.sp, color: Colors.white),

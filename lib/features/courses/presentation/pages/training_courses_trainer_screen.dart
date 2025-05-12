@@ -5,24 +5,23 @@ import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/widgets/CustomDrawer.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/app_text_form_field.dart';
-import 'package:masarat/core/widgets/custom_button.dart';
-import 'package:masarat/core/widgets/custom_dropdown_Button_Form_Field.dart';
-import 'package:masarat/core/widgets/custom_text.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:masarat/core/widgets/course_card_widget.dart';
-class  TrainingCoursesTrainerScreen extends StatefulWidget {
+import 'package:masarat/core/widgets/custom_button.dart';
+import 'package:masarat/core/widgets/custom_drawer.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
+import 'package:masarat/core/widgets/custom_text.dart';
 
-  const  TrainingCoursesTrainerScreen({super.key});
+class TrainingCoursesTrainerScreen extends StatefulWidget {
+  const TrainingCoursesTrainerScreen({super.key});
 
   @override
-  State<TrainingCoursesTrainerScreen> createState() => _TrainingCoursesTrainerScreenState();
+  State<TrainingCoursesTrainerScreen> createState() =>
+      _TrainingCoursesTrainerScreenState();
 }
 
-class _TrainingCoursesTrainerScreenState extends State<TrainingCoursesTrainerScreen> {
-
+class _TrainingCoursesTrainerScreenState
+    extends State<TrainingCoursesTrainerScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -32,7 +31,7 @@ class _TrainingCoursesTrainerScreenState extends State<TrainingCoursesTrainerScr
       drawerIconColor: AppColors.primary,
       drawer: const CustomDrawer(),
       body: Padding(
-        padding: EdgeInsets.symmetric(  vertical: 16.h),
+        padding: EdgeInsets.symmetric(vertical: 16.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -55,8 +54,10 @@ class _TrainingCoursesTrainerScreenState extends State<TrainingCoursesTrainerScr
                   flex: 4,
                   child: AppTextFormField(
                     hintText: 'بحث عن الدورات التدريبية ...',
-
-                    suffixIcon: IconButton(onPressed: (){}, icon: Icon( Icons.search)),
+                    suffixIcon: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.search),
+                    ),
                     backgroundColor: AppColors.withe,
                     validator: (value) {
                       return null; // Replace with your validation logic
@@ -77,7 +78,7 @@ class _TrainingCoursesTrainerScreenState extends State<TrainingCoursesTrainerScr
                     onTap: () {},
                     textFontSize: 8.sp,
                     borderColor: AppColors.primary,
-                    fontWeight:FontWeightHelper.light,
+                    fontWeight: FontWeightHelper.light,
                   ),
                 ),
               ],
@@ -89,16 +90,15 @@ class _TrainingCoursesTrainerScreenState extends State<TrainingCoursesTrainerScr
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                       context.goNamed(
+                      context.goNamed(
                         AppRoute.trainerCourseDetails,
-                       pathParameters: {'courseId': '123'},
-                    );
+                        pathParameters: {'courseId': '123'},
+                      );
                     },
                     child: CourseCard(
                       title: 'مهارات أخصائي محاسبة',
                       hours: 'عدد الساعات : 7 ساعات',
                       lectures: 'عدد المحاضرات: 42',
-
                       actions: [
                         Expanded(
                           child: CustomButton(
@@ -110,11 +110,10 @@ class _TrainingCoursesTrainerScreenState extends State<TrainingCoursesTrainerScr
                             borderColor: AppColors.orange,
                             onTap: () {},
                             textFontSize: 8.sp,
-                            fontWeight:FontWeightHelper.light,
+                            fontWeight: FontWeightHelper.light,
                           ),
                         ),
                       ],
-
                     ),
                   );
                 },

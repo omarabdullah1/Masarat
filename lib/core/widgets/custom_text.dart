@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class CustomText extends StatelessWidget {
   const CustomText({
-    Key? key,
     required this.text,
+    super.key,
     this.style,
     this.textAlign,
     this.maxLines,
     this.overflow,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle? style;

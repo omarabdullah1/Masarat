@@ -3,16 +3,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
-import 'package:masarat/config/app_router.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/widgets/CustomDrawer.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
+import 'package:masarat/core/widgets/custom_drawer.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
-  const CourseDetailsScreen({required this.courseId, super.key, });
+  const CourseDetailsScreen({
+    required this.courseId,
+    super.key,
+  });
   final String courseId;
 
   @override
@@ -44,11 +46,11 @@ class CourseDetailsScreen extends StatelessWidget {
               Gap(20.h),
               _buildCourseDetails(),
               Gap(15.h),
-              _buildSectionTitle("عن الدورة"),
+              _buildSectionTitle('عن الدورة'),
               Gap(10.h),
               _buildCourseDescription(),
               Gap(20.h),
-              _buildSectionTitle("تعليقات المتدربين"),
+              _buildSectionTitle('تعليقات المتدربين'),
               Gap(10.h),
               _buildCommentsSection(),
               Gap(20.h),
@@ -81,11 +83,10 @@ class CourseDetailsScreen extends StatelessWidget {
   // Course Details Section
   Widget _buildCourseDetails() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Center(
           child: CustomText(
-            text: "مهارات أخصائي محاسبة",
+            text: 'مهارات أخصائي محاسبة',
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.bold,
@@ -96,7 +97,7 @@ class CourseDetailsScreen extends StatelessWidget {
         Gap(8.h),
         Center(
           child: CustomText(
-            text: "SAR 1200",
+            text: 'SAR 1200',
             style: TextStyle(
               fontSize: 15.sp,
               fontWeight: FontWeight.bold,
@@ -105,9 +106,9 @@ class CourseDetailsScreen extends StatelessWidget {
           ),
         ),
         Gap(8.h),
-        _buildTrainerInfo("اسم المدرب: مصطفى محمد"),
-        _buildTrainerInfo("عدد الساعات: 7 ساعات"),
-        _buildTrainerInfo("عدد المحاضرات: 42"),
+        _buildTrainerInfo('اسم المدرب: مصطفى محمد'),
+        _buildTrainerInfo('عدد الساعات: 7 ساعات'),
+        _buildTrainerInfo('عدد المحاضرات: 42'),
       ],
     );
   }
@@ -139,9 +140,10 @@ class CourseDetailsScreen extends StatelessWidget {
   // Course Description
   Widget _buildCourseDescription() {
     return Text(
-      "تهدف دورة تنمية مهارات أخصائي المحاسبة المالية إلى تحسين وتطوير مهارات المحاسبين العاملين "
-          "في مجال المحاسبة والمال. وتشمل محاور الدورة موضوعات مثل المحاسبة الإدارية والمحاسبة المالية "
-          "والتحليل المالي والتقارير المالية والقوانين ذات العلاقة بالمجال.",
+      'تهدف دورة تنمية مهارات أخصائي المحاسبة المالية إلى تحسين وتطوير مهارات '
+      'المحاسبين العاملين في مجال المحاسبة والمال. وتشمل محاور الدورة موضوعات '
+      'مثل المحاسبة الإدارية والمحاسبة المالية '
+      'والتحليل المالي والتقارير المالية والقوانين ذات العلاقة بالمجال.',
       style: TextStyle(
         fontSize: 9.5.sp,
         color: Colors.grey[700],
@@ -175,7 +177,7 @@ class CourseDetailsScreen extends StatelessWidget {
           CircleAvatar(
             radius: 15.r,
             backgroundColor: Colors.teal,
-            child: Icon(Icons.person, color: Colors.white),
+            child: const Icon(Icons.person, color: Colors.white),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -183,7 +185,7 @@ class CourseDetailsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "فاطمة علي",
+                  'فاطمة علي',
                   style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeightHelper.regular,
@@ -192,8 +194,8 @@ class CourseDetailsScreen extends StatelessWidget {
                 ),
                 Gap(5.h),
                 Text(
-                  "في عام 94% استفدت بشكل استثنائي في المجال المحاسبي تحت مسمى مصنف المحاسبة المالية تعلمت كل "
-                      "من الخطط.",
+                  'في عام 94% استفدت بشكل استثنائي في المجال المحاسبي تحت مسمى '
+                  'مصنف المحاسبة المالية تعلمت كل من الخطط.',
                   style: TextStyle(
                     fontSize: 9.sp,
                     color: Colors.grey[700],
@@ -246,16 +248,19 @@ class CourseDetailsScreen extends StatelessWidget {
   }
 
   // Watch Button
-  Widget _buildWatchButton( BuildContext context) {
+  Widget _buildWatchButton(BuildContext context) {
     return CustomButton(
       height: 36.h,
       width: double.infinity,
       radius: 58.r,
-      labelText: "مشاهدة أول محاضرة مجاناً",
+      labelText: 'مشاهدة أول محاضرة مجاناً',
       buttonColor: AppColors.background,
       textColor: AppColors.gray,
       onTap: () {
-        context.goNamed(AppRoute.lectureScreen,pathParameters: {'courseId':'554'});
+        context.goNamed(
+          AppRoute.lectureScreen,
+          pathParameters: {'courseId': '554'},
+        );
       },
       textFontSize: 10.sp,
       fontWeight: FontWeightHelper.light,

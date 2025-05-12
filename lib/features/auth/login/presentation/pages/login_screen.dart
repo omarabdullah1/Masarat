@@ -4,22 +4,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
-import 'package:masarat/config/app_router.dart';
 import 'package:masarat/core/constants/validators.dart';
 import 'package:masarat/core/theme/styles.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/assets_mangment.dart';
 import 'package:masarat/core/utils/constants.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
 import 'package:masarat/core/widgets/app_text_form_field.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:masarat/features/auth/login/presentation/pages/forgot_password_screen.dart';
 import 'package:masarat/features/auth/signup/presentation/pages/sign_up_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({required this.isTrainer, super.key});
-   final bool isTrainer;
+  final bool isTrainer;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -37,7 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Gap(30.h),
               _buildLogo(),
@@ -72,7 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildWelcomeMessage() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomText(
           text: 'مرحباً بعودتك !',
@@ -102,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: TextStyles.font12GrayRegular,
         ),
         AppTextFormField(
-          hintText: "mail@email.com",
+          hintText: 'mail@email.com',
           validator: AppValidator.emailValidator,
           backgroundColor: AppColors.withe,
         ),
@@ -119,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: TextStyles.font12GrayRegular,
         ),
         AppTextFormField(
-          hintText: "••••••••",
+          hintText: '••••••••',
           isObscureText: isObscureText,
           validator: AppValidator.passwordValidator,
           backgroundColor: AppColors.withe,
@@ -163,7 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
+              MaterialPageRoute<ForgotPasswordScreen>(
+                builder: (context) => const ForgotPasswordScreen(),
+              ),
             );
           },
           child: CustomText(
@@ -183,9 +182,10 @@ class _LoginScreenState extends State<LoginScreen> {
       onTap: () {
         if (widget.isTrainer) {
           context.go(AppRoute.trainingCoursesTrainer);
-        }else{
+        } else {
           context.go(AppRoute.home);
-        }     },
+        }
+      },
       labelText: 'تسجيل الدخول',
       textFontSize: 16.sp,
       textColor: AppColors.withe,
@@ -223,7 +223,9 @@ class _LoginScreenState extends State<LoginScreen> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const SignUpScreen()),
+          MaterialPageRoute<SignUpScreen>(
+            builder: (context) => const SignUpScreen(),
+          ),
         );
       },
       child: RichText(
@@ -235,10 +237,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextSpan(
               text: 'سجل الآن',
-
               style: TextStyles.font14DarkBlackRegular.copyWith(
                 decoration: TextDecoration.underline,
-                fontFamily: Constants.fontName
+                fontFamily: Constants.fontName,
               ),
             ),
           ],

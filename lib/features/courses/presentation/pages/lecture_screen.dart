@@ -3,10 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
-class  LectureScreen extends StatelessWidget {
+class LectureScreen extends StatelessWidget {
   const LectureScreen({super.key});
 
   @override
@@ -16,11 +16,9 @@ class  LectureScreen extends StatelessWidget {
       backgroundColorAppColor: AppColors.background,
       backgroundColor: AppColors.background,
       drawerIconColor: AppColors.primary,
-
-
       body: SingleChildScrollView(
         child: Padding(
-          padding:   EdgeInsets.all(16.0.r),
+          padding: EdgeInsets.all(16.0.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -37,7 +35,7 @@ class  LectureScreen extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                      SizedBox(height: 16.h),
+                    SizedBox(height: 16.h),
                     const Text(
                       'مهارات أخصائي محاسبة',
                       style: TextStyle(
@@ -46,13 +44,13 @@ class  LectureScreen extends StatelessWidget {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                      SizedBox(height: 8.h),
-                      Text(
+                    SizedBox(height: 8.h),
+                    Text(
                       'عدد الساعات: 7 ساعات',
                       style: TextStyle(color: AppColors.gray),
                     ),
-                      SizedBox(height: 4.h),
-                      Text(
+                    SizedBox(height: 4.h),
+                    Text(
                       'تم مشاهدة: 1/42',
                       style: TextStyle(color: AppColors.primary),
                     ),
@@ -67,8 +65,7 @@ class  LectureScreen extends StatelessWidget {
                 itemCount: 8, // Number of lectures
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: (){
-
+                    onTap: () {
                       context.goNamed(
                         AppRoute.lectureDetails,
                         pathParameters: {
@@ -78,20 +75,28 @@ class  LectureScreen extends StatelessWidget {
                       );
                     },
                     child: Padding(
-                      padding:   EdgeInsets.symmetric(vertical: 4.0.h),
-                      child:  Container(
+                      padding: EdgeInsets.symmetric(vertical: 4.0.h),
+                      child: Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: index == 0?AppColors.primary: Colors.grey[300]! ),
+                          border: Border.all(
+                            color: index == 0
+                                ? AppColors.primary
+                                : Colors.grey[300]!,
+                          ),
                           borderRadius: BorderRadius.circular(4.r),
-                          color:  index == 0? Colors.white: Colors.grey[300],
+                          color: index == 0 ? Colors.white : Colors.grey[300],
                         ),
                         width: double.infinity,
-
-                        height:32.h,
-                        child:  Align(alignment: AlignmentDirectional.centerStart, child: Padding(
-                          padding:   EdgeInsets.all(4.0.r),
-                          child: CustomText(text: 'المحاضرة ${index + 1}: أساسيات المحاسبة', ),
-                        )),
+                        height: 32.h,
+                        child: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Padding(
+                            padding: EdgeInsets.all(4.0.r),
+                            child: CustomText(
+                              text: 'المحاضرة ${index + 1}: أساسيات المحاسبة',
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   );

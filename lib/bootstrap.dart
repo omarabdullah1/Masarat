@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-import 'package:masarat/core/Config.dart';
+import 'package:masarat/core/config.dart';
 
 class AppBlocObserver extends BlocObserver {
   const AppBlocObserver();
@@ -28,11 +28,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   Bloc.observer = const AppBlocObserver();
 
-
 // Cross-flavor configuration
-  final apiUrl = Config.get('apiUrl');
+  // final apiUrl = Config.get('apiUrl');
   final enableLogging = Config.get('enableLogging') as bool;
-
 
   log('Logging is enabled for$enableLogging mode');
 

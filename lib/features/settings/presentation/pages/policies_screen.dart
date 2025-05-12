@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/widgets/CustomDrawer.dart';
-import 'package:masarat/core/widgets/CustomScaffold.dart';
+import 'package:masarat/core/widgets/custom_drawer.dart';
+import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class PoliciesScreen extends StatelessWidget {
@@ -30,13 +30,11 @@ class PoliciesScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       drawerIconColor: AppColors.primary,
       haveAppBar: true,
-      drawer: const CustomDrawer( ),
-
+      drawer: const CustomDrawer(),
       body: Padding(
-        padding:   EdgeInsets.all(16.0.r),
+        padding: EdgeInsets.all(16.0.r),
         child: Column(
           children: [
-
             CustomText(
               text: 'سياسات التطبيق',
               style: TextStyle(
@@ -46,17 +44,16 @@ class PoliciesScreen extends StatelessWidget {
               ),
             ),
 
-              SizedBox(height: 15.h),
+            SizedBox(height: 15.h),
             // List of policies
             Expanded(
               child: ListView(
                 children: policies.map((policy) {
                   return ListTile(
-
                     title: Text(
                       policy,
                       textAlign: TextAlign.right,
-                      style:   TextStyle(
+                      style: TextStyle(
                         fontSize: 12.sp,
                         color: Colors.black87,
                       ),
