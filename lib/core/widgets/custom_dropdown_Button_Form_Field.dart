@@ -2,16 +2,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class CustomDropdownButton extends StatelessWidget {
-  final List<String> items;
-  final String hintText;
-  final ValueChanged<String?>? onChanged;
-  final double height;
-  final double width;
-  final Color iconColor;
-  final Color buttonColor;
-  final Color textColor;
-  final Color dropdownColor;
-
   const CustomDropdownButton({
     required this.items,
     super.key,
@@ -24,6 +14,15 @@ class CustomDropdownButton extends StatelessWidget {
     this.textColor = Colors.black,
     this.dropdownColor = Colors.white,
   });
+  final List<String> items;
+  final String hintText;
+  final ValueChanged<String?>? onChanged;
+  final double height;
+  final double width;
+  final Color iconColor;
+  final Color buttonColor;
+  final Color textColor;
+  final Color dropdownColor;
 
   @override
   Widget build(BuildContext context) {
