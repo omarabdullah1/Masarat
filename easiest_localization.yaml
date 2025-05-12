@@ -1,0 +1,25 @@
+excluded: []
+
+class_name: LocalizationMessages
+
+description: Generated localization package
+
+easiest_localization_version: <installed version>
+
+package_name: localization
+
+package_path: './'
+
+package_version: 1.0.0
+
+primary_localization: en
+
+format_output: false
+
+save_merged_files_as: yaml
+
+remote_version: null
+
+watch: false
+
+init_pubspec: true

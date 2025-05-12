@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/utils/constants.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class DrawerItem extends StatelessWidget {

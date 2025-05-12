@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/config/app_router.dart';
+import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/utils/constants.dart';
 
 class MasaratApp extends StatelessWidget {
   const MasaratApp({super.key});
