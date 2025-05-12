@@ -3,7 +3,7 @@ class AppValidator {
     if (value == null || value.isEmpty) {
       return 'البريد الإلكتروني مطلوب!';
     }
-    final RegExp emailRegex = RegExp(
+    final emailRegex = RegExp(
       r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
     );
     if (!emailRegex.hasMatch(value)) {
@@ -28,13 +28,14 @@ class AppValidator {
     }
     return null;
   }
+
   static String? phoneValidator(String? value) {
     if (value == null || value.isEmpty) {
       return 'يرجى إدخال رقم الهاتف'; // "Please enter a phone number"
     }
 
     // A basic regex for validating phone numbers (adjust to your requirements)
-    final RegExp phoneRegExp = RegExp(r'^[0-9]{8,15}$');
+    final phoneRegExp = RegExp(r'^[0-9]{8,15}$');
 
     if (!phoneRegExp.hasMatch(value)) {
       return 'يرجى إدخال رقم هاتف صحيح'; // "Please enter a valid phone number"

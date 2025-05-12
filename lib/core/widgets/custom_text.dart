@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class CustomText extends StatelessWidget {
   const CustomText({
-    Key? key,
     required this.text,
+    super.key,
     this.style,
     this.textAlign,
     this.maxLines,
     this.overflow,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle? style;
@@ -18,12 +18,15 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: style,
-      textAlign: textAlign ?? TextAlign.start,
-      maxLines: maxLines,
-      overflow: overflow ?? TextOverflow.ellipsis,
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        text,
+        style: style,
+        textAlign: textAlign ?? TextAlign.start,
+        maxLines: maxLines,
+        overflow: overflow ?? TextOverflow.ellipsis,
+      ),
     );
   }
 }
