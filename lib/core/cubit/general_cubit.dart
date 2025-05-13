@@ -14,7 +14,7 @@ class GeneralCubit extends Cubit<GeneralState> {
     // You can choose to use a normal String method or the secured method.
     var lang = await SharedPrefHelper.getString('language_code');
     if (lang.isEmpty) {
-      lang = 'ar'; // Default to English if none is stored
+      lang = 'ar'; // Default to Arabic if none is stored
     }
     this.lang = lang;
     local = Locale(lang);
