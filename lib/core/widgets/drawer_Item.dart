@@ -29,7 +29,7 @@ class DrawerItem extends StatelessWidget {
               textAlign: TextAlign.start,
               text: title,
               style: TextStyle(
-                color: AppColors.withe,
+                color: AppColors.white,
                 fontSize: 19.sp,
                 fontWeight: FontWeightHelper.regular,
                 fontFamily: Constants.fontName,

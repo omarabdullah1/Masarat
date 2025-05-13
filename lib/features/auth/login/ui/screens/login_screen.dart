@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/constants/validators.dart';
 import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/theme/styles.dart';
@@ -13,8 +12,12 @@ import 'package:masarat/core/widgets/app_text_form_field.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
-import 'package:masarat/features/auth/login/presentation/pages/forgot_password_screen.dart';
-import 'package:masarat/features/auth/signup/presentation/pages/sign_up_screen.dart';
+import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
+import 'package:masarat/features/auth/login/logic/cubit/login_state.dart';
+import 'package:masarat/features/auth/login/ui/screens/forgot_password_screen.dart';
+import 'package:masarat/features/auth/signup/ui/screens/sign_up_screen.dart';
+
+import '../widgets/login_bloc_listener.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({required this.isTrainer, super.key});
@@ -45,6 +48,8 @@ class _LoginScreenState extends State<LoginScreen> {
               _buildEmailField(),
               Gap(10.h),
               _buildPasswordField(),
+              Gap(10.h),
+              const LoginBlocListener(),
               Gap(10.h),
               _buildRememberMeAndForgotPasswordRow(),
               Gap(10.h),
@@ -101,7 +106,8 @@ class _LoginScreenState extends State<LoginScreen> {
         AppTextFormField(
           hintText: 'mail@email.com',
           validator: AppValidator.emailValidator,
-          backgroundColor: AppColors.withe,
+          backgroundColor: AppColors.white,
+          controller: context.read<LoginCubit>().emailController,
         ),
       ],
     );
@@ -119,7 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: '••••••••',
           isObscureText: isObscureText,
           validator: AppValidator.passwordValidator,
-          backgroundColor: AppColors.withe,
+          backgroundColor: AppColors.white,
+          controller: context.read<LoginCubit>().passwordController,
           suffixIcon: GestureDetector(
             onTap: () {
               setState(() {
@@ -128,8 +135,11 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: Icon(
               isObscureText ? Icons.visibility_off : Icons.visibility,
+              color: AppColors.primary,
             ),
           ),
+          onSubmit: (data) =>
+              context.read<LoginCubit>().emitLoginStates(context),
         ),
       ],
     );
@@ -177,25 +187,30 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginButton() {
-    return CustomButton(
-      height: 45.h,
-      onTap: () {
-        if (widget.isTrainer) {
-          context.go(AppRoute.trainingCoursesTrainer);
-        } else {
-          context.go(AppRoute.home);
-        }
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        return CustomButton(
+          height: 45.h,
+          onTap: () {
+            context.read<LoginCubit>().emitLoginStates(context);
+            // if (widget.isTrainer) {
+            //   context.go(AppRoute.trainingCoursesTrainer);
+            // } else {
+            //   context.go(AppRoute.home);
+            // }
+          },
+          labelText: 'تسجيل الدخول',
+          textFontSize: 16.sp,
+          textColor: AppColors.white,
+        );
       },
-      labelText: 'تسجيل الدخول',
-      textFontSize: 16.sp,
-      textColor: AppColors.withe,
     );
   }
 
   Widget _buildDividerWithText() {
     return Row(
       children: [
-        Expanded(
+        const Expanded(
           child: Divider(
             thickness: 1,
             color: AppColors.gray,
@@ -208,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
             style: TextStyles.font14GrayRegular,
           ),
         ),
-        Expanded(
+        const Expanded(
           child: Divider(
             thickness: 1,
             color: AppColors.gray,

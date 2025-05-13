@@ -58,7 +58,7 @@ class _TrainingCoursesTrainerScreenState
                       onPressed: () {},
                       icon: const Icon(Icons.search),
                     ),
-                    backgroundColor: AppColors.withe,
+                    backgroundColor: AppColors.white,
                     validator: (value) {
                       return null; // Replace with your validation logic
                     },
