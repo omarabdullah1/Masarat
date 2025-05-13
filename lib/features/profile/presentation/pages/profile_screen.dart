@@ -222,7 +222,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             hintText: hintText,
             validator: validator,
             enabled: enabled,
-            backgroundColor: AppColors.withe,
+            backgroundColor: AppColors.white,
             isObscureText: isObscureText,
             suffixIcon: suffixIcon,
           ),
@@ -249,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             hintText: 'أدخل كلمة السر',
             isObscureText: isPasswordObscured,
             validator: AppValidator.passwordValidator,
-            backgroundColor: AppColors.withe,
+            backgroundColor: AppColors.white,
             suffixIcon: GestureDetector(
               onTap: () {
                 setState(() {
@@ -276,7 +276,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         height: 45.h,
         labelText: 'حفظ التعديلات',
         textFontSize: 16.sp,
-        textColor: AppColors.withe,
+        textColor: AppColors.white,
       ),
     );
   }

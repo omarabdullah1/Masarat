@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/config/app_router.dart';
+import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/utils/constants.dart';
 
 class MasaratApp extends StatelessWidget {
   const MasaratApp({super.key});
@@ -20,7 +20,7 @@ class MasaratApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: Constants.fontName,
-            appBarTheme: AppBarTheme(color: AppColors.background),
+            appBarTheme: const AppBarTheme(color: AppColors.background),
             useMaterial3: false,
           ),
           localizationsDelegates: const [

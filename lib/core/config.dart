@@ -1,21 +1,27 @@
 class Config {
-  // Reads the FLAVOR environment variable and defaults to 'production'
-  // if not provided.
-  static const String flavor =
-      String.fromEnvironment('FLAVOR', defaultValue: 'production');
+  // Static variable to track the current flavor
+  static String _currentFlavor = 'production';
+
+  // Setter method to set the flavor from main files
+  static void setFlavor(String flavor) {
+    _currentFlavor = flavor;
+  }
+
+  // Getter for the current flavor
+  static String get flavor => _currentFlavor;
 
   // A map containing configuration details for each environment.
   static final Map<String, dynamic> config = {
     'development': {
-      'apiUrl': 'https://dev.example.com',
+      'apiUrl': 'https://wecareroot.ddns.net:5300/',
       'enableLogging': true,
     },
     'staging': {
-      'apiUrl': 'https://staging.example.com',
+      'apiUrl': 'https://wecareroot.ddns.net:5300/',
       'enableLogging': true,
     },
     'production': {
-      'apiUrl': 'https://api.example.com',
+      'apiUrl': 'https://wecareroot.ddns.net:5300/',
       'enableLogging': false,
     },
   };

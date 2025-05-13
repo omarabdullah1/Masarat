@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/utils/constants.dart';
 
 class TextStyles {
   static TextStyle font24BlackBold = TextStyle(
@@ -89,6 +89,11 @@ class TextStyles {
     fontSize: 12.sp,
     fontWeight: FontWeightHelper.medium,
     color: AppColors.gray,
+  );
+  static TextStyle font12WhiteBold = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeightHelper.bold,
+    color: AppColors.white,
   );
 
   static TextStyle font14GrayRegular = TextStyle(

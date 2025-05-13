@@ -99,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                   height: 42.h,
                   radius: 12.r,
                   labelText: 'الدورات التدريبية',
-                  buttonColor: AppColors.withe,
+                  buttonColor: AppColors.white,
                   borderColor: AppColors.gray,
                   textColor: AppColors.gray,
                   fontWeight: FontWeightHelper.light,
@@ -116,7 +116,7 @@ class HomeScreen extends StatelessWidget {
                   height: 42.h,
                   labelText: 'مكتــــــــــــبتي',
                   radius: 12.r,
-                  buttonColor: AppColors.withe,
+                  buttonColor: AppColors.white,
                   textColor: AppColors.primary,
                   onTap: () {
                     context.goNamed(AppRoute.myLibrary);

@@ -26,7 +26,7 @@ class CustomDrawer extends StatelessWidget {
                 child: IconButton(
                   icon: SvgPicture.asset(
                     AppImage.menuIcon,
-                    colorFilter: ColorFilter.mode(
+                    colorFilter: const ColorFilter.mode(
                       AppColors.drawerIconColor,
                       BlendMode.srcIn,
                     ),
@@ -140,7 +140,7 @@ class CustomDrawer extends StatelessWidget {
 
   // Helper Method for Divider
   Widget _divider() => CustomsDivider(
-        color: AppColors.withe,
+        color: AppColors.white,
         height: 1.h,
       );
 }

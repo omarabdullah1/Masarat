@@ -57,7 +57,7 @@ class _MyLibraryState extends State<TrainingCoursesScreen> {
                   flex: 4,
                   child: AppTextFormField(
                     hintText: 'بحث عن الدورات التدريبية ...',
-                    backgroundColor: AppColors.withe,
+                    backgroundColor: AppColors.white,
                     validator: (value) {
                       return null; // Replace with your validation logic
                     },
@@ -104,7 +104,7 @@ class _MyLibraryState extends State<TrainingCoursesScreen> {
                                   radius: 58.r,
                                   labelText: 'شــراء الأن',
                                   buttonColor: AppColors.primary,
-                                  textColor: AppColors.withe,
+                                  textColor: AppColors.white,
                                   onTap: () {},
                                   textFontSize: 8.sp,
                                   fontWeight: FontWeightHelper.light,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
-import 'package:masarat/features/auth/login/presentation/pages/login_screen.dart';
-import 'package:masarat/features/auth/presentation/pages/onboarding_screen.dart';
+import 'package:masarat/core/di/dependency_injection.dart';
+import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
+import 'package:masarat/features/auth/login/ui/screens/login_screen.dart';
+import 'package:masarat/features/auth/ui/screens/onboarding_screen.dart';
 import 'package:masarat/features/cart/presentation/pages/shopping_cart_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/course_details_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/lecture_details.dart';
@@ -34,7 +37,10 @@ final GoRouter router = GoRouter(
       name: AppRoute.login,
       builder: (context, state) {
         final isTrainer = (state.extra as bool?) ?? false;
-        return LoginScreen(isTrainer: isTrainer);
+        return BlocProvider(
+          create: (context) => getIt<LoginCubit>(),
+          child: LoginScreen(isTrainer: isTrainer),
+        );
       },
     ),
 
