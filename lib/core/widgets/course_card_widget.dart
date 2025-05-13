@@ -76,7 +76,7 @@ class CourseCard extends StatelessWidget {
                       CustomText(
                         text: hours,
                         style: TextStyle(
-                          color: AppColors.gery200,
+                          color: AppColors.greyLight200,
                           fontWeight: FontWeightHelper.light,
                           fontSize: 10.sp,
                         ),
@@ -84,7 +84,7 @@ class CourseCard extends StatelessWidget {
                       CustomText(
                         text: lectures,
                         style: TextStyle(
-                          color: AppColors.gery200,
+                          color: AppColors.greyLight200,
                           fontWeight: FontWeightHelper.light,
                           fontSize: 10.sp,
                         ),
@@ -96,7 +96,7 @@ class CourseCard extends StatelessWidget {
                             CustomText(
                               text: 'مستوي الاكتمال',
                               style: TextStyle(
-                                color: AppColors.gery200,
+                                color: AppColors.greyLight200,
                                 fontWeight: FontWeightHelper.light,
                                 fontSize: 10.sp,
                               ),

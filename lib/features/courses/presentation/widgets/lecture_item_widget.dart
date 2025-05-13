@@ -15,7 +15,7 @@ class LectureItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.gery200),
+        borderSide: const BorderSide(color: AppColors.greyLight200),
         borderRadius: BorderRadius.circular(8.r),
       ),
       elevation: 0,

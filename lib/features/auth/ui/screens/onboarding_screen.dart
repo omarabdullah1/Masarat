@@ -115,8 +115,8 @@ class ProfessionalTracksApp extends StatelessWidget {
                     CustomButton(
                       labelText: 'موظف',
                       buttonColor: AppColors.white,
-                      textColor: AppColors.gery200,
-                      borderColor: AppColors.gery200,
+                      textColor: AppColors.greyLight200,
+                      borderColor: AppColors.greyLight200,
                       borderWidth: 2.w,
                       onTap: () {},
                       textFontSize: 22.sp,
