@@ -10,6 +10,7 @@ abstract class ApiResult<T> with _$ApiResult<T> {
   const factory ApiResult.success(T data) = Success<T>;
   const factory ApiResult.failure(ApiErrorModel apiErrorModel) = Failure<T>;
 
+  @override
   R when<R>({
     required R Function(T data) success,
     required R Function(ApiErrorModel apiErrorModel) failure,

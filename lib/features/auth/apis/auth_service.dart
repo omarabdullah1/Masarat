@@ -8,9 +8,14 @@ import 'package:retrofit/retrofit.dart';
 
 part 'auth_service.g.dart';
 
-@RestApi(baseUrl: AuthenticationApiConstants.apiBaseUrl)
+// Use empty string for baseUrl, we'll set it in Dio instance
+@RestApi()
 abstract class AuthenticationService {
-  factory AuthenticationService(Dio dio) = _AuthenticationService;
+  factory AuthenticationService(Dio dio) {
+    // Set the base URL from config on the dio instance
+    dio.options.baseUrl = AuthenticationApiConstants.apiBaseUrl;
+    return _AuthenticationService(dio);
+  }
 
   @POST(AuthenticationApiConstants.login)
   Future<LoginResponse> login(

@@ -20,7 +20,7 @@ class MasaratApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: Constants.fontName,
-            appBarTheme: AppBarTheme(color: AppColors.background),
+            appBarTheme: const AppBarTheme(color: AppColors.background),
             useMaterial3: false,
           ),
           localizationsDelegates: const [

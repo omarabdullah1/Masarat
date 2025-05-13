@@ -1,5 +1,7 @@
+import 'package:masarat/core/config.dart';
+
 class AuthenticationApiConstants {
-  static const String apiBaseUrl = 'https://wecareroot.ddns.net:5300/';
+  static String get apiBaseUrl => Config.get('apiUrl') as String;
 
   static const String login = 'api/auth/login';
   static const String loginGoogle = 'api/auth/login-google';

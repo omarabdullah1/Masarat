@@ -38,6 +38,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   // Apply SSL certificate bypass directly to handle expired certificates
   DioFactory.applySslBypass();
 
+  // Log environment information
+  var environment = Config.flavor;
+  log('App running in $environment environment');
+
 // Cross-flavor configuration
   // final apiUrl = Config.get('apiUrl');
   final enableLogging = Config.get('enableLogging') as bool;

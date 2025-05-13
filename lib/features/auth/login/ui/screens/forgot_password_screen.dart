@@ -80,7 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           style: TextStyles.font12GrayRegular,
         ),
         Gap(5.h),
-        AppTextFormField(
+        const AppTextFormField(
           hintText: 'example@email.com',
           validator: AppValidator.emailValidator,
           backgroundColor: AppColors.white,

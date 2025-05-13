@@ -18,7 +18,8 @@ class AddLectureButtonWidget extends StatelessWidget {
         backgroundColor: WidgetStateProperty.all(AppColors.white),
         foregroundColor: WidgetStateProperty.all(AppColors.primary),
         elevation: WidgetStateProperty.all(0),
-        side: WidgetStateProperty.all(BorderSide(color: AppColors.primary)),
+        side:
+            WidgetStateProperty.all(const BorderSide(color: AppColors.primary)),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
         ),

@@ -23,7 +23,7 @@ class AddLectureFormWidget extends StatelessWidget {
         children: [
           TextField(
             controller: courseNameController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'اسم الدورة التدريبية',
               iconColor: AppColors.primary,
               fillColor: AppColors.white,
@@ -32,7 +32,7 @@ class AddLectureFormWidget extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.primary),
               ),
-              enabledBorder: const OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent),
               ),
               border: OutlineInputBorder(
@@ -44,7 +44,7 @@ class AddLectureFormWidget extends StatelessWidget {
           TextField(
             controller: contentController,
             maxLines: 3,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'وضع محتوى المحاضرة',
               iconColor: AppColors.primary,
               fillColor: AppColors.white,
@@ -53,7 +53,7 @@ class AddLectureFormWidget extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.primary),
               ),
-              enabledBorder: const OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent),
               ),
               border: OutlineInputBorder(
@@ -68,16 +68,16 @@ class AddLectureFormWidget extends StatelessWidget {
               labelText: 'وضع المصادر',
               iconColor: AppColors.primary,
               fillColor: AppColors.white,
-              labelStyle: TextStyle(color: AppColors.gray),
+              labelStyle: const TextStyle(color: AppColors.gray),
               filled: true,
               suffixIcon: IconButton(
-                icon: Icon(Icons.upload, color: AppColors.primary),
+                icon: const Icon(Icons.upload, color: AppColors.primary),
                 onPressed: () {},
               ),
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent),
               ),
-              focusedBorder: OutlineInputBorder(
+              focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.primary),
               ),
               border: const OutlineInputBorder(),

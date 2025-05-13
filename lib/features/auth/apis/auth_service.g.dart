@@ -13,9 +13,7 @@ class _AuthenticationService implements AuthenticationService {
     this._dio, {
     this.baseUrl,
     this.errorLogger,
-  }) {
-    baseUrl ??= 'https://wecareroot.ddns.net:5300/';
-  }
+  });
 
   final Dio _dio;
 

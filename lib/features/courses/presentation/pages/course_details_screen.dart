@@ -30,7 +30,7 @@ class CourseDetailsScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_forward_ios_outlined,
             color: AppColors.primary,
           ),

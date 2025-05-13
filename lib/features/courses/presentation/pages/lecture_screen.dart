@@ -45,12 +45,12 @@ class LectureScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 8.h),
-                    Text(
+                    const Text(
                       'عدد الساعات: 7 ساعات',
                       style: TextStyle(color: AppColors.gray),
                     ),
                     SizedBox(height: 4.h),
-                    Text(
+                    const Text(
                       'تم مشاهدة: 1/42',
                       style: TextStyle(color: AppColors.primary),
                     ),

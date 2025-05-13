@@ -26,7 +26,7 @@ class CustomDrawer extends StatelessWidget {
                 child: IconButton(
                   icon: SvgPicture.asset(
                     AppImage.menuIcon,
-                    colorFilter: ColorFilter.mode(
+                    colorFilter: const ColorFilter.mode(
                       AppColors.drawerIconColor,
                       BlendMode.srcIn,
                     ),
