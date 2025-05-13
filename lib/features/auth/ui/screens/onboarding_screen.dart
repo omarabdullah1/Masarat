@@ -64,8 +64,8 @@ class ProfessionalTracksApp extends StatelessWidget {
                     CustomButton(
                       labelText: 'مدرب',
                       buttonColor: AppColors.primary,
-                      textColor: AppColors.withe,
-                      borderColor: AppColors.withe,
+                      textColor: AppColors.white,
+                      borderColor: AppColors.white,
                       textFontSize: 22.sp,
                       borderWidth: 2.w,
                       onTap: () {
@@ -75,7 +75,7 @@ class ProfessionalTracksApp extends StatelessWidget {
                     Gap(16.h),
                     CustomButton(
                       labelText: 'متدرب',
-                      buttonColor: AppColors.withe,
+                      buttonColor: AppColors.white,
                       textColor: AppColors.primary,
                       onTap: () {
                         context.go(AppRoute.login, extra: false);
@@ -87,7 +87,7 @@ class ProfessionalTracksApp extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Divider(
-                            color: AppColors.withe,
+                            color: AppColors.white,
                             thickness: 1.h,
                             indent: 32.w,
                             endIndent: 8.w,
@@ -96,14 +96,14 @@ class ProfessionalTracksApp extends StatelessWidget {
                         Text(
                           'أو',
                           style: TextStyle(
-                            color: AppColors.withe,
+                            color: AppColors.white,
                             fontSize: 18.sp,
                             fontFamily: Constants.fontName,
                           ),
                         ),
                         Expanded(
                           child: Divider(
-                            color: AppColors.withe,
+                            color: AppColors.white,
                             thickness: 1.h,
                             indent: 8.w,
                             endIndent: 32.w,
@@ -114,7 +114,7 @@ class ProfessionalTracksApp extends StatelessWidget {
                     Gap(16.h),
                     CustomButton(
                       labelText: 'موظف',
-                      buttonColor: AppColors.withe,
+                      buttonColor: AppColors.white,
                       textColor: AppColors.gery200,
                       borderColor: AppColors.gery200,
                       borderWidth: 2.w,

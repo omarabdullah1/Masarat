@@ -145,7 +145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             hintText: hintText,
             validator: validator,
             enabled: enabled,
-            backgroundColor: AppColors.withe,
+            backgroundColor: AppColors.white,
             isObscureText: isObscureText,
             suffixIcon: suffixIcon,
           ),
@@ -172,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             hintText: 'أدخل كلمة السر',
             isObscureText: isPasswordObscured,
             validator: AppValidator.passwordValidator,
-            backgroundColor: AppColors.withe,
+            backgroundColor: AppColors.white,
             suffixIcon: GestureDetector(
               onTap: () {
                 setState(() {
@@ -199,7 +199,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         height: 45.h,
         labelText: 'إنشاء الحساب',
         textFontSize: 16.sp,
-        textColor: AppColors.withe,
+        textColor: AppColors.white,
       ),
     );
   }

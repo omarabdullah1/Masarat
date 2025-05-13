@@ -201,7 +201,7 @@ class PackageCard extends StatelessWidget {
                     height: 27.h,
                     radius: 58.r,
                     labelText: 'اشترك الآن',
-                    buttonColor: AppColors.withe,
+                    buttonColor: AppColors.white,
                     textColor: AppColors.primary,
                     borderColor: AppColors.primary,
                     onTap: () {},

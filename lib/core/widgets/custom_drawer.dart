@@ -140,7 +140,7 @@ class CustomDrawer extends StatelessWidget {
 
   // Helper Method for Divider
   Widget _divider() => CustomsDivider(
-        color: AppColors.withe,
+        color: AppColors.white,
         height: 1.h,
       );
 }

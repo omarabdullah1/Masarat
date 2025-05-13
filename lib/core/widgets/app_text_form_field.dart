@@ -19,6 +19,7 @@ class AppTextFormField extends StatelessWidget {
     this.backgroundColor,
     this.controller,
     this.enabled,
+    this.onSubmit,
   });
   final EdgeInsetsGeometry? contentPadding;
   final InputBorder? focusedBorder;
@@ -32,6 +33,7 @@ class AppTextFormField extends StatelessWidget {
   final Color? backgroundColor;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final void Function(String data)? onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +89,11 @@ class AppTextFormField extends StatelessWidget {
       ),
       obscureText: isObscureText ?? false,
       style: TextStyles.font14DarkBlackRegular,
+      onFieldSubmitted: (value) {
+        if (onSubmit != null) {
+          onSubmit?.call(value);
+        }
+      },
       validator: (value) {
         return validator!(value);
       },

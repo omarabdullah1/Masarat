@@ -1,26 +1,22 @@
-
 import 'package:flutter/material.dart';
 
-import 'package:masarat/core/utils/hex_color.dart';
-
-
-class AppColors{
-  static Color primary = HexColor('#00A89D');
-  static Color hint    = Colors.white30;
-  static Color text100= HexColor('#17202A');
-  static Color background    = HexColor('#F8F9F9');
-  static Color yellow    = HexColor('#FFAC06');
-  static Color red    = HexColor('#EA001B');
-  static Color background2   =HexColor('#1B2631');
-  static Color withe    = Colors.white;
-  static Color txtColor = HexColor('#272727');
-  static Color blue     = HexColor('#11A6A1');
-  static Color gery200     = HexColor('#C4D2CE');
-  static Color gray   = HexColor('#747877');
-  static Color orange   = HexColor('#F4A01E');
-  static Color lighterGray     = HexColor('#E0E3E1');
-  static Color drawerIconColor     = HexColor('#F2F4F2');
+class AppColors {
+  static const Color primary = Color(0xFF00A89D);
+  static const Color black = Color(0xFF000000);
+  static const Color transparent = Color(0x00000000);
+  static const Color hint = Colors.white30;
+  static const Color text100 = Color(0xFF17202A);
+  static const Color background = Color(0xFFF8F9F9);
+  static const Color yellow = Color(0xFFFFAC06);
+  static const Color red = Color(0xFFEA001B);
+  static const Color background2 = Color(0xFF1B2631);
+  static const Color white = Colors.white;
+  static const Color txtColor = Color(0xFF272727);
+  static const Color blue = Color(0xFF11A6A1);
+  static const Color gery200 = Color(0xFFC4D2CE);
+  static const Color gray = Color(0xFF747877);
+  static const Color orange = Color(0xFFF4A01E);
+  static const Color lighterGray = Color(0xFFE0E3E1);
+  static const Color drawerIconColor = Color(0xFFF2F4F2);
   static const Color moreLighterGray = Color(0xFFF5F5F5);
-
-
 }

@@ -26,7 +26,7 @@ class AddLectureFormWidget extends StatelessWidget {
             decoration: InputDecoration(
               labelText: 'اسم الدورة التدريبية',
               iconColor: AppColors.primary,
-              fillColor: AppColors.withe,
+              fillColor: AppColors.white,
               labelStyle: TextStyle(color: AppColors.gray),
               filled: true,
               focusedBorder: OutlineInputBorder(
@@ -47,7 +47,7 @@ class AddLectureFormWidget extends StatelessWidget {
             decoration: InputDecoration(
               labelText: 'وضع محتوى المحاضرة',
               iconColor: AppColors.primary,
-              fillColor: AppColors.withe,
+              fillColor: AppColors.white,
               labelStyle: TextStyle(color: AppColors.gray),
               filled: true,
               focusedBorder: OutlineInputBorder(
@@ -67,7 +67,7 @@ class AddLectureFormWidget extends StatelessWidget {
             decoration: InputDecoration(
               labelText: 'وضع المصادر',
               iconColor: AppColors.primary,
-              fillColor: AppColors.withe,
+              fillColor: AppColors.white,
               labelStyle: TextStyle(color: AppColors.gray),
               filled: true,
               suffixIcon: IconButton(

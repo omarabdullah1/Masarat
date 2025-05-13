@@ -120,7 +120,7 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
               style: TextStyle(fontSize: 12.sp),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.withe,
+              backgroundColor: AppColors.white,
               foregroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.r),

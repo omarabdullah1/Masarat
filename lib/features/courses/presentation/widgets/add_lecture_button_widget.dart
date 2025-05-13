@@ -15,7 +15,7 @@ class AddLectureButtonWidget extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: toggleAddLecture,
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(AppColors.withe),
+        backgroundColor: WidgetStateProperty.all(AppColors.white),
         foregroundColor: WidgetStateProperty.all(AppColors.primary),
         elevation: WidgetStateProperty.all(0),
         side: WidgetStateProperty.all(BorderSide(color: AppColors.primary)),

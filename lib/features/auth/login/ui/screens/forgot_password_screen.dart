@@ -83,7 +83,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         AppTextFormField(
           hintText: 'example@email.com',
           validator: AppValidator.emailValidator,
-          backgroundColor: AppColors.withe,
+          backgroundColor: AppColors.white,
         ),
       ],
     );
@@ -97,7 +97,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       height: 45.h,
       labelText: 'إرسال رابط لإعادة تعيين كلمة السر',
       textFontSize: 16.sp,
-      textColor: AppColors.withe,
+      textColor: AppColors.white,
     );
   }
 }

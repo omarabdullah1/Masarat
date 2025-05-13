@@ -222,7 +222,7 @@ class CourseDetailsScreen extends StatelessWidget {
             radius: 58.r,
             labelText: 'شــراء الأن',
             buttonColor: AppColors.primary,
-            textColor: AppColors.withe,
+            textColor: AppColors.white,
             onTap: () {},
             textFontSize: 10.sp,
             fontWeight: FontWeightHelper.light,
