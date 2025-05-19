@@ -7,7 +7,7 @@ import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/assets_mangment.dart';
 import 'package:masarat/core/widgets/customs_divider.dart';
-import 'package:masarat/core/widgets/drawer_item.dart';
+import 'package:masarat/core/utils/drawer_item.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
