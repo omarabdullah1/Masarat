@@ -47,9 +47,11 @@ class CustomScaffold extends StatelessWidget {
     final canGoBack = context.canPop();
 
     // Debug information
-    debugPrint('CustomScaffold - canPop: $canGoBack');
-    if (canGoBack) {
-      debugPrint('CustomScaffold - has history to go back to');
+    if (kDebugMode) {
+      debugPrint('CustomScaffold - canPop: $canGoBack');
+      if (canGoBack) {
+        debugPrint('CustomScaffold - has history to go back to');
+      }
     }
 
     return Scaffold(
