@@ -16,8 +16,8 @@ class LoadingWidget extends StatelessWidget {
   const LoadingWidget({
     super.key,
     required this.loadingState,
-    this.height = 80,
-    this.width = 80,
+    this.height = 100,
+    this.width = 100,
     this.borderRadius = 15,
     this.backgroundColor = AppColors.white,
   });
@@ -53,8 +53,8 @@ class LoadingWidget extends StatelessWidget {
                   dotLottie != null
                       ? Lottie.memory(
                           dotLottie.animations.values.first,
-                          height: height.h * 0.7,
-                          width: width.h * 0.7,
+                          height: height.h * 3.5,
+                          width: width.h * 3.5,
                           fit: BoxFit.contain,
                         )
                       : SizedBox(

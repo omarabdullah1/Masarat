@@ -5,6 +5,8 @@ import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/di/dependency_injection.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/login/ui/screens/login_screen.dart';
+import 'package:masarat/features/auth/signup/logic/cubit/register_cubit.dart';
+import 'package:masarat/features/auth/signup/ui/screens/sign_up_screen.dart';
 import 'package:masarat/features/auth/ui/screens/onboarding_screen.dart';
 import 'package:masarat/features/cart/presentation/pages/shopping_cart_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/course_details_screen.dart';
@@ -40,6 +42,17 @@ final GoRouter router = GoRouter(
         return BlocProvider(
           create: (context) => getIt<LoginCubit>(),
           child: LoginScreen(isTrainer: isTrainer),
+        );
+      },
+    ),
+    // SignUp Route
+    GoRoute(
+      path: AppRoute.signUp,
+      name: AppRoute.signUp,
+      builder: (context, state) {
+        return BlocProvider(
+          create: (context) => getIt<RegisterCubit>(),
+          child: const SignUpScreen(),
         );
       },
     ),

@@ -2,6 +2,7 @@ class AppRoute {
   // Define static constants for paths and names
   static const String onboarding = '/onboarding';
   static const String login = '/login';
+  static const String signUp = '/signUp';
   static const String home = '/home';
   static const String profile = 'profileScreen';
   static const String trainingCoursesTrainer = '/training-courses-trainer';

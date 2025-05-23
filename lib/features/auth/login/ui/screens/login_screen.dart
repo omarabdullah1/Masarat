@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/constants/validators.dart';
 import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/theme/styles.dart';
@@ -15,7 +17,6 @@ import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_state.dart';
 import 'package:masarat/features/auth/login/ui/screens/forgot_password_screen.dart';
-import 'package:masarat/features/auth/signup/ui/screens/sign_up_screen.dart';
 
 import '../widgets/login_bloc_listener.dart';
 
@@ -236,12 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSignUpPrompt() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute<SignUpScreen>(
-            builder: (context) => const SignUpScreen(),
-          ),
-        );
+        context.go(AppRoute.signUp);
       },
       child: RichText(
         text: TextSpan(

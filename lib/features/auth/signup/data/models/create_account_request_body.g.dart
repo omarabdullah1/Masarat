@@ -9,25 +9,23 @@ part of 'create_account_request_body.dart';
 CreateAccountRequestBody _$CreateAccountRequestBodyFromJson(
         Map<String, dynamic> json) =>
     CreateAccountRequestBody(
+      firstName: json['firstName'] as String,
+      lastName: json['lastName'] as String,
       email: json['email'] as String,
       password: json['password'] as String,
-      firstName: json['first_name'] as String,
-      lastName: json['last_name'] as String,
-      countryCode: json['country_code'] as String?,
-      phoneNumber: json['phone_number'] as String?,
-      birthDate: json['birth_date'] as String?,
-      gender: json['gender'] as String,
+      phoneNumber: json['phoneNumber'] as String,
+      academicDegreePath: json['academicDegreePath'] as String?,
+      idNumber: json['idNumber'] as String?,
     );
 
 Map<String, dynamic> _$CreateAccountRequestBodyToJson(
         CreateAccountRequestBody instance) =>
     <String, dynamic>{
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
       'email': instance.email,
       'password': instance.password,
-      'first_name': instance.firstName,
-      'last_name': instance.lastName,
-      'country_code': instance.countryCode,
-      'phone_number': instance.phoneNumber,
-      'birth_date': instance.birthDate,
-      'gender': instance.gender,
+      'phoneNumber': instance.phoneNumber,
+      'academicDegreePath': instance.academicDegreePath,
+      'idNumber': instance.idNumber,
     };
