@@ -53,8 +53,8 @@ class LoadingWidget extends StatelessWidget {
                   dotLottie != null
                       ? Lottie.memory(
                           dotLottie.animations.values.first,
-                          height: height.h * 3.5,
-                          width: width.h * 3.5,
+                          height: height.h * 0.8,
+                          width: width.h * 0.8,
                           fit: BoxFit.contain,
                         )
                       : SizedBox(
