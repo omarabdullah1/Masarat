@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:masarat/core/networking/api_error_handler.dart';
 import 'package:masarat/core/networking/api_result.dart';
 import 'package:masarat/features/auth/apis/auth_service.dart';
@@ -12,8 +14,27 @@ class CreateAccountRepo {
     CreateAccountRequestBody createAccountRequestBody,
   ) async {
     try {
+      // Upload academic degree file if provided
+      if (createAccountRequestBody.academicDegreePath != null) {
+        final uploadResult = await uploadAcademicDegree(
+            File(createAccountRequestBody.academicDegreePath!));
+        if (uploadResult is ApiResultFailure) {
+          return ApiResult.failure(uploadResult.error);
+        }
+      }
+
+      // Create account
       final response =
           await _apiService.createAccount(createAccountRequestBody);
+      return ApiResult.success(response);
+    } catch (error) {
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
+  Future<ApiResult<dynamic>> uploadAcademicDegree(File file) async {
+    try {
+      final response = await _apiService.uploadAcademicDegree(file);
       return ApiResult.success(response);
     } catch (error) {
       return ApiResult.failure(ApiErrorHandler.handle(error));

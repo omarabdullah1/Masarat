@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/assets_mangment.dart';
+import 'package:masarat/core/utils/navigation_helper.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class CustomScaffold extends StatelessWidget {
@@ -22,6 +24,7 @@ class CustomScaffold extends StatelessWidget {
     this.drawerIconColor,
     this.centerTitle = true,
     this.titleColor,
+    this.onBackPressed,
   });
   final Widget body;
   final String? title;
@@ -35,12 +38,21 @@ class CustomScaffold extends StatelessWidget {
   final bool showBackButton;
   final bool centerTitle;
   final void Function()? onTap;
+  final void Function()? onBackPressed;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
 
   @override
   Widget build(BuildContext context) {
-    final canGoBack = Navigator.of(context).canPop();
+    final canGoBack = context.canPop();
+
+    // Debug information
+    if (kDebugMode) {
+      debugPrint('CustomScaffold - canPop: $canGoBack');
+      if (canGoBack) {
+        debugPrint('CustomScaffold - has history to go back to');
+      }
+    }
 
     return Scaffold(
       backgroundColor: backgroundColor ?? AppColors.background,
@@ -88,7 +100,16 @@ class CustomScaffold extends StatelessWidget {
       );
     } else if (showBackButton || canGoBack) {
       return IconButton(
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () {
+          // If a custom back handler is provided, use that
+          if (onBackPressed != null) {
+            onBackPressed!();
+            return;
+          }
+
+          // Use the navigation helper to try multiple back navigation methods
+          NavigationHelper.tryGoBack(context);
+        },
         icon: Icon(
           Icons.arrow_back_ios,
           color: Theme.of(context).iconTheme.color,
