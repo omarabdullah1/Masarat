@@ -2,19 +2,19 @@ class AppRoute {
   // Define static constants for paths and names
   static const String onboarding = '/onboarding';
   static const String login = '/login';
-  static const String signUp = '/signUp';
+  static const String signUp = '/signup';
   static const String home = '/home';
-  static const String profile = 'profileScreen';
-  static const String trainingCoursesTrainer = '/training-courses-trainer';
-  static const String myLibrary = 'myLibrary';
+  static const String profile = 'profilescreen';
+  static const String trainingCoursesTrainer = '/trainingcoursestrainer';
+  static const String myLibrary = 'mylibrary';
   static const String policies = 'policies';
-  static const String aboutUs = 'aboutUs';
-  static const String shoppingCart = 'shoppingCart';
-  static const String trainingCourses = 'trainingCourses';
-  static const String courseDetails = 'courseDetails/:courseId';
-  static const String trainerCourseDetails = 'trainerCourseDetails/:courseId';
-  static const String lectureScreen = 'lectureScreen';
-  static const String lectureDetails = 'lectureDetails/:lectureId';
-  static const String careerGuidance = '/careerGuidance';
+  static const String aboutUs = 'aboutus';
+  static const String shoppingCart = 'shoppingcart';
+  static const String trainingCourses = 'trainingcourses';
+  static const String courseDetails = 'coursedetails/:courseid';
+  static const String trainerCourseDetails = 'trainercoursedetails/:courseid';
+  static const String lectureScreen = 'lecturescreen';
+  static const String lectureDetails = 'lecturedetails/:lectureid';
+  static const String careerGuidance = '/careerguidance';
   static const String pricing = 'pricing';
 }
