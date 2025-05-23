@@ -77,9 +77,11 @@ class ProfessionalTracksApp extends StatelessWidget {
                       labelText: 'متدرب',
                       buttonColor: AppColors.white,
                       textColor: AppColors.primary,
-                      onTap: () {
-                        context.go(AppRoute.login, extra: false);
-                      },
+                      onTap: null,
+                      // () {
+
+                      //   // context.go(AppRoute.login, extra: false);
+                      // },
                       textFontSize: 22.sp,
                     ),
                     Gap(16.h),
@@ -115,10 +117,8 @@ class ProfessionalTracksApp extends StatelessWidget {
                     CustomButton(
                       labelText: 'موظف',
                       buttonColor: AppColors.white,
-                      textColor: AppColors.greyLight200,
-                      borderColor: AppColors.greyLight200,
-                      borderWidth: 2.w,
-                      onTap: () {},
+                      textColor: AppColors.primary,
+                      onTap: null,
                       textFontSize: 22.sp,
                     ),
                   ],

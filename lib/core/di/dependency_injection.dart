@@ -7,6 +7,8 @@ import 'package:masarat/features/auth/login/data/repos/login_repo.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/signup/data/repos/create_account_repo.dart';
 
+import '../../features/auth/signup/logic/cubit/register_cubit.dart';
+
 final getIt = GetIt.instance;
 
 Future<void> setupGetIt() async {
@@ -37,5 +39,6 @@ Future<void> setupGetIt() async {
   /************************ */
   */
     ..registerFactory<GeneralCubit>(GeneralCubit.new)
-    ..registerFactory<LoginCubit>(() => LoginCubit(getIt()));
+    ..registerFactory<LoginCubit>(() => LoginCubit(getIt()))
+    ..registerFactory<RegisterCubit>(() => RegisterCubit(getIt()));
 }

@@ -36,6 +36,9 @@ target 'Runner' do
   # Remove the explicit GoogleMaps version constraint
   # pod 'GoogleMaps', '9.4.1'
   
+  # Pin SDWebImage to a compatible version
+  pod 'SDWebImage', '~> 5.18.0'
+  
   target 'RunnerTests' do
     inherit! :search_paths
   end
