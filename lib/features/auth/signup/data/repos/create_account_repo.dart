@@ -16,8 +16,11 @@ class CreateAccountRepo {
     try {
       // Upload academic degree file if provided
       if (createAccountRequestBody.academicDegreePath != null) {
-        await uploadAcademicDegree(
+        final uploadResult = await uploadAcademicDegree(
             File(createAccountRequestBody.academicDegreePath!));
+        if (uploadResult is ApiResultFailure) {
+          return ApiResult.failure(uploadResult.error);
+        }
       }
 
       // Create account
