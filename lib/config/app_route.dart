@@ -7,6 +7,7 @@ class AppRoute {
   static const String home = '/home';
   static const String profile = 'profilescreen';
   static const String trainingCoursesTrainer = '/trainingcoursestrainer';
+  static const String createCourse = 'createcourse';
   static const String myLibrary = 'mylibrary';
   static const String policies = 'policies';
   static const String aboutUs = 'aboutus';

@@ -20,6 +20,7 @@ class AppTextFormField extends StatelessWidget {
     this.controller,
     this.enabled,
     this.onSubmit,
+    this.maxLines = 1,
   });
   final EdgeInsetsGeometry? contentPadding;
   final InputBorder? focusedBorder;
@@ -34,12 +35,14 @@ class AppTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final void Function(String data)? onSubmit;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       enabled: enabled,
       controller: controller,
+      maxLines: maxLines,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: contentPadding ??

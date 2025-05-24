@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +13,8 @@ import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/widgets/loading_widget.dart';
 
 class LoginBlocListener extends StatelessWidget {
-  const LoginBlocListener({super.key});
+  const LoginBlocListener({super.key, required this.isTrainer});
+  final bool isTrainer;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,13 @@ class LoginBlocListener extends StatelessWidget {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.of(context).popUntil((route) => route.isFirst);
               isLoggedInUser = true;
-              context.go(AppRoute.home);
+              if (isTrainer) {
+                log('User is a trainer, navigating to training courses');
+                context.go(AppRoute.trainingCoursesTrainer);
+              } else {
+                log('User is not a trainer, navigating to home');
+                context.go(AppRoute.home);
+              }
             });
           },
           error: (error) {
