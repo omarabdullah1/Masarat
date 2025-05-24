@@ -23,9 +23,18 @@ import 'package:masarat/features/profile/presentation/pages/profile_screen.dart'
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
 
+import '../features/splash/ui/splash_screen.dart';
+
 final GoRouter router = GoRouter(
-  initialLocation: AppRoute.onboarding, // Start at onboarding
+  initialLocation: AppRoute.splash, // Start at onboarding
   routes: [
+    // Splash Route
+    GoRoute(
+      path: AppRoute.splash,
+      name: AppRoute.splash,
+      builder: (context, state) => const SplashScreen(),
+    ),
+
     // Onboarding Route
     GoRoute(
       path: AppRoute.onboarding,
