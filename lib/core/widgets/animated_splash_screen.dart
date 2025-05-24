@@ -27,7 +27,7 @@ class AnimatedSplash extends StatefulWidget {
   final Transition type;
   Animation<double>? animation;
   final Widget child;
-  dynamic durationInSeconds;
+  final int durationInSeconds;
   final Widget navigator;
   final Curve curve;
 
