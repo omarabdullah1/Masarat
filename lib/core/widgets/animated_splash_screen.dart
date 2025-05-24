@@ -38,7 +38,7 @@ class AnimatedSplash extends StatefulWidget {
     this.curve = Curves.ease,
     this.animation,
     required this.navigator,
-    this.durationInSeconds,
+    required this.durationInSeconds,
     this.backgroundColor = AppColors.white,
   });
 
