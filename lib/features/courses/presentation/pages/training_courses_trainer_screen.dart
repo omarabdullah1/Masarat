@@ -75,7 +75,9 @@ class _TrainingCoursesTrainerScreenState
                     radius: 58.r,
                     buttonColor: AppColors.background,
                     textColor: AppColors.primary,
-                    onTap: () {},
+                    onTap: () {
+                      context.goNamed(AppRoute.createCourse);
+                    },
                     textFontSize: 8.sp,
                     borderColor: AppColors.primary,
                     fontWeight: FontWeightHelper.light,

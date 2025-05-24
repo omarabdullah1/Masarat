@@ -50,7 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
               Gap(10.h),
               _buildPasswordField(),
               Gap(10.h),
-              const LoginBlocListener(),
+              LoginBlocListener(
+                isTrainer: widget.isTrainer,
+              ),
               Gap(10.h),
               _buildRememberMeAndForgotPasswordRow(),
               Gap(10.h),

@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
+import 'package:masarat/core/helpers/constants.dart';
+import 'package:masarat/core/helpers/shared_pref_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/assets_mangment.dart';
 import 'package:masarat/core/widgets/customs_divider.dart';
@@ -126,9 +128,55 @@ class CustomDrawer extends StatelessWidget {
             // Logout
             DrawerItem(
               title: 'تسجيل الخروج',
-              onTap: () {
+              onTap: () async {
+                // Close the drawer first
                 Scaffold.of(context).closeDrawer();
-                // Implement logout logic
+
+                // Show a loading dialog
+                if (context.mounted) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => const AlertDialog(
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 20),
+                          Text('جاري تسجيل الخروج...'),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                try {
+                  // Clear user token from secure storage
+                  await SharedPrefHelper.removeSecuredString(
+                      SharedPrefKeys.userToken);
+                  // Clear all user data
+                  await SharedPrefHelper.clearAllSecuredData();
+                  // Reset the isLoggedInUser flag
+                  isLoggedInUser = false;
+
+                  // Dismiss loading dialog and navigate to onboarding screen
+                  if (context.mounted) {
+                    Navigator.of(context).pop(); // Dismiss dialog
+                    context.go(AppRoute.onboarding);
+                  }
+                } catch (e) {
+                  // If there's an error, still try to navigate to onboarding
+                  if (context.mounted) {
+                    Navigator.of(context).pop(); // Dismiss dialog
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('حدث خطأ أثناء تسجيل الخروج'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    context.go(AppRoute.onboarding);
+                  }
+                }
               },
             ),
             _divider(),

@@ -9,10 +9,12 @@ import 'package:masarat/features/auth/signup/logic/cubit/register_cubit.dart';
 import 'package:masarat/features/auth/signup/ui/screens/sign_up_screen.dart';
 import 'package:masarat/features/auth/ui/screens/onboarding_screen.dart';
 import 'package:masarat/features/cart/presentation/pages/shopping_cart_screen.dart';
+import 'package:masarat/features/courses/logic/cubit/create_course_cubit.dart';
 import 'package:masarat/features/courses/presentation/pages/course_details_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/lecture_details.dart';
 import 'package:masarat/features/courses/presentation/pages/lecture_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/trainer_course_details_screen.dart';
+import 'package:masarat/features/courses/ui/screens/create_course_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/training_courses_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/training_courses_trainer_screen.dart';
 import 'package:masarat/features/home/presentation/pages/home_screen.dart';
@@ -157,6 +159,14 @@ final GoRouter router = GoRouter(
       name: AppRoute.trainingCoursesTrainer,
       builder: (context, state) => const TrainingCoursesTrainerScreen(),
       routes: [
+        GoRoute(
+          path: AppRoute.createCourse,
+          name: AppRoute.createCourse,
+          builder: (context, state) => BlocProvider(
+            create: (context) => getIt<CreateCourseCubit>(),
+            child: const CreateCourseScreen(),
+          ),
+        ),
         GoRoute(
           path: AppRoute.trainerCourseDetails,
           name: AppRoute.trainerCourseDetails,
