@@ -25,7 +25,7 @@ enum Transition {
 class AnimatedSplash extends StatefulWidget {
   final Color backgroundColor;
   final Transition type;
-  dynamic animation;
+  Animation<double>? animation;
   final Widget child;
   dynamic durationInSeconds;
   final Widget navigator;
