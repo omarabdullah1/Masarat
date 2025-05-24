@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:masarat/core/helpers/constants.dart';
+import 'package:masarat/core/helpers/shared_pref_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import '../../../assets/assets.dart';
 import '../../../config/app_route.dart';
@@ -17,9 +19,18 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Schedule navigation after splash duration
-    Future.delayed(const Duration(seconds: 4), () {
-      if (mounted) {
-        context.go(AppRoute.login);
+    Future.delayed(const Duration(seconds: 4), () async {
+      if (context.mounted) {
+        String? token =
+            await SharedPrefHelper.getSecuredString(SharedPrefKeys.userToken);
+
+        if (!mounted) return;
+
+        if (token != null && token.isNotEmpty) {
+          context.go(AppRoute.trainingCoursesTrainer);
+        } else {
+          context.go(AppRoute.onboarding);
+        }
       }
     });
   }
