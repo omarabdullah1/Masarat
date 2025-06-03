@@ -1,0 +1,1057 @@
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'published_courses_state.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+/// @nodoc
+mixin _$PublishedCoursesState<T> {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(PublishedCoursesResponse data) success,
+    required TResult Function(String error) error,
+    required TResult Function(PublishedCoursesResponse data) loadingMore,
+    required TResult Function(PublishedCoursesResponse data, String error)
+        loadMoreError,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(PublishedCoursesResponse data)? success,
+    TResult? Function(String error)? error,
+    TResult? Function(PublishedCoursesResponse data)? loadingMore,
+    TResult? Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(PublishedCoursesResponse data)? success,
+    TResult Function(String error)? error,
+    TResult Function(PublishedCoursesResponse data)? loadingMore,
+    TResult Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial<T> value) initial,
+    required TResult Function(Loading<T> value) loading,
+    required TResult Function(PublishedCoursesSuccess<T> value) success,
+    required TResult Function(Error<T> value) error,
+    required TResult Function(LoadingMore<T> value) loadingMore,
+    required TResult Function(LoadMoreError<T> value) loadMoreError,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial<T> value)? initial,
+    TResult? Function(Loading<T> value)? loading,
+    TResult? Function(PublishedCoursesSuccess<T> value)? success,
+    TResult? Function(Error<T> value)? error,
+    TResult? Function(LoadingMore<T> value)? loadingMore,
+    TResult? Function(LoadMoreError<T> value)? loadMoreError,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial<T> value)? initial,
+    TResult Function(Loading<T> value)? loading,
+    TResult Function(PublishedCoursesSuccess<T> value)? success,
+    TResult Function(Error<T> value)? error,
+    TResult Function(LoadingMore<T> value)? loadingMore,
+    TResult Function(LoadMoreError<T> value)? loadMoreError,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PublishedCoursesStateCopyWith<T, $Res> {
+  factory $PublishedCoursesStateCopyWith(PublishedCoursesState<T> value,
+          $Res Function(PublishedCoursesState<T>) then) =
+      _$PublishedCoursesStateCopyWithImpl<T, $Res, PublishedCoursesState<T>>;
+}
+
+/// @nodoc
+class _$PublishedCoursesStateCopyWithImpl<T, $Res,
+        $Val extends PublishedCoursesState<T>>
+    implements $PublishedCoursesStateCopyWith<T, $Res> {
+  _$PublishedCoursesStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$InitialImplCopyWith<T, $Res> {
+  factory _$$InitialImplCopyWith(
+          _$InitialImpl<T> value, $Res Function(_$InitialImpl<T>) then) =
+      __$$InitialImplCopyWithImpl<T, $Res>;
+}
+
+/// @nodoc
+class __$$InitialImplCopyWithImpl<T, $Res>
+    extends _$PublishedCoursesStateCopyWithImpl<T, $Res, _$InitialImpl<T>>
+    implements _$$InitialImplCopyWith<T, $Res> {
+  __$$InitialImplCopyWithImpl(
+      _$InitialImpl<T> _value, $Res Function(_$InitialImpl<T>) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$InitialImpl<T> implements _Initial<T> {
+  const _$InitialImpl();
+
+  @override
+  String toString() {
+    return 'PublishedCoursesState<$T>.initial()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$InitialImpl<T>);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(PublishedCoursesResponse data) success,
+    required TResult Function(String error) error,
+    required TResult Function(PublishedCoursesResponse data) loadingMore,
+    required TResult Function(PublishedCoursesResponse data, String error)
+        loadMoreError,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(PublishedCoursesResponse data)? success,
+    TResult? Function(String error)? error,
+    TResult? Function(PublishedCoursesResponse data)? loadingMore,
+    TResult? Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(PublishedCoursesResponse data)? success,
+    TResult Function(String error)? error,
+    TResult Function(PublishedCoursesResponse data)? loadingMore,
+    TResult Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial<T> value) initial,
+    required TResult Function(Loading<T> value) loading,
+    required TResult Function(PublishedCoursesSuccess<T> value) success,
+    required TResult Function(Error<T> value) error,
+    required TResult Function(LoadingMore<T> value) loadingMore,
+    required TResult Function(LoadMoreError<T> value) loadMoreError,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial<T> value)? initial,
+    TResult? Function(Loading<T> value)? loading,
+    TResult? Function(PublishedCoursesSuccess<T> value)? success,
+    TResult? Function(Error<T> value)? error,
+    TResult? Function(LoadingMore<T> value)? loadingMore,
+    TResult? Function(LoadMoreError<T> value)? loadMoreError,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial<T> value)? initial,
+    TResult Function(Loading<T> value)? loading,
+    TResult Function(PublishedCoursesSuccess<T> value)? success,
+    TResult Function(Error<T> value)? error,
+    TResult Function(LoadingMore<T> value)? loadingMore,
+    TResult Function(LoadMoreError<T> value)? loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Initial<T> implements PublishedCoursesState<T> {
+  const factory _Initial() = _$InitialImpl<T>;
+}
+
+/// @nodoc
+abstract class _$$LoadingImplCopyWith<T, $Res> {
+  factory _$$LoadingImplCopyWith(
+          _$LoadingImpl<T> value, $Res Function(_$LoadingImpl<T>) then) =
+      __$$LoadingImplCopyWithImpl<T, $Res>;
+}
+
+/// @nodoc
+class __$$LoadingImplCopyWithImpl<T, $Res>
+    extends _$PublishedCoursesStateCopyWithImpl<T, $Res, _$LoadingImpl<T>>
+    implements _$$LoadingImplCopyWith<T, $Res> {
+  __$$LoadingImplCopyWithImpl(
+      _$LoadingImpl<T> _value, $Res Function(_$LoadingImpl<T>) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$LoadingImpl<T> implements Loading<T> {
+  const _$LoadingImpl();
+
+  @override
+  String toString() {
+    return 'PublishedCoursesState<$T>.loading()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadingImpl<T>);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(PublishedCoursesResponse data) success,
+    required TResult Function(String error) error,
+    required TResult Function(PublishedCoursesResponse data) loadingMore,
+    required TResult Function(PublishedCoursesResponse data, String error)
+        loadMoreError,
+  }) {
+    return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(PublishedCoursesResponse data)? success,
+    TResult? Function(String error)? error,
+    TResult? Function(PublishedCoursesResponse data)? loadingMore,
+    TResult? Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+  }) {
+    return loading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(PublishedCoursesResponse data)? success,
+    TResult Function(String error)? error,
+    TResult Function(PublishedCoursesResponse data)? loadingMore,
+    TResult Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial<T> value) initial,
+    required TResult Function(Loading<T> value) loading,
+    required TResult Function(PublishedCoursesSuccess<T> value) success,
+    required TResult Function(Error<T> value) error,
+    required TResult Function(LoadingMore<T> value) loadingMore,
+    required TResult Function(LoadMoreError<T> value) loadMoreError,
+  }) {
+    return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial<T> value)? initial,
+    TResult? Function(Loading<T> value)? loading,
+    TResult? Function(PublishedCoursesSuccess<T> value)? success,
+    TResult? Function(Error<T> value)? error,
+    TResult? Function(LoadingMore<T> value)? loadingMore,
+    TResult? Function(LoadMoreError<T> value)? loadMoreError,
+  }) {
+    return loading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial<T> value)? initial,
+    TResult Function(Loading<T> value)? loading,
+    TResult Function(PublishedCoursesSuccess<T> value)? success,
+    TResult Function(Error<T> value)? error,
+    TResult Function(LoadingMore<T> value)? loadingMore,
+    TResult Function(LoadMoreError<T> value)? loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class Loading<T> implements PublishedCoursesState<T> {
+  const factory Loading() = _$LoadingImpl<T>;
+}
+
+/// @nodoc
+abstract class _$$PublishedCoursesSuccessImplCopyWith<T, $Res> {
+  factory _$$PublishedCoursesSuccessImplCopyWith(
+          _$PublishedCoursesSuccessImpl<T> value,
+          $Res Function(_$PublishedCoursesSuccessImpl<T>) then) =
+      __$$PublishedCoursesSuccessImplCopyWithImpl<T, $Res>;
+  @useResult
+  $Res call({PublishedCoursesResponse data});
+}
+
+/// @nodoc
+class __$$PublishedCoursesSuccessImplCopyWithImpl<T, $Res>
+    extends _$PublishedCoursesStateCopyWithImpl<T, $Res,
+        _$PublishedCoursesSuccessImpl<T>>
+    implements _$$PublishedCoursesSuccessImplCopyWith<T, $Res> {
+  __$$PublishedCoursesSuccessImplCopyWithImpl(
+      _$PublishedCoursesSuccessImpl<T> _value,
+      $Res Function(_$PublishedCoursesSuccessImpl<T>) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$PublishedCoursesSuccessImpl<T>(
+      null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as PublishedCoursesResponse,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PublishedCoursesSuccessImpl<T> implements PublishedCoursesSuccess<T> {
+  const _$PublishedCoursesSuccessImpl(this.data);
+
+  @override
+  final PublishedCoursesResponse data;
+
+  @override
+  String toString() {
+    return 'PublishedCoursesState<$T>.success(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PublishedCoursesSuccessImpl<T> &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PublishedCoursesSuccessImplCopyWith<T, _$PublishedCoursesSuccessImpl<T>>
+      get copyWith => __$$PublishedCoursesSuccessImplCopyWithImpl<T,
+          _$PublishedCoursesSuccessImpl<T>>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(PublishedCoursesResponse data) success,
+    required TResult Function(String error) error,
+    required TResult Function(PublishedCoursesResponse data) loadingMore,
+    required TResult Function(PublishedCoursesResponse data, String error)
+        loadMoreError,
+  }) {
+    return success(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(PublishedCoursesResponse data)? success,
+    TResult? Function(String error)? error,
+    TResult? Function(PublishedCoursesResponse data)? loadingMore,
+    TResult? Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+  }) {
+    return success?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(PublishedCoursesResponse data)? success,
+    TResult Function(String error)? error,
+    TResult Function(PublishedCoursesResponse data)? loadingMore,
+    TResult Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial<T> value) initial,
+    required TResult Function(Loading<T> value) loading,
+    required TResult Function(PublishedCoursesSuccess<T> value) success,
+    required TResult Function(Error<T> value) error,
+    required TResult Function(LoadingMore<T> value) loadingMore,
+    required TResult Function(LoadMoreError<T> value) loadMoreError,
+  }) {
+    return success(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial<T> value)? initial,
+    TResult? Function(Loading<T> value)? loading,
+    TResult? Function(PublishedCoursesSuccess<T> value)? success,
+    TResult? Function(Error<T> value)? error,
+    TResult? Function(LoadingMore<T> value)? loadingMore,
+    TResult? Function(LoadMoreError<T> value)? loadMoreError,
+  }) {
+    return success?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial<T> value)? initial,
+    TResult Function(Loading<T> value)? loading,
+    TResult Function(PublishedCoursesSuccess<T> value)? success,
+    TResult Function(Error<T> value)? error,
+    TResult Function(LoadingMore<T> value)? loadingMore,
+    TResult Function(LoadMoreError<T> value)? loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (success != null) {
+      return success(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class PublishedCoursesSuccess<T> implements PublishedCoursesState<T> {
+  const factory PublishedCoursesSuccess(final PublishedCoursesResponse data) =
+      _$PublishedCoursesSuccessImpl<T>;
+
+  PublishedCoursesResponse get data;
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PublishedCoursesSuccessImplCopyWith<T, _$PublishedCoursesSuccessImpl<T>>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ErrorImplCopyWith<T, $Res> {
+  factory _$$ErrorImplCopyWith(
+          _$ErrorImpl<T> value, $Res Function(_$ErrorImpl<T>) then) =
+      __$$ErrorImplCopyWithImpl<T, $Res>;
+  @useResult
+  $Res call({String error});
+}
+
+/// @nodoc
+class __$$ErrorImplCopyWithImpl<T, $Res>
+    extends _$PublishedCoursesStateCopyWithImpl<T, $Res, _$ErrorImpl<T>>
+    implements _$$ErrorImplCopyWith<T, $Res> {
+  __$$ErrorImplCopyWithImpl(
+      _$ErrorImpl<T> _value, $Res Function(_$ErrorImpl<T>) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? error = null,
+  }) {
+    return _then(_$ErrorImpl<T>(
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ErrorImpl<T> implements Error<T> {
+  const _$ErrorImpl({required this.error});
+
+  @override
+  final String error;
+
+  @override
+  String toString() {
+    return 'PublishedCoursesState<$T>.error(error: $error)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ErrorImpl<T> &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, error);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ErrorImplCopyWith<T, _$ErrorImpl<T>> get copyWith =>
+      __$$ErrorImplCopyWithImpl<T, _$ErrorImpl<T>>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(PublishedCoursesResponse data) success,
+    required TResult Function(String error) error,
+    required TResult Function(PublishedCoursesResponse data) loadingMore,
+    required TResult Function(PublishedCoursesResponse data, String error)
+        loadMoreError,
+  }) {
+    return error(this.error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(PublishedCoursesResponse data)? success,
+    TResult? Function(String error)? error,
+    TResult? Function(PublishedCoursesResponse data)? loadingMore,
+    TResult? Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+  }) {
+    return error?.call(this.error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(PublishedCoursesResponse data)? success,
+    TResult Function(String error)? error,
+    TResult Function(PublishedCoursesResponse data)? loadingMore,
+    TResult Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this.error);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial<T> value) initial,
+    required TResult Function(Loading<T> value) loading,
+    required TResult Function(PublishedCoursesSuccess<T> value) success,
+    required TResult Function(Error<T> value) error,
+    required TResult Function(LoadingMore<T> value) loadingMore,
+    required TResult Function(LoadMoreError<T> value) loadMoreError,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial<T> value)? initial,
+    TResult? Function(Loading<T> value)? loading,
+    TResult? Function(PublishedCoursesSuccess<T> value)? success,
+    TResult? Function(Error<T> value)? error,
+    TResult? Function(LoadingMore<T> value)? loadingMore,
+    TResult? Function(LoadMoreError<T> value)? loadMoreError,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial<T> value)? initial,
+    TResult Function(Loading<T> value)? loading,
+    TResult Function(PublishedCoursesSuccess<T> value)? success,
+    TResult Function(Error<T> value)? error,
+    TResult Function(LoadingMore<T> value)? loadingMore,
+    TResult Function(LoadMoreError<T> value)? loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class Error<T> implements PublishedCoursesState<T> {
+  const factory Error({required final String error}) = _$ErrorImpl<T>;
+
+  String get error;
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ErrorImplCopyWith<T, _$ErrorImpl<T>> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoadingMoreImplCopyWith<T, $Res> {
+  factory _$$LoadingMoreImplCopyWith(_$LoadingMoreImpl<T> value,
+          $Res Function(_$LoadingMoreImpl<T>) then) =
+      __$$LoadingMoreImplCopyWithImpl<T, $Res>;
+  @useResult
+  $Res call({PublishedCoursesResponse data});
+}
+
+/// @nodoc
+class __$$LoadingMoreImplCopyWithImpl<T, $Res>
+    extends _$PublishedCoursesStateCopyWithImpl<T, $Res, _$LoadingMoreImpl<T>>
+    implements _$$LoadingMoreImplCopyWith<T, $Res> {
+  __$$LoadingMoreImplCopyWithImpl(
+      _$LoadingMoreImpl<T> _value, $Res Function(_$LoadingMoreImpl<T>) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$LoadingMoreImpl<T>(
+      null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as PublishedCoursesResponse,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LoadingMoreImpl<T> implements LoadingMore<T> {
+  const _$LoadingMoreImpl(this.data);
+
+  @override
+  final PublishedCoursesResponse data;
+
+  @override
+  String toString() {
+    return 'PublishedCoursesState<$T>.loadingMore(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoadingMoreImpl<T> &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoadingMoreImplCopyWith<T, _$LoadingMoreImpl<T>> get copyWith =>
+      __$$LoadingMoreImplCopyWithImpl<T, _$LoadingMoreImpl<T>>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(PublishedCoursesResponse data) success,
+    required TResult Function(String error) error,
+    required TResult Function(PublishedCoursesResponse data) loadingMore,
+    required TResult Function(PublishedCoursesResponse data, String error)
+        loadMoreError,
+  }) {
+    return loadingMore(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(PublishedCoursesResponse data)? success,
+    TResult? Function(String error)? error,
+    TResult? Function(PublishedCoursesResponse data)? loadingMore,
+    TResult? Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+  }) {
+    return loadingMore?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(PublishedCoursesResponse data)? success,
+    TResult Function(String error)? error,
+    TResult Function(PublishedCoursesResponse data)? loadingMore,
+    TResult Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (loadingMore != null) {
+      return loadingMore(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial<T> value) initial,
+    required TResult Function(Loading<T> value) loading,
+    required TResult Function(PublishedCoursesSuccess<T> value) success,
+    required TResult Function(Error<T> value) error,
+    required TResult Function(LoadingMore<T> value) loadingMore,
+    required TResult Function(LoadMoreError<T> value) loadMoreError,
+  }) {
+    return loadingMore(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial<T> value)? initial,
+    TResult? Function(Loading<T> value)? loading,
+    TResult? Function(PublishedCoursesSuccess<T> value)? success,
+    TResult? Function(Error<T> value)? error,
+    TResult? Function(LoadingMore<T> value)? loadingMore,
+    TResult? Function(LoadMoreError<T> value)? loadMoreError,
+  }) {
+    return loadingMore?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial<T> value)? initial,
+    TResult Function(Loading<T> value)? loading,
+    TResult Function(PublishedCoursesSuccess<T> value)? success,
+    TResult Function(Error<T> value)? error,
+    TResult Function(LoadingMore<T> value)? loadingMore,
+    TResult Function(LoadMoreError<T> value)? loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (loadingMore != null) {
+      return loadingMore(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoadingMore<T> implements PublishedCoursesState<T> {
+  const factory LoadingMore(final PublishedCoursesResponse data) =
+      _$LoadingMoreImpl<T>;
+
+  PublishedCoursesResponse get data;
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoadingMoreImplCopyWith<T, _$LoadingMoreImpl<T>> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoadMoreErrorImplCopyWith<T, $Res> {
+  factory _$$LoadMoreErrorImplCopyWith(_$LoadMoreErrorImpl<T> value,
+          $Res Function(_$LoadMoreErrorImpl<T>) then) =
+      __$$LoadMoreErrorImplCopyWithImpl<T, $Res>;
+  @useResult
+  $Res call({PublishedCoursesResponse data, String error});
+}
+
+/// @nodoc
+class __$$LoadMoreErrorImplCopyWithImpl<T, $Res>
+    extends _$PublishedCoursesStateCopyWithImpl<T, $Res, _$LoadMoreErrorImpl<T>>
+    implements _$$LoadMoreErrorImplCopyWith<T, $Res> {
+  __$$LoadMoreErrorImplCopyWithImpl(_$LoadMoreErrorImpl<T> _value,
+      $Res Function(_$LoadMoreErrorImpl<T>) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+    Object? error = null,
+  }) {
+    return _then(_$LoadMoreErrorImpl<T>(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as PublishedCoursesResponse,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LoadMoreErrorImpl<T> implements LoadMoreError<T> {
+  const _$LoadMoreErrorImpl({required this.data, required this.error});
+
+  @override
+  final PublishedCoursesResponse data;
+  @override
+  final String error;
+
+  @override
+  String toString() {
+    return 'PublishedCoursesState<$T>.loadMoreError(data: $data, error: $error)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LoadMoreErrorImpl<T> &&
+            (identical(other.data, data) || other.data == data) &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data, error);
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoadMoreErrorImplCopyWith<T, _$LoadMoreErrorImpl<T>> get copyWith =>
+      __$$LoadMoreErrorImplCopyWithImpl<T, _$LoadMoreErrorImpl<T>>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(PublishedCoursesResponse data) success,
+    required TResult Function(String error) error,
+    required TResult Function(PublishedCoursesResponse data) loadingMore,
+    required TResult Function(PublishedCoursesResponse data, String error)
+        loadMoreError,
+  }) {
+    return loadMoreError(data, this.error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(PublishedCoursesResponse data)? success,
+    TResult? Function(String error)? error,
+    TResult? Function(PublishedCoursesResponse data)? loadingMore,
+    TResult? Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+  }) {
+    return loadMoreError?.call(data, this.error);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(PublishedCoursesResponse data)? success,
+    TResult Function(String error)? error,
+    TResult Function(PublishedCoursesResponse data)? loadingMore,
+    TResult Function(PublishedCoursesResponse data, String error)?
+        loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (loadMoreError != null) {
+      return loadMoreError(data, this.error);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial<T> value) initial,
+    required TResult Function(Loading<T> value) loading,
+    required TResult Function(PublishedCoursesSuccess<T> value) success,
+    required TResult Function(Error<T> value) error,
+    required TResult Function(LoadingMore<T> value) loadingMore,
+    required TResult Function(LoadMoreError<T> value) loadMoreError,
+  }) {
+    return loadMoreError(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial<T> value)? initial,
+    TResult? Function(Loading<T> value)? loading,
+    TResult? Function(PublishedCoursesSuccess<T> value)? success,
+    TResult? Function(Error<T> value)? error,
+    TResult? Function(LoadingMore<T> value)? loadingMore,
+    TResult? Function(LoadMoreError<T> value)? loadMoreError,
+  }) {
+    return loadMoreError?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial<T> value)? initial,
+    TResult Function(Loading<T> value)? loading,
+    TResult Function(PublishedCoursesSuccess<T> value)? success,
+    TResult Function(Error<T> value)? error,
+    TResult Function(LoadingMore<T> value)? loadingMore,
+    TResult Function(LoadMoreError<T> value)? loadMoreError,
+    required TResult orElse(),
+  }) {
+    if (loadMoreError != null) {
+      return loadMoreError(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoadMoreError<T> implements PublishedCoursesState<T> {
+  const factory LoadMoreError(
+      {required final PublishedCoursesResponse data,
+      required final String error}) = _$LoadMoreErrorImpl<T>;
+
+  PublishedCoursesResponse get data;
+  String get error;
+
+  /// Create a copy of PublishedCoursesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LoadMoreErrorImplCopyWith<T, _$LoadMoreErrorImpl<T>> get copyWith =>
+      throw _privateConstructorUsedError;
+}

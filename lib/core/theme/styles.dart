@@ -124,4 +124,35 @@ class TextStyles {
     fontWeight: FontWeightHelper.regular,
     color: AppColors.orange,
   );
+
+  // Added styles for PublishedCoursesScreen
+  static TextStyle font16greyBold = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeightHelper.bold,
+    color: AppColors.gray,
+  );
+
+  static TextStyle font18greyBold = TextStyle(
+    fontSize: 18.sp,
+    fontWeight: FontWeightHelper.bold,
+    color: AppColors.gray,
+  );
+
+  static TextStyle font14greyRegular = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeightHelper.regular,
+    color: AppColors.gray,
+  );
+
+  static TextStyle font12PrimaryRegular = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeightHelper.regular,
+    color: AppColors.primary,
+  );
+
+  static TextStyle font16PrimaryBold = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeightHelper.bold,
+    color: AppColors.primary,
+  );
 }
