@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -36,6 +39,7 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log(image ?? 'No image provided', name: 'CourseCard');
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
       decoration: BoxDecoration(
@@ -123,13 +127,37 @@ class CourseCard extends StatelessWidget {
                 Gap(16.w),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    'https://www.gstatic.com/earth/social/00_generic_facebook-001.jpg',
-                    // Replace with your image URL
-                    height: 130.h,
-                    width: 104.w,
-                    fit: BoxFit.cover,
-                  ),
+                  child: image != null
+                      ? CachedNetworkImage(
+                          imageUrl: image!,
+                          height: 130.h,
+                          width: 104.w,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            color: AppColors.lighterGray,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: AppColors.lighterGray,
+                            child: const Icon(Icons.broken_image_outlined,
+                                color: AppColors.gray),
+                          ),
+                        )
+                      : Container(
+                          height: 130.h,
+                          width: 104.w,
+                          color: AppColors.lighterGray,
+                          // child: const Center(
+                          //   child: Icon(
+                          //     Icons.image_not_supported,
+                          //     color: AppColors.gray,
+                          //   ),
+                          // ),
+                        ),
                 ),
               ],
             ),

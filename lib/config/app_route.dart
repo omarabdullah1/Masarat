@@ -19,4 +19,5 @@ class AppRoute {
   static const String lectureDetails = 'lecturedetails/:lectureid';
   static const String careerGuidance = '/careerguidance';
   static const String pricing = 'pricing';
+  static const String publishedCourses = 'publishedcourses';
 }

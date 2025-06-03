@@ -259,7 +259,7 @@ class CourseDetailsScreen extends StatelessWidget {
       onTap: () {
         context.goNamed(
           AppRoute.lectureScreen,
-          pathParameters: {'courseId': '554'},
+          pathParameters: {'courseid': '554'},
         );
       },
       textFontSize: 10.sp,

@@ -120,18 +120,26 @@ class HomeScreen extends StatelessWidget {
                   textColor: AppColors.primary,
                   onTap: () {
                     context.goNamed(AppRoute.myLibrary);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => MyLibrary(),
-                    //   ),
-                    // )
                   },
                   textFontSize: 14.sp,
                   fontWeight: FontWeightHelper.light,
                 ),
               ),
             ],
+          ),
+          Gap(10.h),
+          // Published Courses Button
+          CustomButton(
+            height: 42.h,
+            labelText: 'الدورات المنشورة',
+            radius: 12.r,
+            buttonColor: AppColors.primary,
+            textColor: AppColors.white,
+            onTap: () {
+              context.goNamed(AppRoute.publishedCourses);
+            },
+            textFontSize: 14.sp,
+            fontWeight: FontWeightHelper.medium,
           ),
         ],
       ),

@@ -69,8 +69,8 @@ class LectureScreen extends StatelessWidget {
                       context.goNamed(
                         AppRoute.lectureDetails,
                         pathParameters: {
-                          'courseId': '123', // Example course ID
-                          'lectureId': '456', // Example lecture ID
+                          'courseid': '123', // Example course ID
+                          'lectureid': '456', // Example lecture ID
                         },
                       );
                     },
