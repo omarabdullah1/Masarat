@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-
 import 'package:masarat/core/cubit/general_cubit.dart';
 import 'package:masarat/core/networking/dio_factory.dart';
 import 'package:masarat/features/auth/apis/auth_service.dart';
@@ -9,6 +8,9 @@ import 'package:masarat/features/auth/signup/data/repos/create_account_repo.dart
 import 'package:masarat/features/courses/apis/courses_service.dart';
 import 'package:masarat/features/courses/data/repos/courses_repo.dart';
 import 'package:masarat/features/courses/logic/cubit/create_course_cubit.dart';
+import 'package:masarat/features/instructor/instructor_home/data/apis/home_service.dart';
+import 'package:masarat/features/instructor/instructor_home/data/repos/home_repo.dart';
+import 'package:masarat/features/instructor/instructor_home/logic/cubit/published_courses_cubit.dart';
 
 import '../../features/auth/signup/logic/cubit/register_cubit.dart';
 
@@ -29,6 +31,9 @@ Future<void> setupGetIt() async {
     ..registerLazySingleton<CoursesService>(
       () => CoursesService(dio),
     )
+    ..registerLazySingleton<HomeService>(
+      () => HomeService(dio),
+    )
 
     /************************* */
     /* ******** REPOS *********
@@ -42,6 +47,9 @@ Future<void> setupGetIt() async {
     ..registerLazySingleton<CoursesRepo>(
       () => CoursesRepo(getIt()),
     )
+    ..registerLazySingleton<HomeRepo>(
+      () => HomeRepo(getIt()),
+    )
 
     /************************* */
     /* ******** CUBIT *********
@@ -50,5 +58,7 @@ Future<void> setupGetIt() async {
     ..registerFactory<GeneralCubit>(GeneralCubit.new)
     ..registerFactory<LoginCubit>(() => LoginCubit(getIt()))
     ..registerFactory<RegisterCubit>(() => RegisterCubit(getIt()))
-    ..registerFactory<CreateCourseCubit>(() => CreateCourseCubit(getIt()));
+    ..registerFactory<CreateCourseCubit>(() => CreateCourseCubit(getIt()))
+    ..registerFactory<PublishedCoursesCubit>(
+        () => PublishedCoursesCubit(getIt()));
 }

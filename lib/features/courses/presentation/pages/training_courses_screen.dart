@@ -86,7 +86,7 @@ class _MyLibraryState extends State<TrainingCoursesScreen> {
                     onTap: () {
                       context.goNamed(
                         AppRoute.courseDetails,
-                        pathParameters: {'courseId': '123'},
+                        pathParameters: {'courseid': '123'},
                       );
                     },
                     child: CourseCard(
