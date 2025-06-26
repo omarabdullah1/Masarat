@@ -21,7 +21,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   flutter_blurhash: ^0.8.2
   flutter_dotenv: ^5.1.0
-  flutter_inappwebview: 5.7.2+3
+  # Replaced flutter_inappwebview with webview_flutter (already included below)
   flutter_localizations:
     sdk: flutter
   flutter_screenutil: ^5.9.3
@@ -60,7 +60,7 @@ dependencies:
   webview_flutter: 4.2.2
   webview_flutter_android: 3.9.3
   webview_flutter_wkwebview: 3.7.3
-  youtube_player_flutter: ^8.1.2
+  # youtube_player_flutter: ^8.1.2 (commented out due to dependency on flutter_inappwebview)
 
 dev_dependencies:
   bloc_test: ^9.1.7
