@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+// Temporarily removed YouTube player due to compatibility issues
+// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LectureDetailsScreen extends StatefulWidget {
   const LectureDetailsScreen({required this.lectureId, super.key});
@@ -14,57 +15,19 @@ class LectureDetailsScreen extends StatefulWidget {
 }
 
 class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
-  late YoutubePlayerController _controller;
-  late PlayerState _playerState = PlayerState.unknown;
-  late YoutubeMetaData _videoMetaData = const YoutubeMetaData();
-
-  String getVideoTitle() {
-    return _videoMetaData.title.isNotEmpty ? _videoMetaData.title : 'No Title';
-  }
-
-  String getPlayerStateDescription() {
-    switch (_playerState) {
-      case PlayerState.playing:
-        return 'Playing';
-      case PlayerState.paused:
-        return 'Paused';
-      case PlayerState.ended:
-        return 'Ended';
-      case PlayerState.buffering:
-        return 'Buffering';
-      case PlayerState.cued:
-        return 'Cued';
-      case PlayerState.unknown:
-        return 'Unknown';
-      case PlayerState.unStarted:
-        throw UnimplementedError();
-    }
-  }
-
-  bool _isPlayerReady = false;
+  // Placeholder for video state
+  String videoTitle = "Introduction to Accounting";
+  String videoStatus = "Video player temporarily unavailable";
 
   @override
   void initState() {
     super.initState();
-    _controller = YoutubePlayerController(
-      initialVideoId: 'M7lc1UVf-VE', // Replace with your YouTube video ID
-    )..addListener(listener);
-    _playerState = PlayerState.unknown;
-    _videoMetaData = const YoutubeMetaData();
-  }
-
-  void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
-      setState(() {
-        _playerState = _controller.value.playerState;
-        _videoMetaData = _controller.metadata;
-      });
-    }
+    // YouTube player initialization code was here
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    // YouTube player disposal code was here
     super.dispose();
   }
 
@@ -78,90 +41,190 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
       title: 'المحاضرة الأولى: أساسيات المحاسبة',
       body: Column(
         children: [
-          // YouTube Player
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: YoutubePlayer(
-              controller: _controller,
-              showVideoProgressIndicator: true,
-              progressIndicatorColor: Colors.teal,
-              progressColors: const ProgressBarColors(
-                playedColor: Colors.teal,
-                handleColor: Colors.tealAccent,
-              ),
-              onReady: () {
-                setState(() {
-                  _isPlayerReady = true;
-                });
-              },
-              onEnded: (data) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Video has ended!'),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 10),
-          // Download Button
-          ElevatedButton.icon(
-            onPressed: () {
-              // Add your download logic here
+          // Interactive placeholder for video player
+          InkWell(
+            onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Downloading resources...'),
+                  content:
+                      Text('Video player will be available in future updates'),
+                  duration: Duration(seconds: 2),
                 ),
               );
             },
-            icon: const Icon(Icons.download),
-            label: Text(
-              'تحميل المصادر',
-              style: TextStyle(fontSize: 12.sp),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.white,
-              foregroundColor: AppColors.primary,
-              shape: RoundedRectangleBorder(
+            child: Container(
+              height: 220.h,
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              decoration: BoxDecoration(
+                color: Colors.black87,
                 borderRadius: BorderRadius.circular(8.r),
-                side: BorderSide(color: AppColors.primary, width: 1.h),
               ),
-              minimumSize: Size(145.w, 40.h),
-            ),
-          ),
-          const SizedBox(height: 10),
-          // List of Lectures
-          Expanded(
-            child: ListView.builder(
-              itemCount: 8, // Number of lectures
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 4.0.h, horizontal: 20.w),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color:
-                            index == 0 ? AppColors.primary : Colors.grey[300]!,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.video_library,
+                        size: 50.sp,
+                        color: Colors.white,
                       ),
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                    width: double.infinity,
-                    height: 32.h,
-                    child: Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: Padding(
-                        padding: EdgeInsets.all(4.0.r),
-                        child: CustomText(
-                          text: 'المحاضرة ${index + 1}: أساسيات المحاسبة',
+                      SizedBox(height: 16.h),
+                      CustomText(
+                        text: videoTitle,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
+                      ),
+                      SizedBox(height: 8.h),
+                      CustomText(
+                        text: videoStatus,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    bottom: 16.h,
+                    right: 16.w,
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.calendar_today,
+                              size: 14.sp, color: Colors.white),
+                          SizedBox(width: 4.w),
+                          CustomText(
+                            text: 'Coming Soon',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                );
-              },
+                ],
+              ),
             ),
           ),
+
+          // Lecture Content
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText(
+                    text: 'محتوى المحاضرة',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.text100,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomText(
+                    text:
+                        'تتناول هذه المحاضرة المفاهيم الأساسية للمحاسبة وتشمل:',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: AppColors.text100,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  _buildListItem('مبادئ المحاسبة الأساسية'),
+                  _buildListItem('أنواع الحسابات والدفاتر المحاسبية'),
+                  _buildListItem('معادلة الميزانية العمومية'),
+                  _buildListItem('مفهوم القيد المزدوج'),
+                  SizedBox(height: 24.h),
+                  CustomText(
+                    text: 'المرفقات والموارد',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.text100,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  _buildAttachmentItem(
+                      'ملخص المحاضرة (PDF)', Icons.picture_as_pdf),
+                  _buildAttachmentItem('أوراق العمل (XLSX)', Icons.table_chart),
+                  _buildAttachmentItem('تمارين تطبيقية', Icons.assignment),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildListItem(String text) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8.h),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.circle, size: 8.sp, color: AppColors.primary),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: CustomText(
+              text: text,
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: AppColors.text100,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAttachmentItem(String title, IconData icon) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 24.sp, color: AppColors.primary),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: CustomText(
+              text: title,
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: AppColors.text100,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Icon(Icons.download, size: 20.sp, color: AppColors.gray),
         ],
       ),
     );
