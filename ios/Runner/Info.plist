@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+ 	<key>FLTEnableImpeller</key>
+  	<false />
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
@@ -54,5 +56,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires access to the photo library for selecting documents and images</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app requires access to the camera for capturing images</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app requires access to the microphone for audio files</string>
 </dict>
 </plist>

@@ -5,25 +5,40 @@ import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/di/dependency_injection.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/login/ui/screens/login_screen.dart';
+import 'package:masarat/features/auth/signup/logic/cubit/register_cubit.dart';
+import 'package:masarat/features/auth/signup/ui/screens/sign_up_screen.dart';
 import 'package:masarat/features/auth/ui/screens/onboarding_screen.dart';
 import 'package:masarat/features/cart/presentation/pages/shopping_cart_screen.dart';
+import 'package:masarat/features/courses/logic/cubit/create_course_cubit.dart';
 import 'package:masarat/features/courses/presentation/pages/course_details_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/lecture_details.dart';
 import 'package:masarat/features/courses/presentation/pages/lecture_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/trainer_course_details_screen.dart';
 import 'package:masarat/features/courses/presentation/pages/training_courses_screen.dart';
-import 'package:masarat/features/courses/presentation/pages/training_courses_trainer_screen.dart';
+import 'package:masarat/features/courses/ui/screens/create_course_screen.dart';
 import 'package:masarat/features/home/presentation/pages/home_screen.dart';
 import 'package:masarat/features/home/presentation/pages/my_library.dart';
+import 'package:masarat/features/home/presentation/pages/published_courses_screen.dart';
+import 'package:masarat/features/instructor/instructor_home/logic/cubit/published_courses_cubit.dart';
 import 'package:masarat/features/packages/presentation/pages/career_guidance_screen.dart';
 import 'package:masarat/features/packages/presentation/pages/pricing_screen.dart';
 import 'package:masarat/features/profile/presentation/pages/profile_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
 
+import '../features/instructor/instructor_home/presentation/pages/training_courses_trainer_screen.dart';
+import '../features/splash/ui/splash_screen.dart';
+
 final GoRouter router = GoRouter(
-  initialLocation: AppRoute.onboarding, // Start at onboarding
+  initialLocation: AppRoute.splash, // Start at onboarding
   routes: [
+    // Splash Route
+    GoRoute(
+      path: AppRoute.splash,
+      name: AppRoute.splash,
+      builder: (context, state) => const SplashScreen(),
+    ),
+
     // Onboarding Route
     GoRoute(
       path: AppRoute.onboarding,
@@ -40,6 +55,17 @@ final GoRouter router = GoRouter(
         return BlocProvider(
           create: (context) => getIt<LoginCubit>(),
           child: LoginScreen(isTrainer: isTrainer),
+        );
+      },
+    ),
+    // SignUp Route
+    GoRoute(
+      path: AppRoute.signUp,
+      name: AppRoute.signUp,
+      builder: (context, state) {
+        return BlocProvider(
+          create: (context) => getIt<RegisterCubit>(),
+          child: const SignUpScreen(),
         );
       },
     ),
@@ -81,6 +107,15 @@ final GoRouter router = GoRouter(
           builder: (context, state) => const ShoppingCartScreen(),
         ),
         GoRoute(
+          path: AppRoute.publishedCourses,
+          name: AppRoute.publishedCourses,
+          builder: (context, state) => BlocProvider(
+            create: (context) =>
+                getIt<PublishedCoursesCubit>()..getPublishedCourses(),
+            child: const PublishedCoursesScreen(),
+          ),
+        ),
+        GoRoute(
           path: AppRoute.trainingCourses,
           name: AppRoute.trainingCourses,
           builder: (context, state) => const TrainingCoursesScreen(),
@@ -89,7 +124,7 @@ final GoRouter router = GoRouter(
               path: AppRoute.courseDetails,
               name: AppRoute.courseDetails,
               builder: (context, state) {
-                final courseId = state.pathParameters['courseId'];
+                final courseId = state.pathParameters['courseid'];
                 return CourseDetailsScreen(courseId: courseId!);
               },
               routes: [
@@ -102,7 +137,7 @@ final GoRouter router = GoRouter(
                       path: AppRoute.lectureDetails,
                       name: AppRoute.lectureDetails,
                       builder: (context, state) {
-                        final lectureId = state.pathParameters['lectureId'];
+                        final lectureId = state.pathParameters['lectureid'];
                         return LectureDetailsScreen(lectureId: lectureId!);
                       },
                     ),
@@ -133,13 +168,25 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRoute.trainingCoursesTrainer,
       name: AppRoute.trainingCoursesTrainer,
-      builder: (context, state) => const TrainingCoursesTrainerScreen(),
+      builder: (context, state) => BlocProvider(
+        create: (context) =>
+            getIt<PublishedCoursesCubit>()..getPublishedCourses(),
+        child: const TrainingCoursesTrainerScreen(),
+      ),
       routes: [
+        GoRoute(
+          path: AppRoute.createCourse,
+          name: AppRoute.createCourse,
+          builder: (context, state) => BlocProvider(
+            create: (context) => getIt<CreateCourseCubit>(),
+            child: const CreateCourseScreen(),
+          ),
+        ),
         GoRoute(
           path: AppRoute.trainerCourseDetails,
           name: AppRoute.trainerCourseDetails,
           builder: (context, state) {
-            final courseId = state.pathParameters['courseId'];
+            final courseId = state.pathParameters['courseid'];
             return TrainerCourseDetailsScreen(courseId: courseId!);
           },
         ),

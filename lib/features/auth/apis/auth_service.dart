@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:masarat/features/auth/apis/auth_api_constants.dart';
 import 'package:masarat/features/auth/login/data/models/login_request_body.dart';
@@ -25,6 +27,13 @@ abstract class AuthenticationService {
   @POST(AuthenticationApiConstants.createAccount)
   Future<CreateAccountResponse> createAccount(
     @Body() CreateAccountRequestBody createAccountRequestBody,
+  );
+
+  // For uploading academic degree file with form data
+  @POST(AuthenticationApiConstants.uploadAcademicDegree)
+  @MultiPart()
+  Future<dynamic> uploadAcademicDegree(
+    @Part(name: 'file') File file,
   );
 
   // @POST(AuthenticationApiConstants.forget)
