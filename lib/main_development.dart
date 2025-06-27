@@ -7,7 +7,7 @@ import 'package:masarat/core/helpers/constants.dart';
 
 void main() {
   // Set the flavor for development environment
-  Config.setFlavor('development1');
+  Config.setFlavor('development');
 
   bootstrap(
     () => EasyLocalization(
