@@ -10,6 +10,7 @@ import '../models/add_lesson/add_lesson_response.dart';
 import '../models/category/category_model.dart';
 import '../models/course/create_course_request_body.dart';
 import '../models/course/create_course_response.dart';
+import '../models/lesson/lesson_model.dart';
 
 class InstructorRepo {
   InstructorRepo(this._apiService);
@@ -64,6 +65,16 @@ class InstructorRepo {
       return ApiResult.success(response);
     } catch (error, stackTrace) {
       log('Get Published Courses error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
+  Future<ApiResult<List<LessonModel>>> getLessons(String courseId) async {
+    try {
+      final response = await _apiService.getLessons(courseId);
+      return ApiResult.success(response);
+    } catch (error, stackTrace) {
+      log('Get Lessons error: $error', stackTrace: stackTrace);
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }
