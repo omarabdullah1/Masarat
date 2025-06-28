@@ -11,5 +11,7 @@ class InstructorApiConstants {
 
   static const String addLesson = 'api/lessons';
 
+  static const String getLessons = 'api/lessons/course';
+
   static String imageUrl(String image) => '$apiBaseUrl$image';
 }
