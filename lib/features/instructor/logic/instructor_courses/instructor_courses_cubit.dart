@@ -1,9 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masarat/features/instructor/data/models/course/course_model.dart';
 import 'package:masarat/features/instructor/data/models/course/instructor_courses_response.dart';
 import 'package:masarat/features/instructor/data/repos/instructor_repo.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_state.dart';
+import 'package:masarat/features/instructor/logic/update_course/update_course_cubit.dart';
+import 'package:masarat/features/instructor/ui/screens/update_course_screen.dart';
 
 import '../../data/models/category/category_model.dart';
 
@@ -30,6 +34,7 @@ class InstructorCoursesCubit extends Cubit<InstructorCoursesState> {
   String? get selectedCategoryId => _selectedCategoryId;
   String? get selectedLevel => _selectedLevel;
   List<CategoryModel> get categories => _categories;
+  InstructorRepo get instructorRepo => _homeRepo;
 
   // Pagination error handling
   String? get lastPaginationError {
@@ -138,5 +143,36 @@ class InstructorCoursesCubit extends Cubit<InstructorCoursesState> {
       page: _currentPage + 1,
       limit: _pageLimit,
     );
+  }
+
+  // Navigation method to update course
+  void navigateToUpdateCourse(
+    BuildContext context,
+    CourseModel courseData,
+  ) {
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => UpdateCourseCubit(_homeRepo),
+          child: UpdateCourseScreen(
+            courseId: courseData.id,
+            courseTitle: courseData.title,
+            courseDescription: courseData.description,
+            courseLevel: courseData.level,
+            courseDurationEstimate: courseData.durationEstimate,
+            courseTags: courseData.tags,
+            coursePrice: courseData.price,
+            courseCategoryId: courseData.category.id,
+            verificationStatus: courseData.verificationStatus,
+            isPublished: courseData.isPublished,
+          ),
+        ),
+      ),
+    )
+        .then((_) {
+      // Refresh courses list when returning from edit screen
+      getPublishedCourses();
+    });
   }
 }

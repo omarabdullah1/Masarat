@@ -4,6 +4,8 @@ import 'package:masarat/core/networking/api_error_handler.dart';
 import 'package:masarat/core/networking/api_result.dart';
 import 'package:masarat/features/instructor/data/apis/instructor_service.dart';
 import 'package:masarat/features/instructor/data/models/course/instructor_courses_response.dart';
+import 'package:masarat/features/instructor/data/models/course/update_course_request_body.dart';
+import 'package:masarat/features/instructor/data/models/course/update_course_response.dart';
 
 import '../models/add_lesson/add_lesson_request_body.dart';
 import '../models/add_lesson/add_lesson_response.dart';
@@ -24,6 +26,20 @@ class InstructorRepo {
       return ApiResult.success(response);
     } catch (error, stackTrace) {
       log('Create course error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
+  Future<ApiResult<UpdateCourseResponse>> updateCourse(
+    String courseId,
+    UpdateCourseRequestBody updateCourseRequestBody,
+  ) async {
+    try {
+      final response =
+          await _apiService.updateCourse(courseId, updateCourseRequestBody);
+      return ApiResult.success(response);
+    } catch (error, stackTrace) {
+      log('Update course error: $error', stackTrace: stackTrace);
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }

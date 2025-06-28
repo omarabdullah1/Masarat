@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:masarat/features/instructor/data/models/course/instructor_courses_response.dart';
+import 'package:masarat/features/instructor/data/models/course/update_course_request_body.dart';
+import 'package:masarat/features/instructor/data/models/course/update_course_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/add_lesson/add_lesson_request_body.dart';
@@ -31,6 +33,12 @@ abstract class InstructorService {
   @POST(InstructorApiConstants.createCourse)
   Future<CreateCourseResponse> createCourse(
     @Body() CreateCourseRequestBody createCourseRequestBody,
+  );
+
+  @PUT('api/courses/{courseId}')
+  Future<UpdateCourseResponse> updateCourse(
+    @Path('courseId') String courseId,
+    @Body() UpdateCourseRequestBody updateCourseRequestBody,
   );
 
   @GET(InstructorApiConstants.categories)

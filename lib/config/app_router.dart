@@ -19,7 +19,6 @@ import 'package:masarat/features/home/presentation/pages/my_library.dart';
 import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 import 'package:masarat/features/instructor/presentation/pages/instructor_course_details_page.dart';
-import 'package:masarat/features/instructor/presentation/pages/instructor_dashboard_page.dart';
 import 'package:masarat/features/packages/presentation/pages/career_guidance_screen.dart';
 import 'package:masarat/features/packages/presentation/pages/pricing_screen.dart';
 import 'package:masarat/features/profile/presentation/pages/profile_screen.dart';
@@ -105,15 +104,6 @@ final GoRouter router = GoRouter(
           path: AppRoute.shoppingCart,
           name: AppRoute.shoppingCart,
           builder: (context, state) => const ShoppingCartScreen(),
-        ),
-        GoRoute(
-          path: AppRoute.publishedCourses,
-          name: AppRoute.publishedCourses,
-          builder: (context, state) => BlocProvider(
-            create: (context) =>
-                getIt<InstructorCoursesCubit>()..getPublishedCourses(),
-            child: const InstructorDashboardPage(),
-          ),
         ),
         GoRoute(
           path: AppRoute.trainingCourses,

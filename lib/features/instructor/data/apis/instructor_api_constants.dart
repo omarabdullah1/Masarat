@@ -7,6 +7,8 @@ class InstructorApiConstants {
 
   static const String createCourse = 'api/courses';
 
+  static const String updateCourse = 'api/courses';
+
   static const String categories = 'api/categories';
 
   static const String addLesson = 'api/lessons';
