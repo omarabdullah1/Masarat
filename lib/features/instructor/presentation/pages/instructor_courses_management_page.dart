@@ -149,7 +149,7 @@ class _InstructorCoursesManagementPageState
                                   textColor: AppColors.primary,
                                   borderColor: AppColors.orange,
                                   onTap: () {
-                                    // Edit course action
+                                    // Edit course action - skeleton/loading state
                                   },
                                   textFontSize: 8.sp,
                                   fontWeight: FontWeightHelper.light,
@@ -223,7 +223,12 @@ class _InstructorCoursesManagementPageState
                                     textColor: AppColors.primary,
                                     borderColor: AppColors.orange,
                                     onTap: () {
-                                      // Edit course action
+                                      context
+                                          .read<InstructorCoursesCubit>()
+                                          .navigateToUpdateCourse(
+                                            context,
+                                            course,
+                                          );
                                     },
                                     textFontSize: 8.sp,
                                     fontWeight: FontWeightHelper.light,
