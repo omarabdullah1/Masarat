@@ -5,8 +5,6 @@ import 'package:masarat/features/auth/apis/auth_service.dart';
 import 'package:masarat/features/auth/login/data/repos/login_repo.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/signup/data/repos/create_account_repo.dart';
-import 'package:masarat/features/courses/apis/courses_service.dart';
-import 'package:masarat/features/courses/data/repos/courses_repo.dart';
 import 'package:masarat/features/instructor/data/apis/instructor_service.dart';
 import 'package:masarat/features/instructor/data/repos/instructor_repo.dart';
 import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_cubit.dart';
@@ -14,6 +12,8 @@ import 'package:masarat/features/instructor/logic/create_course/create_course_cu
 import 'package:masarat/features/instructor/logic/delete_lesson/delete_lesson_cubit.dart';
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
+import 'package:masarat/features/student/courses/apis/courses_service.dart';
+import 'package:masarat/features/student/courses/data/repos/courses_repo.dart';
 
 import '../../features/auth/signup/logic/cubit/register_cubit.dart';
 

@@ -77,11 +77,9 @@ class ProfessionalTracksApp extends StatelessWidget {
                       labelText: 'متدرب',
                       buttonColor: AppColors.white,
                       textColor: AppColors.primary,
-                      onTap: null,
-                      // () {
-
-                      //   // context.go(AppRoute.login, extra: false);
-                      // },
+                      onTap: () {
+                        context.go(AppRoute.login, extra: false);
+                      },
                       textFontSize: 22.sp,
                     ),
                     Gap(16.h),

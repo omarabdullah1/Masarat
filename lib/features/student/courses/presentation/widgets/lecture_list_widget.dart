@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:masarat/features/courses/presentation/widgets/lecture_item_widget.dart';
+import 'package:masarat/features/student/courses/presentation/widgets/lecture_item_widget.dart';
 
 class LectureListWidget extends StatelessWidget {
   const LectureListWidget({
