@@ -20,58 +20,22 @@ class AddLectureFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            controller: courseNameController,
-            decoration: const InputDecoration(
-              labelText: 'عنوان الدرس',
-              iconColor: AppColors.primary,
-              fillColor: AppColors.white,
-              labelStyle: TextStyle(color: AppColors.gray),
-              filled: true,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: contentController,
-            maxLines: 3,
-            decoration: const InputDecoration(
-              labelText: 'رابط المحتوى (فيديو/صوت)',
-              iconColor: AppColors.primary,
-              fillColor: AppColors.white,
-              labelStyle: TextStyle(color: AppColors.gray),
-              filled: true,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          if (orderController != null)
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: AppColors.greyLight200, width: 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             TextField(
-              controller: orderController,
-              keyboardType: TextInputType.number,
+              controller: courseNameController,
               decoration: const InputDecoration(
-                labelText: 'ترتيب الدرس',
+                labelText: 'عنوان الدرس',
                 iconColor: AppColors.primary,
                 fillColor: AppColors.white,
                 labelStyle: TextStyle(color: AppColors.gray),
@@ -87,12 +51,12 @@ class AddLectureFormWidget extends StatelessWidget {
                 ),
               ),
             ),
-          if (orderController != null) const SizedBox(height: 16),
-          if (durationController != null)
+            const SizedBox(height: 16),
             TextField(
-              controller: durationController,
+              controller: contentController,
+              maxLines: 3,
               decoration: const InputDecoration(
-                labelText: 'مدة الدرس المقدرة (مثال: 10 دقائق)',
+                labelText: 'رابط المحتوى (فيديو/صوت)',
                 iconColor: AppColors.primary,
                 fillColor: AppColors.white,
                 labelStyle: TextStyle(color: AppColors.gray),
@@ -108,40 +72,84 @@ class AddLectureFormWidget extends StatelessWidget {
                 ),
               ),
             ),
-          if (durationController != null) const SizedBox(height: 16),
-          TextField(
-            controller: sourceController,
-            decoration: InputDecoration(
-              labelText: 'مصادر إضافية (اختياري)',
-              iconColor: AppColors.primary,
-              fillColor: AppColors.white,
-              labelStyle: const TextStyle(color: AppColors.gray),
-              filled: true,
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.upload, color: AppColors.primary),
-                onPressed: () {},
+            const SizedBox(height: 16),
+            if (orderController != null)
+              TextField(
+                controller: orderController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'ترتيب الدرس',
+                  iconColor: AppColors.primary,
+                  fillColor: AppColors.white,
+                  labelStyle: TextStyle(color: AppColors.gray),
+                  filled: true,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.primary),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.primary),
+                  ),
+                ),
               ),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
+            if (orderController != null) const SizedBox(height: 16),
+            if (durationController != null)
+              TextField(
+                controller: durationController,
+                decoration: const InputDecoration(
+                  labelText: 'مدة الدرس المقدرة (مثال: 10 دقائق)',
+                  iconColor: AppColors.primary,
+                  fillColor: AppColors.white,
+                  labelStyle: TextStyle(color: AppColors.gray),
+                  filled: true,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.primary),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.primary),
+                  ),
+                ),
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
+            if (durationController != null) const SizedBox(height: 16),
+            TextField(
+              controller: sourceController,
+              decoration: InputDecoration(
+                labelText: 'مصادر إضافية (اختياري)',
+                iconColor: AppColors.primary,
+                fillColor: AppColors.white,
+                labelStyle: const TextStyle(color: AppColors.gray),
+                filled: true,
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.upload, color: AppColors.primary),
+                  onPressed: () {},
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
+                border: const OutlineInputBorder(),
               ),
-              border: const OutlineInputBorder(),
             ),
-          ),
-          const SizedBox(height: 16),
-          Center(
-            child: ElevatedButton(
-              onPressed: addLecture,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.white,
+            const SizedBox(height: 16),
+            Center(
+              child: ElevatedButton(
+                onPressed: addLecture,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.white,
+                ),
+                child: const Text('إضافة الدرس'),
               ),
-              child: const Text('إضافة الدرس'),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

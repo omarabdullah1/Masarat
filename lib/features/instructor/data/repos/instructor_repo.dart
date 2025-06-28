@@ -94,4 +94,14 @@ class InstructorRepo {
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }
+
+  Future<ApiResult<void>> deleteLesson(String lessonId) async {
+    try {
+      await _apiService.deleteLesson(lessonId);
+      return const ApiResult.success(null);
+    } catch (error, stackTrace) {
+      log('Delete Lesson error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
 }

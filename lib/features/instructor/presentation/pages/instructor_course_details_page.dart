@@ -12,6 +12,8 @@ import 'package:masarat/features/courses/presentation/widgets/add_lecture_form_w
 import 'package:masarat/features/instructor/data/models/add_lesson/add_lesson_request_body.dart';
 import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_cubit.dart';
 import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_state.dart';
+import 'package:masarat/features/instructor/logic/delete_lesson/delete_lesson_cubit.dart';
+import 'package:masarat/features/instructor/logic/delete_lesson/delete_lesson_state.dart';
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.dart';
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_state.dart';
 import 'package:masarat/features/instructor/presentation/widgets/lessons_list_widget.dart';
@@ -32,6 +34,7 @@ class _InstructorCourseDetailsPageState
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt<AddLessonCubit>()),
+        BlocProvider(create: (context) => getIt<DeleteLessonCubit>()),
         BlocProvider(
             create: (context) =>
                 getIt<GetLessonsCubit>()..getLessons(widget.courseId)),
@@ -98,45 +101,77 @@ class _TrainerCourseDetailsContentState
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddLessonCubit, AddLessonState>(
-      listener: (context, state) {
-        state.maybeWhen(
-          success: (data) {
-            // Hide form after successful lesson addition
-            setState(() {
-              isAddingLecture = false;
-            });
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AddLessonCubit, AddLessonState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              success: (data) {
+                // Hide form after successful lesson addition
+                setState(() {
+                  isAddingLecture = false;
+                });
 
-            // Clear controllers
-            courseNameController.clear();
-            contentController.clear();
-            sourceController.clear();
-            orderController.clear();
-            durationController.clear();
+                // Clear controllers
+                courseNameController.clear();
+                contentController.clear();
+                sourceController.clear();
+                orderController.clear();
+                durationController.clear();
 
-            // Refresh lessons list
-            context.read<GetLessonsCubit>().getLessons(widget.courseId);
+                // Refresh lessons list
+                context.read<GetLessonsCubit>().getLessons(widget.courseId);
 
-            // Show success message
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('تم إضافة الدرس بنجاح'),
-                backgroundColor: Colors.green,
-              ),
+                // Show success message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('تم إضافة الدرس بنجاح'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              error: (error) {
+                // Show error message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('خطأ في إضافة الدرس: $error'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              },
+              orElse: () {},
             );
           },
-          error: (error) {
-            // Show error message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('خطأ في إضافة الدرس: $error'),
-                backgroundColor: Colors.red,
-              ),
+        ),
+        BlocListener<DeleteLessonCubit, DeleteLessonState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              success: () {
+                // Refresh lessons list after successful deletion
+                context.read<GetLessonsCubit>().getLessons(widget.courseId);
+
+                // Show success message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('تم حذف الدرس بنجاح'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              error: (error) {
+                // Show error message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('خطأ في حذف الدرس: $error'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              },
+              orElse: () {},
             );
           },
-          orElse: () {},
-        );
-      },
+        ),
+      ],
       child: CustomScaffold(
         haveAppBar: true,
         backgroundColorAppColor: AppColors.background,
@@ -145,84 +180,134 @@ class _TrainerCourseDetailsContentState
         showBackButton: true,
         body: Stack(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: CustomText(
-                    text: 'الــدورات التدريبيــة',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 22.sp,
-                      fontWeight: FontWeightHelper.regular,
+            SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: CustomText(
+                      text: 'الــدورات التدريبيــة',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 22.sp,
+                        fontWeight: FontWeightHelper.regular,
+                      ),
                     ),
                   ),
-                ),
-                Gap(15.h),
-                AddLectureButtonWidget(
-                  isAddingLecture: isAddingLecture,
-                  toggleAddLecture: () {
-                    setState(() {
-                      isAddingLecture = !isAddingLecture; // Toggle visibility
-                    });
-                  },
-                ),
-                if (isAddingLecture)
-                  AddLectureFormWidget(
-                    courseNameController: courseNameController,
-                    contentController: contentController,
-                    sourceController: sourceController,
-                    orderController: orderController,
-                    durationController: durationController,
-                    addLecture: addLecture,
+                  Gap(15.h),
+                  AddLectureButtonWidget(
+                    isAddingLecture: isAddingLecture,
+                    toggleAddLecture: () {
+                      setState(() {
+                        isAddingLecture = !isAddingLecture; // Toggle visibility
+                      });
+                    },
                   ),
-                SizedBox(height: 16.h),
-                BlocBuilder<GetLessonsCubit, GetLessonsState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
+                  if (isAddingLecture)
+                    AddLectureFormWidget(
+                      courseNameController: courseNameController,
+                      contentController: contentController,
+                      sourceController: sourceController,
+                      orderController: orderController,
+                      durationController: durationController,
+                      addLecture: addLecture,
+                    ),
+                  SizedBox(height: 16.h),
+                  BlocBuilder<GetLessonsCubit, GetLessonsState>(
+                    builder: (context, state) {
+                      return state.maybeWhen(
+                        loading: () => SizedBox(
+                          height: 200.h,
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primary,
+                            ),
+                          ),
                         ),
-                      ),
-                      success: (lessons) => LessonsListWidget(
-                        lessons: lessons,
-                        onDeleteLesson: (lesson) {
-                          // You can implement delete functionality here
-                          // For now, just show a message
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('حذف الدرس: ${lesson.title}'),
-                            ),
-                          );
-                        },
-                      ),
-                      error: (error) => Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              'Error loading lessons: $error',
-                              style: const TextStyle(color: Colors.red),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                context
-                                    .read<GetLessonsCubit>()
-                                    .getLessons(widget.courseId);
-                              },
-                              child: const Text('Retry'),
-                            ),
-                          ],
+                        success: (lessons) => LessonsListWidget(
+                          lessons: lessons,
+                          onDeleteLesson: (lesson) {
+                            // Show confirmation dialog before deleting
+                            showDialog(
+                              context: context,
+                              builder: (dialogContext) => AlertDialog(
+                                title: const Text('تأكيد الحذف'),
+                                content: Text(
+                                    'هل أنت متأكد من حذف الدرس "${lesson.title}"؟'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(dialogContext).pop(),
+                                    child: const Text('إلغاء'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(dialogContext).pop();
+                                      // Call delete lesson cubit
+                                      context
+                                          .read<DeleteLessonCubit>()
+                                          .deleteLesson(lesson.id);
+                                    },
+                                    child: const Text('حذف',
+                                        style: TextStyle(color: Colors.red)),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                      orElse: () => const SizedBox.shrink(),
-                    );
-                  },
-                ),
-              ],
+                        error: (error) => SizedBox(
+                          height: 200.h,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Error loading lessons: $error',
+                                  style: const TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: 16.h),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    context
+                                        .read<GetLessonsCubit>()
+                                        .getLessons(widget.courseId);
+                                  },
+                                  child: const Text('Retry'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        orElse: () => const SizedBox.shrink(),
+                      );
+                    },
+                  ),
+                  // Add some bottom padding to ensure content doesn't get cut off
+                  SizedBox(height: 80.h),
+                ],
+              ),
             ),
             // Loading overlay
             BlocBuilder<AddLessonCubit, AddLessonState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  loading: () => Container(
+                    color: Colors.black.withAlpha((0.3 * 255).toInt()),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  orElse: () => const SizedBox.shrink(),
+                );
+              },
+            ),
+            // Delete lesson loading overlay
+            BlocBuilder<DeleteLessonCubit, DeleteLessonState>(
               builder: (context, state) {
                 return state.maybeWhen(
                   loading: () => Container(
