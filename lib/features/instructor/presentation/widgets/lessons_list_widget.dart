@@ -63,22 +63,16 @@ class LessonsListWidget extends StatelessWidget {
             ),
           ),
         ),
-        Flexible(
-          fit: FlexFit.loose,
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.only(bottom: 16.h),
-            itemCount: lessons.length,
-            itemBuilder: (context, index) {
-              final lesson = lessons[index];
-              return LessonItemWidget(
-                lesson: lesson,
-                onDelete: () => onDeleteLesson(lesson),
-              );
-            },
-          ),
+        // Use Column instead of Flexible with ListView for better integration with parent ScrollView
+        Column(
+          children: lessons.map((lesson) {
+            return LessonItemWidget(
+              lesson: lesson,
+              onDelete: () => onDeleteLesson(lesson),
+            );
+          }).toList(),
         ),
+        SizedBox(height: 16.h),
       ],
     );
   }

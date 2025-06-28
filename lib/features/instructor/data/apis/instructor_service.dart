@@ -53,4 +53,9 @@ abstract class InstructorService {
   Future<List<LessonModel>> getLessons(
     @Path("courseId") String courseId,
   );
+
+  @DELETE('${InstructorApiConstants.deleteLesson}/{lessonId}')
+  Future<void> deleteLesson(
+    @Path("lessonId") String lessonId,
+  );
 }
