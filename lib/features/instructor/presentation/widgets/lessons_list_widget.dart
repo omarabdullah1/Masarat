@@ -50,6 +50,7 @@ class LessonsListWidget extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -62,8 +63,11 @@ class LessonsListWidget extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
+        Flexible(
+          fit: FlexFit.loose,
           child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.only(bottom: 16.h),
             itemCount: lessons.length,
             itemBuilder: (context, index) {
