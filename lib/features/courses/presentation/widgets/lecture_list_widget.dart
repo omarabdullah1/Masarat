@@ -12,8 +12,11 @@ class LectureListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Flexible(
+      fit: FlexFit.loose,
       child: ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: lectures.length,
         itemBuilder: (context, index) {
           return LectureItemWidget(
