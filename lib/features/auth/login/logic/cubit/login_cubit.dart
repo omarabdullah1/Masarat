@@ -52,6 +52,8 @@ class LoginCubit extends Cubit<LoginState> {
           SharedPrefKeys.userName,
           '${loginResponse.firstName} ${loginResponse.lastName}',
         );
+        await SharedPrefHelper.setSecuredString(
+            SharedPrefKeys.userRole, loginResponse.role);
 
         await saveUserToken(loginResponse.token);
         if (context.mounted) {

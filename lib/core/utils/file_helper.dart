@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 
 class FileHelper {
   /// Pick a file with error handling and platform-specific workarounds
@@ -12,24 +13,24 @@ class FileHelper {
     try {
       // Debug message for initialization
       debugPrint('Initializing FilePicker...');
-      
+
       // Try to pick files with the specified parameters
       final result = await FilePicker.platform.pickFiles(
         type: type,
         allowedExtensions: allowedExtensions,
         allowMultiple: allowMultiple,
       );
-      
+
       if (result != null) {
         debugPrint('File selected: ${result.files.first.name}');
       } else {
         debugPrint('No file selected');
       }
-      
+
       return result;
     } catch (e) {
       debugPrint('ERROR PICKING FILE: $e');
-      
+
       // Print platform-specific error information
       if (Platform.isAndroid) {
         debugPrint('''
@@ -48,7 +49,7 @@ class FileHelper {
         ==================================
         ''');
       }
-      
+
       return null;
     }
   }

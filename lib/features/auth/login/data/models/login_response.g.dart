@@ -13,7 +13,7 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
       lastName: json['lastName'] as String,
       email: json['email'] as String,
       role: json['role'] as String,
-      profilePictureUrl: json['profilePictureUrl'] as String,
+      profilePictureUrl: json['profilePictureUrl'] as String?,
       token: json['token'] as String,
     );
 

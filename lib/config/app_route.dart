@@ -6,7 +6,8 @@ class AppRoute {
   static const String signUp = '/signup';
   static const String home = '/home';
   static const String profile = 'profilescreen';
-  static const String trainingCoursesTrainer = '/trainingcoursestrainer';
+  static const String instructorCoursesManagement =
+      '/instructorCoursesManagement';
   static const String createCourse = 'createcourse';
   static const String myLibrary = 'mylibrary';
   static const String policies = 'policies';
@@ -19,5 +20,4 @@ class AppRoute {
   static const String lectureDetails = 'lecturedetails/:lectureid';
   static const String careerGuidance = '/careerguidance';
   static const String pricing = 'pricing';
-  static const String publishedCourses = 'publishedcourses';
 }

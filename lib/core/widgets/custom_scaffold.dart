@@ -110,7 +110,7 @@ class CustomScaffold extends StatelessWidget {
         },
         icon: Icon(
           Icons.arrow_back_ios,
-          color: Theme.of(context).iconTheme.color,
+          color: AppColors.primary,
           size: 20.sp,
         ),
       );

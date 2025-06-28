@@ -5,12 +5,16 @@ import 'package:masarat/features/auth/apis/auth_service.dart';
 import 'package:masarat/features/auth/login/data/repos/login_repo.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/signup/data/repos/create_account_repo.dart';
-import 'package:masarat/features/courses/apis/courses_service.dart';
-import 'package:masarat/features/courses/data/repos/courses_repo.dart';
-import 'package:masarat/features/courses/logic/cubit/create_course_cubit.dart';
-import 'package:masarat/features/instructor/instructor_home/data/apis/home_service.dart';
-import 'package:masarat/features/instructor/instructor_home/data/repos/home_repo.dart';
-import 'package:masarat/features/instructor/instructor_home/logic/cubit/published_courses_cubit.dart';
+import 'package:masarat/features/instructor/data/apis/instructor_service.dart';
+import 'package:masarat/features/instructor/data/repos/instructor_repo.dart';
+import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_cubit.dart';
+import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
+import 'package:masarat/features/instructor/logic/delete_lesson/delete_lesson_cubit.dart';
+import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.dart';
+import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
+import 'package:masarat/features/student/courses/apis/courses_service.dart';
+import 'package:masarat/features/student/courses/data/repos/courses_repo.dart';
+import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
 
 import '../../features/auth/signup/logic/cubit/register_cubit.dart';
 
@@ -31,8 +35,8 @@ Future<void> setupGetIt() async {
     ..registerLazySingleton<CoursesService>(
       () => CoursesService(dio),
     )
-    ..registerLazySingleton<HomeService>(
-      () => HomeService(dio),
+    ..registerLazySingleton<InstructorService>(
+      () => InstructorService(dio),
     )
 
     /************************* */
@@ -47,8 +51,8 @@ Future<void> setupGetIt() async {
     ..registerLazySingleton<CoursesRepo>(
       () => CoursesRepo(getIt()),
     )
-    ..registerLazySingleton<HomeRepo>(
-      () => HomeRepo(getIt()),
+    ..registerLazySingleton<InstructorRepo>(
+      () => InstructorRepo(getIt()),
     )
 
     /************************* */
@@ -59,6 +63,11 @@ Future<void> setupGetIt() async {
     ..registerFactory<LoginCubit>(() => LoginCubit(getIt()))
     ..registerFactory<RegisterCubit>(() => RegisterCubit(getIt()))
     ..registerFactory<CreateCourseCubit>(() => CreateCourseCubit(getIt()))
-    ..registerFactory<PublishedCoursesCubit>(
-        () => PublishedCoursesCubit(getIt()));
+    ..registerFactory<AddLessonCubit>(() => AddLessonCubit(getIt()))
+    ..registerFactory<DeleteLessonCubit>(() => DeleteLessonCubit(getIt()))
+    ..registerFactory<GetLessonsCubit>(() => GetLessonsCubit(getIt()))
+    ..registerFactory<InstructorCoursesCubit>(
+        () => InstructorCoursesCubit(getIt()))
+    ..registerFactory<TrainingCoursesCubit>(
+        () => TrainingCoursesCubit(getIt()));
 }

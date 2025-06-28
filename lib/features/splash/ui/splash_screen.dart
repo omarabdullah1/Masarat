@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/helpers/shared_pref_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
+
 import '../../../assets/assets.dart';
 import '../../../config/app_route.dart';
 
@@ -23,11 +24,17 @@ class _SplashScreenState extends State<SplashScreen> {
       if (context.mounted) {
         String? token =
             await SharedPrefHelper.getSecuredString(SharedPrefKeys.userToken);
+        String? role =
+            await SharedPrefHelper.getSecuredString(SharedPrefKeys.userRole);
 
         if (!mounted) return;
 
         if (token != null && token.isNotEmpty) {
-          context.go(AppRoute.trainingCoursesTrainer);
+          if (role == 'student') {
+            context.go(AppRoute.home);
+          } else {
+            context.go(AppRoute.instructorCoursesManagement);
+          }
         } else {
           context.go(AppRoute.onboarding);
         }
