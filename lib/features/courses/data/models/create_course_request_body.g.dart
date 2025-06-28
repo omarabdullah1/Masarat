@@ -15,6 +15,7 @@ CreateCourseRequestBody _$CreateCourseRequestBodyFromJson(
       level: json['level'] as String,
       durationEstimate: json['durationEstimate'] as String,
       tags: json['tags'] as String,
+      price: (json['price'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$CreateCourseRequestBodyToJson(
@@ -26,4 +27,5 @@ Map<String, dynamic> _$CreateCourseRequestBodyToJson(
       'level': instance.level,
       'durationEstimate': instance.durationEstimate,
       'tags': instance.tags,
+      'price': instance.price,
     };

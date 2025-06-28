@@ -7,7 +7,7 @@ class CategoryModel {
   CategoryModel({
     required this.id,
     required this.name,
-    required this.iconUrl,
+    this.iconUrl,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
@@ -16,7 +16,7 @@ class CategoryModel {
   @JsonKey(name: '_id')
   final String id;
   final String name;
-  final String iconUrl;
+  final String? iconUrl;
 
   Map<String, dynamic> toJson() => _$CategoryModelToJson(this);
 }

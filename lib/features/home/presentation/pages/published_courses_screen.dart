@@ -474,22 +474,22 @@ class _CourseCard extends StatelessWidget {
               Gap(8.h),
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 12.r,
-                    backgroundImage:
-                        course.instructor.profilePictureUrl != null &&
-                                course.instructor.profilePictureUrl!.isNotEmpty
-                            ? NetworkImage(course.instructor.profilePictureUrl!)
-                            : null,
-                    child: course.instructor.profilePictureUrl == null ||
-                            course.instructor.profilePictureUrl!.isEmpty
-                        ? Icon(Icons.person, size: 16.r)
-                        : null,
-                  ),
+                  ///TODO: GET profile picture from course model
+                  // CircleAvatar(
+                  //   radius: 12.r,
+                  //   backgroundImage:
+                  //       course.instructor.profilePictureUrl != null &&
+                  //               course.instructor.profilePictureUrl!.isNotEmpty
+                  //           ? NetworkImage(course.instructor.profilePictureUrl!)
+                  //           : null,
+                  //   child: course.instructor.profilePictureUrl == null ||
+                  //           course.instructor.profilePictureUrl!.isEmpty
+                  //       ? Icon(Icons.person, size: 16.r)
+                  //       : null,
+                  // ),
                   Gap(8.w),
                   CustomText(
-                    text:
-                        'المدرب: ${course.instructor.firstName} ${course.instructor.lastName}',
+                    text: 'المدرب: ${course.instructor}',
                     style: TextStyles.font12GrayRegular,
                   ),
                 ],

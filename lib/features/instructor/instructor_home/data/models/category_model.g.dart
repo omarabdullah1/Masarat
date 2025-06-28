@@ -10,7 +10,7 @@ CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) =>
     CategoryModel(
       id: json['_id'] as String,
       name: json['name'] as String,
-      iconUrl: json['iconUrl'] as String,
+      iconUrl: json['iconUrl'] as String?,
     );
 
 Map<String, dynamic> _$CategoryModelToJson(CategoryModel instance) =>

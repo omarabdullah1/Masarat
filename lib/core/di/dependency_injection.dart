@@ -7,6 +7,7 @@ import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/signup/data/repos/create_account_repo.dart';
 import 'package:masarat/features/courses/apis/courses_service.dart';
 import 'package:masarat/features/courses/data/repos/courses_repo.dart';
+import 'package:masarat/features/courses/logic/cubit/add_lesson_cubit.dart';
 import 'package:masarat/features/courses/logic/cubit/create_course_cubit.dart';
 import 'package:masarat/features/instructor/instructor_home/data/apis/home_service.dart';
 import 'package:masarat/features/instructor/instructor_home/data/repos/home_repo.dart';
@@ -59,6 +60,7 @@ Future<void> setupGetIt() async {
     ..registerFactory<LoginCubit>(() => LoginCubit(getIt()))
     ..registerFactory<RegisterCubit>(() => RegisterCubit(getIt()))
     ..registerFactory<CreateCourseCubit>(() => CreateCourseCubit(getIt()))
+    ..registerFactory<AddLessonCubit>(() => AddLessonCubit(getIt()))
     ..registerFactory<PublishedCoursesCubit>(
         () => PublishedCoursesCubit(getIt()));
 }

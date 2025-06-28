@@ -84,6 +84,16 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   validator: _requiredValidator,
                 ),
 
+                // Price
+                _buildFormField(
+                  label: 'سعر الدورة',
+                  hintText: 'أدخل سعر الدورة (مثال: 299.99)',
+                  controller: cubit.priceController,
+                  validator: _priceValidator,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+
                 // Tags
                 _buildFormField(
                   label: 'الكلمات المفتاحية',
@@ -119,6 +129,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     required TextEditingController controller,
     required String? Function(String?)? validator,
     int maxLines = 1,
+    TextInputType? keyboardType,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,6 +149,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           validator: validator,
           backgroundColor: AppColors.white,
           maxLines: maxLines,
+          keyboardType: keyboardType,
         ),
         Gap(16.h),
       ],
@@ -146,6 +158,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   String? _requiredValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
+      print('Required validation failed for value: "$value"');
       return 'هذا الحقل مطلوب';
     }
     return null;
@@ -153,21 +166,39 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   String? _levelValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
+      print('Level validation failed - empty value: "$value"');
       return 'هذا الحقل مطلوب';
     }
     if (!['beginner', 'intermediate', 'advanced']
         .contains(value.toLowerCase())) {
+      print('Level validation failed - invalid level: "$value"');
       return 'المستوى يجب أن يكون beginner أو intermediate أو advanced';
     }
     return null;
   }
 
+  String? _priceValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'هذا الحقل مطلوب';
+    }
+    final price = double.tryParse(value);
+    if (price == null) {
+      return 'يرجى إدخال سعر صحيح';
+    }
+    if (price < 0) {
+      return 'السعر يجب أن يكون أكبر من أو يساوي الصفر';
+    }
+    return null;
+  }
+
   void _submitForm() {
+    print('Submit form called!'); // Debug log
     // Hide keyboard
     FocusScope.of(context).unfocus();
 
     // Submit the form
     cubit.createCourse();
+    print('CreateCourse called!'); // Debug log
   }
 
   // New method to build category dropdown

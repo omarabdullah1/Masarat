@@ -8,10 +8,14 @@ class AddLectureFormWidget extends StatelessWidget {
     required this.sourceController,
     required this.addLecture,
     super.key,
+    this.orderController,
+    this.durationController,
   });
   final TextEditingController courseNameController;
   final TextEditingController contentController;
   final TextEditingController sourceController;
+  final TextEditingController? orderController;
+  final TextEditingController? durationController;
   final VoidCallback addLecture;
 
   @override
@@ -24,7 +28,7 @@ class AddLectureFormWidget extends StatelessWidget {
           TextField(
             controller: courseNameController,
             decoration: const InputDecoration(
-              labelText: 'اسم الدورة التدريبية',
+              labelText: 'عنوان الدرس',
               iconColor: AppColors.primary,
               fillColor: AppColors.white,
               labelStyle: TextStyle(color: AppColors.gray),
@@ -45,7 +49,7 @@ class AddLectureFormWidget extends StatelessWidget {
             controller: contentController,
             maxLines: 3,
             decoration: const InputDecoration(
-              labelText: 'وضع محتوى المحاضرة',
+              labelText: 'رابط المحتوى (فيديو/صوت)',
               iconColor: AppColors.primary,
               fillColor: AppColors.white,
               labelStyle: TextStyle(color: AppColors.gray),
@@ -62,10 +66,53 @@ class AddLectureFormWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
+          if (orderController != null)
+            TextField(
+              controller: orderController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'ترتيب الدرس',
+                iconColor: AppColors.primary,
+                fillColor: AppColors.white,
+                labelStyle: TextStyle(color: AppColors.gray),
+                filled: true,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
+              ),
+            ),
+          if (orderController != null) const SizedBox(height: 16),
+          if (durationController != null)
+            TextField(
+              controller: durationController,
+              decoration: const InputDecoration(
+                labelText: 'مدة الدرس المقدرة (مثال: 10 دقائق)',
+                iconColor: AppColors.primary,
+                fillColor: AppColors.white,
+                labelStyle: TextStyle(color: AppColors.gray),
+                filled: true,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
+              ),
+            ),
+          if (durationController != null) const SizedBox(height: 16),
           TextField(
             controller: sourceController,
             decoration: InputDecoration(
-              labelText: 'وضع المصادر',
+              labelText: 'مصادر إضافية (اختياري)',
               iconColor: AppColors.primary,
               fillColor: AppColors.white,
               labelStyle: const TextStyle(color: AppColors.gray),
@@ -87,7 +134,11 @@ class AddLectureFormWidget extends StatelessWidget {
           Center(
             child: ElevatedButton(
               onPressed: addLecture,
-              child: const Text('رفع المحاضرة'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.white,
+              ),
+              child: const Text('إضافة الدرس'),
             ),
           ),
         ],

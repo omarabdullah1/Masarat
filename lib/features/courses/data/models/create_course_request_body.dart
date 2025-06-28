@@ -10,6 +10,7 @@ class CreateCourseRequestBody {
   final String level;
   final String durationEstimate;
   final String tags;
+  final double price;
 
   CreateCourseRequestBody({
     required this.title,
@@ -18,6 +19,7 @@ class CreateCourseRequestBody {
     required this.level,
     required this.durationEstimate,
     required this.tags,
+    required this.price,
   });
 
   factory CreateCourseRequestBody.fromJson(Map<String, dynamic> json) =>

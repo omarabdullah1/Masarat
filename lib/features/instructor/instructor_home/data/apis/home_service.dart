@@ -15,7 +15,7 @@ abstract class HomeService {
     return _HomeService(dio);
   }
 
-  @GET(HomeApiConstants.instructorPublishedCourses)
+  @GET(HomeApiConstants.instructorCourses)
   Future<PublishedCoursesResponse> getPublishedCourses({
     @Query("category") String? categoryId,
     @Query("level") String? level,

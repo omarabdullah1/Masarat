@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'category_model.dart';
-import 'instructor_model.dart';
 
 part 'course_model.g.dart';
 
@@ -32,7 +31,7 @@ class CourseModel {
   final String title;
   final String description;
   final CategoryModel category;
-  final InstructorModel instructor;
+  final String instructor;
   final String coverImageUrl;
   final double price;
   final String level;
