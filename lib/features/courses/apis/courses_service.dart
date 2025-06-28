@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:masarat/features/auth/apis/auth_api_constants.dart';
 import 'package:masarat/features/courses/apis/courses_api_constants.dart';
+import 'package:masarat/features/courses/data/models/add_lesson_request_body.dart';
+import 'package:masarat/features/courses/data/models/add_lesson_response.dart';
 import 'package:masarat/features/courses/data/models/category_model.dart';
 import 'package:masarat/features/courses/data/models/create_course_request_body.dart';
 import 'package:masarat/features/courses/data/models/create_course_response.dart';
@@ -24,4 +26,9 @@ abstract class CoursesService {
 
   @GET(CoursesApiConstants.categories)
   Future<List<CategoryModel>> getCategories();
+
+  @POST(CoursesApiConstants.addLesson)
+  Future<AddLessonResponse> addLesson(
+    @Body() AddLessonRequestBody addLessonRequestBody,
+  );
 }

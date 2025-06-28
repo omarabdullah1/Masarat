@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/core/theme/styles.dart';
 import 'package:masarat/core/utils/app_colors.dart';
@@ -21,6 +20,7 @@ class AppTextFormField extends StatelessWidget {
     this.enabled,
     this.onSubmit,
     this.maxLines = 1,
+    this.keyboardType,
   });
   final EdgeInsetsGeometry? contentPadding;
   final InputBorder? focusedBorder;
@@ -36,6 +36,7 @@ class AppTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final void Function(String data)? onSubmit;
   final int? maxLines;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,7 @@ class AppTextFormField extends StatelessWidget {
       enabled: enabled,
       controller: controller,
       maxLines: maxLines,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: contentPadding ??

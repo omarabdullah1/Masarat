@@ -24,6 +24,7 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
   final TextEditingController durationEstimateController =
       TextEditingController();
   final TextEditingController tagsController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   // Category related properties
@@ -39,6 +40,7 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
     levelController.clear();
     durationEstimateController.clear();
     tagsController.clear();
+    priceController.clear();
     selectedCategory = null;
   }
 
@@ -71,19 +73,35 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
   }
 
   Future<void> createCourse() async {
+    log('createCourse method called');
+
+    // Log form field values for debugging
+    log('Title: "${titleController.text}"');
+    log('Description: "${descriptionController.text}"');
+    log('Level: "${levelController.text}"');
+    log('Duration: "${durationEstimateController.text}"');
+    log('Price: "${priceController.text}"');
+    log('Tags: "${tagsController.text}"');
+    log('Selected Category: ${selectedCategory?.name ?? "null"}');
+
     if (!formKey.currentState!.validate()) {
+      log('Form validation failed');
       return;
     }
+    log('Form validation passed');
 
     // Check if a category is selected
     if (selectedCategory == null) {
+      log('No category selected');
       emit(const CreateCourseState.error(
         error: 'يرجى اختيار تصنيف للدورة',
       ));
       return;
     }
+    log('Category selected: ${selectedCategory!.name}');
 
     emit(const CreateCourseState.loading());
+    log('Loading state emitted');
 
     // Process the tags string to the format the API expects
     final tagsString = tagsController.text.trim();
@@ -95,9 +113,13 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
       level: levelController.text,
       durationEstimate: durationEstimateController.text,
       tags: tagsString,
+      price: double.tryParse(priceController.text) ?? 0.0,
     );
 
+    log('Request body created: ${requestBody.toJson()}');
+
     final result = await _coursesRepo.createCourse(requestBody);
+    log('API call completed');
 
     result.when(
       success: (courseResponse) {
@@ -123,6 +145,7 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
     levelController.dispose();
     durationEstimateController.dispose();
     tagsController.dispose();
+    priceController.dispose();
     return super.close();
   }
 }

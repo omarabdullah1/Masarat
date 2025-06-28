@@ -6,4 +6,5 @@ class CoursesApiConstants {
   static const String courses = 'api/courses';
   static const String createCourse = 'api/courses';
   static const String categories = 'api/categories';
+  static const String addLesson = 'api/lessons';
 }

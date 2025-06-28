@@ -12,8 +12,7 @@ CourseModel _$CourseModelFromJson(Map<String, dynamic> json) => CourseModel(
       description: json['description'] as String,
       category:
           CategoryModel.fromJson(json['category'] as Map<String, dynamic>),
-      instructor:
-          InstructorModel.fromJson(json['instructor'] as Map<String, dynamic>),
+      instructor: json['instructor'] as String,
       coverImageUrl: json['coverImageUrl'] as String,
       price: (json['price'] as num).toDouble(),
       level: json['level'] as String,
