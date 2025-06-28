@@ -1,12 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/widgets/loading_widget.dart';
 import 'package:masarat/core/widgets/styled_toast.dart';
-import 'package:masarat/features/courses/logic/cubit/create_course_cubit.dart';
-import 'package:masarat/features/courses/logic/cubit/create_course_state.dart';
-import 'dart:developer';
+import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
+import 'package:masarat/features/instructor/logic/create_course/create_course_state.dart';
 
 class CreateCourseBlocListener extends StatelessWidget {
   const CreateCourseBlocListener({Key? key}) : super(key: key);

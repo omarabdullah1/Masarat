@@ -7,11 +7,11 @@ import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/signup/data/repos/create_account_repo.dart';
 import 'package:masarat/features/courses/apis/courses_service.dart';
 import 'package:masarat/features/courses/data/repos/courses_repo.dart';
-import 'package:masarat/features/courses/logic/cubit/add_lesson_cubit.dart';
-import 'package:masarat/features/courses/logic/cubit/create_course_cubit.dart';
-import 'package:masarat/features/instructor/instructor_home/data/apis/home_service.dart';
-import 'package:masarat/features/instructor/instructor_home/data/repos/home_repo.dart';
-import 'package:masarat/features/instructor/instructor_home/logic/cubit/published_courses_cubit.dart';
+import 'package:masarat/features/instructor/data/apis/instructor_service.dart';
+import 'package:masarat/features/instructor/data/repos/instructor_repo.dart';
+import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_cubit.dart';
+import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
+import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 
 import '../../features/auth/signup/logic/cubit/register_cubit.dart';
 
@@ -32,8 +32,8 @@ Future<void> setupGetIt() async {
     ..registerLazySingleton<CoursesService>(
       () => CoursesService(dio),
     )
-    ..registerLazySingleton<HomeService>(
-      () => HomeService(dio),
+    ..registerLazySingleton<InstructorService>(
+      () => InstructorService(dio),
     )
 
     /************************* */
@@ -48,8 +48,8 @@ Future<void> setupGetIt() async {
     ..registerLazySingleton<CoursesRepo>(
       () => CoursesRepo(getIt()),
     )
-    ..registerLazySingleton<HomeRepo>(
-      () => HomeRepo(getIt()),
+    ..registerLazySingleton<InstructorRepo>(
+      () => InstructorRepo(getIt()),
     )
 
     /************************* */
@@ -61,6 +61,6 @@ Future<void> setupGetIt() async {
     ..registerFactory<RegisterCubit>(() => RegisterCubit(getIt()))
     ..registerFactory<CreateCourseCubit>(() => CreateCourseCubit(getIt()))
     ..registerFactory<AddLessonCubit>(() => AddLessonCubit(getIt()))
-    ..registerFactory<PublishedCoursesCubit>(
-        () => PublishedCoursesCubit(getIt()));
+    ..registerFactory<InstructorCoursesCubit>(
+        () => InstructorCoursesCubit(getIt()));
 }

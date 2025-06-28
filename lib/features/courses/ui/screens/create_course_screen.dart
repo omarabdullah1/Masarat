@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,11 +10,12 @@ import 'package:masarat/core/widgets/app_text_form_field.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
-import 'package:masarat/features/courses/data/models/category_model.dart';
-import 'package:masarat/features/courses/logic/cubit/create_course_cubit.dart';
-import 'package:masarat/features/courses/logic/cubit/create_course_state.dart';
 import 'package:masarat/features/courses/ui/widgets/create_course_bloc_listener.dart';
+import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
+import 'package:masarat/features/instructor/logic/create_course/create_course_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+
+import '../../../instructor/data/models/category/category_model.dart';
 
 class CreateCourseScreen extends StatefulWidget {
   const CreateCourseScreen({Key? key}) : super(key: key);
@@ -158,7 +161,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   String? _requiredValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
-      print('Required validation failed for value: "$value"');
+      log('Required validation failed for value: "$value"');
       return 'هذا الحقل مطلوب';
     }
     return null;
@@ -166,12 +169,12 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   String? _levelValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
-      print('Level validation failed - empty value: "$value"');
+      log('Level validation failed - empty value: "$value"');
       return 'هذا الحقل مطلوب';
     }
     if (!['beginner', 'intermediate', 'advanced']
         .contains(value.toLowerCase())) {
-      print('Level validation failed - invalid level: "$value"');
+      log('Level validation failed - invalid level: "$value"');
       return 'المستوى يجب أن يكون beginner أو intermediate أو advanced';
     }
     return null;
@@ -192,13 +195,13 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   }
 
   void _submitForm() {
-    print('Submit form called!'); // Debug log
+    log('Submit form called!'); // Debug log
     // Hide keyboard
     FocusScope.of(context).unfocus();
 
     // Submit the form
     cubit.createCourse();
-    print('CreateCourse called!'); // Debug log
+    log('CreateCourse called!'); // Debug log
   }
 
   // New method to build category dropdown
