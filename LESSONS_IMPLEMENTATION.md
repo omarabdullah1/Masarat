@@ -84,7 +84,7 @@ Successfully implemented the get lessons functionality for the trainer course de
 
 ### 6. Screen Integration
 
-- **File**: `lib/features/instructor/presentation/pages/trainer_course_details_screen.dart`
+- **File**: `lib/features/instructor/presentation/pages/instructor_course_details_page.dart`
 - **Features**:
   - MultiBlocProvider setup for both AddLesson and GetLessons
   - Automatic lesson fetching on screen load

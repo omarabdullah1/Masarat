@@ -20,16 +20,16 @@ import '../../../../core/widgets/app_text_form_field.dart';
 import '../../../../core/widgets/course_card_widget.dart';
 import '../../../../core/widgets/custom_drawer.dart';
 
-class TrainingCoursesTrainerScreen extends StatefulWidget {
-  const TrainingCoursesTrainerScreen({super.key});
+class InstructorCoursesManagementPage extends StatefulWidget {
+  const InstructorCoursesManagementPage({super.key});
 
   @override
-  State<TrainingCoursesTrainerScreen> createState() =>
-      _TrainingCoursesTrainerScreenState();
+  State<InstructorCoursesManagementPage> createState() =>
+      _InstructorCoursesManagementPageState();
 }
 
-class _TrainingCoursesTrainerScreenState
-    extends State<TrainingCoursesTrainerScreen> {
+class _InstructorCoursesManagementPageState
+    extends State<InstructorCoursesManagementPage> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 

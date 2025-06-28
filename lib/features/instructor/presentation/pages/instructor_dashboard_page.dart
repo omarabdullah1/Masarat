@@ -17,14 +17,15 @@ import 'package:masarat/features/instructor/logic/instructor_courses/instructor_
 import '../../data/models/category/category_model.dart';
 import '../widgets/published_courses_bloc_listener.dart';
 
-class PublishedCoursesScreen extends StatefulWidget {
-  const PublishedCoursesScreen({super.key});
+class InstructorDashboardPage extends StatefulWidget {
+  const InstructorDashboardPage({super.key});
 
   @override
-  State<PublishedCoursesScreen> createState() => _PublishedCoursesScreenState();
+  State<InstructorDashboardPage> createState() =>
+      _InstructorDashboardPageState();
 }
 
-class _PublishedCoursesScreenState extends State<PublishedCoursesScreen> {
+class _InstructorDashboardPageState extends State<InstructorDashboardPage> {
   final ScrollController _scrollController = ScrollController();
   final List<String> levels = ['beginner', 'intermediate', 'advanced', 'all'];
   String? _selectedLevel;
