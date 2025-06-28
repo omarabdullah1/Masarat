@@ -10,7 +10,7 @@ class LoginResponse {
     required this.lastName,
     required this.email,
     required this.role,
-    required this.profilePictureUrl,
+    this.profilePictureUrl,
     required this.token,
   });
 
@@ -22,7 +22,7 @@ class LoginResponse {
   final String lastName;
   final String email;
   final String role;
-  final String profilePictureUrl;
+  final String? profilePictureUrl;
   final String token;
 
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);

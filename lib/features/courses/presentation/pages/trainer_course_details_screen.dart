@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/widgets/custom_drawer.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:masarat/features/courses/presentation/widgets/add_lecture_button_widget.dart';
@@ -57,7 +56,7 @@ class _TrainerCourseDetailsScreenState
       backgroundColorAppColor: AppColors.background,
       backgroundColor: AppColors.background,
       drawerIconColor: AppColors.primary,
-      drawer: const CustomDrawer(),
+      showBackButton: true,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
