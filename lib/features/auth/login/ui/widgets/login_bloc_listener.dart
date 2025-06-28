@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
-
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_state.dart';
 
@@ -40,7 +39,7 @@ class LoginBlocListener extends StatelessWidget {
               isLoggedInUser = true;
               if (isTrainer) {
                 log('User is a trainer, navigating to training courses');
-                context.go(AppRoute.trainingCoursesTrainer);
+                context.go(AppRoute.instructorCoursesManagement);
               } else {
                 log('User is not a trainer, navigating to home');
                 context.go(AppRoute.home);

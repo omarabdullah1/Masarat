@@ -7,8 +7,6 @@ import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
-import 'package:masarat/features/courses/presentation/widgets/add_lecture_button_widget.dart';
-import 'package:masarat/features/courses/presentation/widgets/add_lecture_form_widget.dart';
 import 'package:masarat/features/instructor/data/models/add_lesson/add_lesson_request_body.dart';
 import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_cubit.dart';
 import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_state.dart';
@@ -17,6 +15,8 @@ import 'package:masarat/features/instructor/logic/delete_lesson/delete_lesson_st
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.dart';
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_state.dart';
 import 'package:masarat/features/instructor/presentation/widgets/lessons_list_widget.dart';
+import 'package:masarat/features/student/courses/presentation/widgets/add_lecture_button_widget.dart';
+import 'package:masarat/features/student/courses/presentation/widgets/add_lecture_form_widget.dart';
 
 class InstructorCourseDetailsPage extends StatefulWidget {
   const InstructorCourseDetailsPage({required this.courseId, super.key});

@@ -1,4 +1,4 @@
-import 'package:masarat/features/courses/apis/courses_service.dart';
+import 'package:masarat/features/student/courses/apis/courses_service.dart';
 
 class CoursesRepo {
   CoursesRepo(this._apiService);
