@@ -18,15 +18,15 @@ import 'package:masarat/features/home/presentation/pages/home_screen.dart';
 import 'package:masarat/features/home/presentation/pages/my_library.dart';
 import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
-import 'package:masarat/features/instructor/presentation/pages/published_courses_screen.dart';
-import 'package:masarat/features/instructor/presentation/pages/trainer_course_details_screen.dart';
+import 'package:masarat/features/instructor/presentation/pages/instructor_course_details_page.dart';
+import 'package:masarat/features/instructor/presentation/pages/instructor_dashboard_page.dart';
 import 'package:masarat/features/packages/presentation/pages/career_guidance_screen.dart';
 import 'package:masarat/features/packages/presentation/pages/pricing_screen.dart';
 import 'package:masarat/features/profile/presentation/pages/profile_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
 
-import '../features/instructor/presentation/pages/training_courses_trainer_screen.dart';
+import '../features/instructor/presentation/pages/instructor_courses_management_page.dart';
 import '../features/splash/ui/splash_screen.dart';
 
 final GoRouter router = GoRouter(
@@ -112,7 +112,7 @@ final GoRouter router = GoRouter(
           builder: (context, state) => BlocProvider(
             create: (context) =>
                 getIt<InstructorCoursesCubit>()..getPublishedCourses(),
-            child: const PublishedCoursesScreen(),
+            child: const InstructorDashboardPage(),
           ),
         ),
         GoRoute(
@@ -171,7 +171,7 @@ final GoRouter router = GoRouter(
       builder: (context, state) => BlocProvider(
         create: (context) =>
             getIt<InstructorCoursesCubit>()..getPublishedCourses(),
-        child: const TrainingCoursesTrainerScreen(),
+        child: const InstructorCoursesManagementPage(),
       ),
       routes: [
         GoRoute(
@@ -187,7 +187,7 @@ final GoRouter router = GoRouter(
           name: AppRoute.trainerCourseDetails,
           builder: (context, state) {
             final courseId = state.pathParameters['courseid'];
-            return TrainerCourseDetailsScreen(courseId: courseId!);
+            return InstructorCourseDetailsPage(courseId: courseId!);
           },
         ),
       ],

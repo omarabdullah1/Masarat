@@ -16,17 +16,17 @@ import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_state.dart';
 import 'package:masarat/features/instructor/presentation/widgets/lessons_list_widget.dart';
 
-class TrainerCourseDetailsScreen extends StatefulWidget {
-  const TrainerCourseDetailsScreen({required this.courseId, super.key});
+class InstructorCourseDetailsPage extends StatefulWidget {
+  const InstructorCourseDetailsPage({required this.courseId, super.key});
   final String courseId;
 
   @override
-  State<TrainerCourseDetailsScreen> createState() =>
-      _TrainerCourseDetailsScreenState();
+  State<InstructorCourseDetailsPage> createState() =>
+      _InstructorCourseDetailsPageState();
 }
 
-class _TrainerCourseDetailsScreenState
-    extends State<TrainerCourseDetailsScreen> {
+class _InstructorCourseDetailsPageState
+    extends State<InstructorCourseDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
