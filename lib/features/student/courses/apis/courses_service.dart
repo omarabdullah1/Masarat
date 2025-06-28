@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:masarat/features/auth/apis/auth_api_constants.dart';
+import 'package:masarat/features/student/courses/apis/courses_api_constants.dart';
+import 'package:masarat/features/student/courses/data/models/courses_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'courses_service.g.dart';
@@ -12,4 +14,12 @@ abstract class CoursesService {
     dio.options.baseUrl = AuthenticationApiConstants.apiBaseUrl;
     return _CoursesService(dio);
   }
+
+  @GET(CoursesApiConstants.createCourse)
+  Future<CoursesResponse> getCourses({
+    @Query("category") String? categoryId,
+    @Query("level") String? level,
+    @Query("limit") int? limit,
+    @Query("page") int? page,
+  });
 }
