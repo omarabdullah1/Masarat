@@ -97,7 +97,7 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.7),
+                        color: AppColors.primary.withAlpha((0.7 * 255).toInt()),
                         borderRadius: BorderRadius.circular(16.r),
                       ),
                       child: Row(
@@ -204,7 +204,7 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
         borderRadius: BorderRadius.circular(8.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).toInt()),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
