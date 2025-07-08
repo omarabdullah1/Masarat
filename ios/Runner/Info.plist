@@ -62,5 +62,9 @@
     <string>This app requires access to the camera for capturing images</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>This app requires access to the microphone for audio files</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to your location to provide location-based learning content and map features</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs access to your location to provide location-based learning content and map features</string>
 </dict>
 </plist>
