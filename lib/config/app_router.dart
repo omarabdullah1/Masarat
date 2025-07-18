@@ -11,22 +11,19 @@ import 'package:masarat/features/auth/ui/screens/onboarding_screen.dart';
 import 'package:masarat/features/cart/presentation/pages/shopping_cart_screen.dart';
 import 'package:masarat/features/home/presentation/pages/home_screen.dart';
 import 'package:masarat/features/home/presentation/pages/my_library.dart';
+import 'package:masarat/features/instructor/home/presentation/pages/instructor_home_screen.dart';
 import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 import 'package:masarat/features/instructor/presentation/pages/create_course_screen.dart';
 import 'package:masarat/features/instructor/presentation/pages/instructor_course_details_page.dart';
-import 'package:masarat/features/packages/presentation/pages/career_guidance_screen.dart';
-import 'package:masarat/features/packages/presentation/pages/pricing_screen.dart';
 import 'package:masarat/features/profile/presentation/pages/profile_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
+import 'package:masarat/features/splash/ui/splash_screen.dart';
 import 'package:masarat/features/student/courses/presentation/pages/course_details_screen.dart';
 import 'package:masarat/features/student/courses/presentation/pages/lecture_details.dart';
 import 'package:masarat/features/student/courses/presentation/pages/lecture_screen.dart';
 import 'package:masarat/features/student/courses/presentation/pages/training_courses_screen.dart';
-
-import '../features/instructor/presentation/pages/instructor_courses_management_page.dart';
-import '../features/splash/ui/splash_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: AppRoute.splash, // Start at onboarding
@@ -140,20 +137,6 @@ final GoRouter router = GoRouter(
       ],
     ),
 
-    // Career Guidance Route
-    GoRoute(
-      path: AppRoute.careerGuidance,
-      name: AppRoute.careerGuidance,
-      builder: (context, state) => const CareerGuidanceScreen(),
-      routes: [
-        GoRoute(
-          path: AppRoute.pricing,
-          name: AppRoute.pricing,
-          builder: (context, state) => const PricingScreen(),
-        ),
-      ],
-    ),
-
     // Trainer's Training Courses
     GoRoute(
       path: AppRoute.instructorCoursesManagement,
@@ -161,7 +144,7 @@ final GoRouter router = GoRouter(
       builder: (context, state) => BlocProvider(
         create: (context) =>
             getIt<InstructorCoursesCubit>()..getPublishedCourses(),
-        child: const InstructorCoursesManagementPage(),
+        child: const InstructorHomeScreen(),
       ),
       routes: [
         GoRoute(

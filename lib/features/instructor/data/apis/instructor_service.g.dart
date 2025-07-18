@@ -45,7 +45,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/courses/my-courses',
+          'api/v1/courses/my-courses',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -80,7 +80,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/courses',
+          'api/v1/courses',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -150,7 +150,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/categories',
+          'api/v1/categories',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -187,7 +187,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/lessons',
+          'api/v1/lessons',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -220,7 +220,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/lessons/course/${courseId}',
+          'api/v1/lessons/course/${courseId}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -255,7 +255,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/lessons/${lessonId}',
+          'api/v1/lessons/${lessonId}',
           queryParameters: queryParameters,
           data: _data,
         )

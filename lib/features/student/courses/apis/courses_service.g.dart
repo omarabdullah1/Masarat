@@ -45,7 +45,7 @@ class _CoursesService implements CoursesService {
     )
         .compose(
           _dio.options,
-          'api/courses',
+          'api/v1/courses',
           queryParameters: queryParameters,
           data: _data,
         )

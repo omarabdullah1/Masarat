@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
+import 'package:masarat/core/config.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/widgets/app_text_form_field.dart';
@@ -135,41 +136,39 @@ class _TrainingCoursesScreenState extends State<TrainingCoursesScreen> {
                                     'عدد الساعات : ${course.durationEstimate}',
                                 lectures:
                                     'عدد المحاضرات: ${course.lessons.length}',
+                                image:
+                                    '${Config.get('apiUrl').toString().endsWith('/') ? Config.get('apiUrl').toString().substring(0, Config.get('apiUrl').toString().length - 1) : Config.get('apiUrl')}${course.coverImageUrl}',
                                 actions: [
-                                  Expanded(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: CustomButton(
-                                            height: 27.h,
-                                            radius: 58.r,
-                                            labelText:
-                                                'شــراء بـ ${course.price} ر.س',
-                                            buttonColor: AppColors.primary,
-                                            textColor: AppColors.white,
-                                            onTap: () {},
-                                            textFontSize: 8.sp,
-                                            fontWeight: FontWeightHelper.light,
-                                          ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: CustomButton(
+                                          height: 27.h,
+                                          radius: 58.r,
+                                          labelText:
+                                              'شــراء ${course.price} ر.س',
+                                          buttonColor: AppColors.primary,
+                                          textColor: AppColors.white,
+                                          onTap: () {},
+                                          textFontSize: 7.sp,
+                                          fontWeight: FontWeightHelper.light,
                                         ),
-                                        Gap(14.w),
-                                        Expanded(
-                                          child: CustomButton(
-                                            height: 27.h,
-                                            labelText: 'إضافة إلى السلة',
-                                            radius: 58.r,
-                                            buttonColor: AppColors.background,
-                                            textColor: AppColors.yellow,
-                                            onTap: () {},
-                                            textFontSize: 8.sp,
-                                            borderColor: AppColors.yellow,
-                                            fontWeight: FontWeightHelper.light,
-                                          ),
+                                      ),
+                                      SizedBox(width: 5.w),
+                                      Expanded(
+                                        child: CustomButton(
+                                          height: 27.h,
+                                          labelText: 'إضافة للسلة',
+                                          radius: 58.r,
+                                          buttonColor: AppColors.background,
+                                          textColor: AppColors.yellow,
+                                          onTap: () {},
+                                          textFontSize: 7.sp,
+                                          borderColor: AppColors.yellow,
+                                          fontWeight: FontWeightHelper.light,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                                 onSecondaryAction: () {},

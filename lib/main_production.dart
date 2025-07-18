@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:masarat/app/app.dart';
 import 'package:masarat/bootstrap.dart';
@@ -16,6 +17,7 @@ void main() {
         Locale(Constants.enLang),
         Locale(Constants.arLang),
       ],
+      assetLoader: const YamlAssetLoader(), // Use YAML loader for .yaml files
       child: const MasaratApp(),
     ),
   );
