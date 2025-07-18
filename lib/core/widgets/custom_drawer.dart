@@ -1,194 +1,161 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/helpers/shared_pref_helper.dart';
-import 'package:masarat/core/utils/app_colors.dart';
-import 'package:masarat/core/utils/assets_mangment.dart';
-import 'package:masarat/core/widgets/customs_divider.dart';
-import 'package:masarat/core/widgets/drawer_item.dart';
+import 'package:masarat/core/widgets/instructor_drawer.dart';
+import 'package:masarat/core/widgets/student_drawer.dart';
 
-class CustomDrawer extends StatelessWidget {
+/// A custom drawer that selects the appropriate drawer implementation based on user role.
+/// This widget handles the logic of determining whether to show the instructor-specific drawer
+/// or the student-specific drawer.
+class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
+
+  // Static test field for development/testing purposes
+  // This will be ignored when actual user role is available from storage
+  static String? testUserRole;
+
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  String? _userRole;
+  bool _isLoading = true;
+
+  // Helper method to decode base64 URL safe string
+  String _decodeBase64(String str) {
+    String output = str.replaceAll('-', '+').replaceAll('_', '/');
+    switch (output.length % 4) {
+      case 0:
+        break;
+      case 2:
+        output += '==';
+        break;
+      case 3:
+        output += '=';
+        break;
+      default:
+        throw Exception('Illegal base64url string!');
+    }
+
+    // Convert from base64
+    try {
+      return Uri.decodeComponent(String.fromCharCodes(
+        base64Decode(output),
+      ));
+    } catch (e) {
+      log('Error decoding base64: $e');
+      return '';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Load user role when widget initializes
+    _loadUserRole();
+  }
+
+  // Load user role asynchronously
+  Future<void> _loadUserRole() async {
+    try {
+      // Check if user is logged in first
+      final token =
+          await SharedPrefHelper.getSecuredString(SharedPrefKeys.userToken);
+      log('Retrieved token from secure storage: ${token != null ? "exists (${token.substring(0, 20)}...)" : "null"}');
+
+      // If no token, user is not logged in, default to student
+      if (token == null || token.isEmpty) {
+        log('User is not logged in, defaulting to student drawer');
+        if (mounted) {
+          setState(() {
+            _userRole = 'student';
+            _isLoading = false;
+          });
+        }
+        return;
+      }
+
+      // Get user role from secure storage
+      final storedRole =
+          await SharedPrefHelper.getSecuredString(SharedPrefKeys.userRole);
+      log('Retrieved role from secure storage: ${storedRole ?? "null"}');
+
+      // Try to extract role from JWT if no explicit role is stored
+      String? roleFromToken;
+      if ((storedRole == null || storedRole.isEmpty) && token.isNotEmpty) {
+        try {
+          final parts = token.split('.');
+          if (parts.length > 1) {
+            // Decode the payload part of the JWT token
+            final payload = _decodeBase64(parts[1]);
+            log('JWT payload: $payload');
+            if (payload.contains('"role"')) {
+              final roleStart = payload.indexOf('"role"') + 7;
+              final roleEnd = payload.indexOf('"', roleStart + 1);
+              if (roleStart > 0 && roleEnd > roleStart) {
+                roleFromToken = payload.substring(roleStart + 1, roleEnd);
+                log('Extracted role from JWT: $roleFromToken');
+              }
+            }
+          }
+        } catch (e) {
+          log('Error extracting role from JWT: $e');
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          // Use role with this priority: 1. Stored role, 2. JWT role, 3. Default student
+          _userRole = (storedRole != null && storedRole.isNotEmpty)
+              ? storedRole
+              : (roleFromToken != null)
+                  ? roleFromToken
+                  : 'student';
+          _isLoading = false;
+        });
+      }
+
+      log('Final selected user role: $_userRole');
+    } catch (e) {
+      log('Error loading user role: $e', error: e);
+      if (mounted) {
+        setState(() {
+          _userRole = 'student'; // Default to student on error
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ColoredBox(
-        color: AppColors.primary,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  icon: SvgPicture.asset(
-                    AppImage.menuIcon,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.drawerIconColor,
-                      BlendMode.srcIn,
-                    ),
-                    height: 30.h,
-                    width: 30.w,
-                  ),
-                  onPressed: () => Scaffold.of(context).closeDrawer(),
-                ),
-              ),
-            ),
-            // Profile Page
-            DrawerItem(
-              title: 'الصـفحة الشخصــية',
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                context.goNamed(AppRoute.profile, extra: true);
-              },
-            ),
-            _divider(),
-
-            // Home Page
-            DrawerItem(
-              title: 'الرئـيســــــــــــية',
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                context.goNamed(AppRoute.home);
-              },
-            ),
-            _divider(),
-
-            // My Library Page
-            DrawerItem(
-              title: 'مكتبـتــــــــــــي',
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                context.goNamed(AppRoute.myLibrary);
-              },
-            ),
-            _divider(),
-
-            // Training Courses Page
-            DrawerItem(
-              title: 'الــدورات التدريبيــة',
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                context.goNamed(AppRoute.trainingCourses);
-              },
-            ),
-            _divider(),
-
-            // Shopping Cart Page
-            DrawerItem(
-              title: 'سلة المشتريـــــات',
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                context.goNamed(AppRoute.shoppingCart);
-              },
-            ),
-            _divider(),
-            // Career Guidance Page
-            DrawerItem(
-              title: 'الإرشــاد المهـــني',
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                context.goNamed(AppRoute.careerGuidance);
-              },
-            ),
-            _divider(),
-            // About Us Page
-            DrawerItem(
-              title: 'مــــن نـحــــــــن',
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                context.goNamed(AppRoute.aboutUs);
-              },
-            ),
-            _divider(),
-            // Contact Us (Placeholder for Future Implementation)
-            DrawerItem(
-              title: 'تواصـــــل معنــــا',
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                // Navigate to Contact Us page (Add route later if required)
-              },
-            ),
-            _divider(),
-            // Policies Page
-            DrawerItem(
-              title: 'سيـاسـات التـطبيق',
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                context.goNamed(AppRoute.policies);
-              },
-            ),
-            _divider(),
-            Gap(125.h),
-            // Logout
-            DrawerItem(
-              title: 'تسجيل الخروج',
-              onTap: () async {
-                // Close the drawer first
-                Scaffold.of(context).closeDrawer();
-
-                // Show a loading dialog
-                if (context.mounted) {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => const AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 20),
-                          Text('جاري تسجيل الخروج...'),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
-                try {
-                  // Clear user token from secure storage
-                  await SharedPrefHelper.removeSecuredString(
-                      SharedPrefKeys.userToken);
-                  // Clear all user data
-                  await SharedPrefHelper.clearAllSecuredData();
-                  // Reset the isLoggedInUser flag
-                  isLoggedInUser = false;
-
-                  // Dismiss loading dialog and navigate to onboarding screen
-                  if (context.mounted) {
-                    Navigator.of(context).pop(); // Dismiss dialog
-                    context.go(AppRoute.onboarding);
-                  }
-                } catch (e) {
-                  // If there's an error, still try to navigate to onboarding
-                  if (context.mounted) {
-                    Navigator.of(context).pop(); // Dismiss dialog
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('حدث خطأ أثناء تسجيل الخروج'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                    context.go(AppRoute.onboarding);
-                  }
-                }
-              },
-            ),
-            _divider(),
-          ],
+    // Show loading indicator while fetching user role
+    if (_isLoading) {
+      return const Drawer(
+        child: Center(
+          child: CircularProgressIndicator(),
         ),
-      ),
-    );
-  }
-
-  // Helper Method for Divider
-  Widget _divider() => CustomsDivider(
-        color: AppColors.white,
-        height: 1.h,
       );
+    }
+
+    // Get the user role, with fallback options:
+    // 1. Use actual user role from storage if available
+    // 2. Use test role if provided (for development/testing)
+    // 3. Default to 'student' as fallback
+    final String userRole = _userRole ?? CustomDrawer.testUserRole ?? 'student';
+
+    // Log the user role for debugging purposes
+    log('Rendering drawer for user role: $userRole');
+
+    // Return different drawer based on role
+    if (userRole == 'instructor' || userRole == 'trainer') {
+      return const InstructorDrawer();
+    } else {
+      return const StudentDrawer();
+    }
+  }
 }

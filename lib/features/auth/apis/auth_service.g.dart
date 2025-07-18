@@ -35,7 +35,7 @@ class _AuthenticationService implements AuthenticationService {
     )
         .compose(
           _dio.options,
-          'api/auth/login',
+          'api/v1/auth/login',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -70,7 +70,7 @@ class _AuthenticationService implements AuthenticationService {
     )
         .compose(
           _dio.options,
-          'api/auth/register',
+          'api/v1/auth/register',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -111,7 +111,7 @@ class _AuthenticationService implements AuthenticationService {
     )
         .compose(
           _dio.options,
-          'api/auth/upload-academic-degree',
+          'api/v1/auth/upload-academic-degree',
           queryParameters: queryParameters,
           data: _data,
         )

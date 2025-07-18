@@ -1,0 +1,195 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:masarat/config/app_route.dart';
+import 'package:masarat/core/helpers/constants.dart';
+import 'package:masarat/core/helpers/shared_pref_helper.dart';
+import 'package:masarat/core/utils/app_colors.dart';
+import 'package:masarat/core/utils/assets_mangment.dart';
+import 'package:masarat/core/widgets/customs_divider.dart';
+import 'package:masarat/core/widgets/drawer_item.dart';
+
+class StudentDrawer extends StatelessWidget {
+  const StudentDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ColoredBox(
+        color: AppColors.primary,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        icon: SvgPicture.asset(
+                          AppImage.menuIcon,
+                          colorFilter: const ColorFilter.mode(
+                            AppColors.drawerIconColor,
+                            BlendMode.srcIn,
+                          ),
+                          height: 30.h,
+                          width: 30.w,
+                        ),
+                        onPressed: () => Scaffold.of(context).closeDrawer(),
+                      ),
+                    ),
+                  ),
+                  // Profile Page
+                  DrawerItem(
+                    title: 'الصـفحة الشخصــية',
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.goNamed(AppRoute.profile, extra: true);
+                    },
+                  ),
+                  _divider(),
+
+                  // Home Page
+                  DrawerItem(
+                    title: 'الرئـيســــــــــــية',
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.goNamed(AppRoute.home);
+                    },
+                  ),
+                  _divider(),
+
+                  // My Library Page - Student specific
+                  DrawerItem(
+                    title: 'مكتبـتــــــــــــي',
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.goNamed(AppRoute.myLibrary);
+                    },
+                  ),
+                  _divider(),
+
+                  // Training Courses Page - Student specific
+                  DrawerItem(
+                    title: 'الــدورات التدريبيــة',
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.goNamed(AppRoute.trainingCourses);
+                    },
+                  ),
+                  _divider(),
+
+                  // Shopping Cart Page - Student specific
+                  DrawerItem(
+                    title: 'سلة المشتريـــــات',
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.goNamed(AppRoute.shoppingCart);
+                    },
+                  ),
+                  _divider(),
+
+                  // About Us Page
+                  DrawerItem(
+                    title: 'مــــن نـحــــــــن',
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.goNamed(AppRoute.aboutUs);
+                    },
+                  ),
+                  _divider(),
+
+                  // Contact Us (Placeholder for Future Implementation)
+                  DrawerItem(
+                    title: 'تواصـــــل معنــــا',
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      // Navigate to Contact Us page (Add route later if required)
+                    },
+                  ),
+                  _divider(),
+
+                  // Policies Page
+                  DrawerItem(
+                    title: 'سيـاسـات التـطبيق',
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.goNamed(AppRoute.policies);
+                    },
+                  ),
+                  _divider(),
+                  Gap(125.h),
+
+                  // Logout
+                  DrawerItem(
+                    title: 'تسجيل الخروج',
+                    onTap: () async {
+                      // Close the drawer first
+                      Scaffold.of(context).closeDrawer();
+
+                      // Show a loading dialog
+                      if (context.mounted) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => const AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircularProgressIndicator(),
+                                SizedBox(height: 20),
+                                Text('جاري تسجيل الخروج...'),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      try {
+                        // Clear user token from secure storage
+                        await SharedPrefHelper.removeSecuredString(
+                            SharedPrefKeys.userToken);
+                        // Clear all user data
+                        await SharedPrefHelper.clearAllSecuredData();
+                        // Reset the isLoggedInUser flag
+                        isLoggedInUser = false;
+
+                        // Dismiss loading dialog and navigate to onboarding screen
+                        if (context.mounted) {
+                          Navigator.of(context).pop(); // Dismiss dialog
+                          context.go(AppRoute.onboarding);
+                        }
+                      } catch (e) {
+                        // If there's an error, still try to navigate to onboarding
+                        if (context.mounted) {
+                          Navigator.of(context).pop(); // Dismiss dialog
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('حدث خطأ أثناء تسجيل الخروج'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          context.go(AppRoute.onboarding);
+                        }
+                      }
+                    },
+                  ),
+                  _divider(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper Method for Divider
+  Widget _divider() => CustomsDivider(
+        color: AppColors.white,
+        height: 1.h,
+      );
+}

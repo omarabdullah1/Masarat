@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,6 +63,7 @@ class _TrainerCourseDetailsContentState
   final TextEditingController sourceController = TextEditingController();
   final TextEditingController orderController = TextEditingController();
   final TextEditingController durationController = TextEditingController();
+  PlatformFile? selectedFile;
 
   @override
   void dispose() {
@@ -73,30 +75,78 @@ class _TrainerCourseDetailsContentState
     super.dispose();
   }
 
-  void addLecture() {
-    // Validate required fields
-    if (courseNameController.text.isNotEmpty &&
-        contentController.text.isNotEmpty &&
-        orderController.text.isNotEmpty &&
-        durationController.text.isNotEmpty) {
-      // Create the add lesson request
-      final requestBody = AddLessonRequestBody(
-        title: courseNameController.text.trim(),
-        contentType: 'video', // Default to video, can be made dynamic
-        content: contentController.text.trim(),
-        courseId: widget.courseId,
-        order: int.tryParse(orderController.text) ?? 1,
-        durationEstimate: durationController.text.trim(),
-        isPreviewable: false, // Default to false, can be made dynamic
+  Future<void> pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.any,
+        allowMultiple: false,
       );
 
-      // Call the BLoC to add the lesson
-      context.read<AddLessonCubit>().addLesson(requestBody);
-    } else {
+      if (result != null && result.files.isNotEmpty) {
+        setState(() {
+          selectedFile = result.files.first;
+          // Update source controller with file name
+          sourceController.text = selectedFile!.name;
+        });
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('تم اختيار الملف: ${selectedFile!.name}'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all required fields')),
+        SnackBar(
+          content: Text('خطأ في اختيار الملف: $e'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
+  }
+
+  void addLecture() {
+    // Debug: log values to check what's empty
+    print('Course name: ${courseNameController.text}');
+    print('Content: ${contentController.text}');
+    print('Order: ${orderController.text}');
+    print('Duration: ${durationController.text}');
+
+    // Improved validation with specific messages
+    String errorMessage = '';
+
+    if (courseNameController.text.trim().isEmpty) {
+      errorMessage = 'يرجى إدخال عنوان الدرس';
+    } else if (contentController.text.trim().isEmpty) {
+      errorMessage = 'يرجى إدخال رابط المحتوى';
+    } else if (orderController.text.trim().isEmpty) {
+      errorMessage = 'يرجى إدخال ترتيب الدرس';
+    } else if (int.tryParse(orderController.text.trim()) == null) {
+      errorMessage = 'ترتيب الدرس يجب أن يكون رقمًا صحيحًا';
+    } else if (durationController.text.trim().isEmpty) {
+      errorMessage = 'يرجى إدخال مدة الدرس المقدرة';
+    }
+
+    if (errorMessage.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+      return;
+    }
+
+    // All fields are valid, create the add lesson request
+    final requestBody = AddLessonRequestBody(
+      title: courseNameController.text.trim(),
+      contentType: 'video', // Default to video, can be made dynamic
+      content: contentController.text.trim(),
+      courseId: widget.courseId,
+      order: int.tryParse(orderController.text.trim()) ?? 1,
+      durationEstimate: durationController.text.trim(),
+      isPreviewable: false, // Default to false, can be made dynamic
+    ); // Call the BLoC to add the lesson
+    context.read<AddLessonCubit>().addLesson(requestBody);
   }
 
   @override
@@ -212,6 +262,7 @@ class _TrainerCourseDetailsContentState
                       orderController: orderController,
                       durationController: durationController,
                       addLecture: addLecture,
+                      onUploadPressed: pickFile,
                     ),
                   SizedBox(height: 16.h),
                   BlocBuilder<GetLessonsCubit, GetLessonsState>(

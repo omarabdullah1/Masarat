@@ -10,6 +10,7 @@ class AddLectureFormWidget extends StatelessWidget {
     super.key,
     this.orderController,
     this.durationController,
+    this.onUploadPressed,
   });
   final TextEditingController courseNameController;
   final TextEditingController contentController;
@@ -17,6 +18,7 @@ class AddLectureFormWidget extends StatelessWidget {
   final TextEditingController? orderController;
   final TextEditingController? durationController;
   final VoidCallback addLecture;
+  final VoidCallback? onUploadPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +128,7 @@ class AddLectureFormWidget extends StatelessWidget {
                 filled: true,
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.upload, color: AppColors.primary),
-                  onPressed: () {},
+                  onPressed: onUploadPressed,
                 ),
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),

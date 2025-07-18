@@ -12,7 +12,8 @@ LessonModel _$LessonModelFromJson(Map<String, dynamic> json) => LessonModel(
       contentType: json['contentType'] as String,
       content: json['content'] as String,
       order: (json['order'] as num).toInt(),
-      durationEstimate: json['durationEstimate'] as String,
+      durationEstimate:
+          LessonModel._durationEstimateFromJson(json['durationEstimate']),
       isPreviewable: json['isPreviewable'] as bool,
     );
 

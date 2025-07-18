@@ -14,7 +14,8 @@ AddLessonResponse _$AddLessonResponseFromJson(Map<String, dynamic> json) =>
       content: json['content'] as String,
       course: json['course'] as String,
       order: (json['order'] as num).toInt(),
-      durationEstimate: json['durationEstimate'] as String,
+      durationEstimate:
+          AddLessonResponse._durationEstimateFromJson(json['durationEstimate']),
       isPreviewable: json['isPreviewable'] as bool,
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
