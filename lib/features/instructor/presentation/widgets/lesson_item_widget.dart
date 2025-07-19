@@ -9,10 +9,12 @@ class LessonItemWidget extends StatelessWidget {
   const LessonItemWidget({
     required this.lesson,
     required this.onDelete,
+    required this.onEdit,
     super.key,
   });
   final LessonModel lesson;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +63,11 @@ class LessonItemWidget extends StatelessWidget {
                       ),
                     ),
                     Gap(8.w),
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.blue),
+                      onPressed: onEdit,
+                      tooltip: 'تعديل الدرس',
+                    ),
                     IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: onDelete,

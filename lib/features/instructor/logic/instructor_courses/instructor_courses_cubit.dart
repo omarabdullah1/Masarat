@@ -151,6 +151,6 @@ class InstructorCoursesCubit extends Cubit<InstructorCoursesState> {
   ) {
     // TODO: Implement navigation to update course screen
     // The UpdateCourseScreen file doesn't exist yet
-    print('Navigate to update course: ${courseData.title}');
+    log('Navigate to update course: ${courseData.title}');
   }
 }

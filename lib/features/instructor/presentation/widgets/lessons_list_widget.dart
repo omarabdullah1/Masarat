@@ -9,10 +9,12 @@ class LessonsListWidget extends StatelessWidget {
   const LessonsListWidget({
     required this.lessons,
     required this.onDeleteLesson,
+    required this.onEditLesson,
     super.key,
   });
   final List<LessonModel> lessons;
   final void Function(LessonModel lesson) onDeleteLesson;
+  final void Function(LessonModel lesson) onEditLesson;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,7 @@ class LessonsListWidget extends StatelessWidget {
             return LessonItemWidget(
               lesson: lesson,
               onDelete: () => onDeleteLesson(lesson),
+              onEdit: () => onEditLesson(lesson),
             );
           }).toList(),
         ),

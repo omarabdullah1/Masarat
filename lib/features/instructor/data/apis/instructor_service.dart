@@ -58,4 +58,10 @@ abstract class InstructorService {
   Future<void> deleteLesson(
     @Path("lessonId") String lessonId,
   );
+
+  @PUT('${InstructorApiConstants.updateLesson}/{lessonId}')
+  Future<LessonModel> updateLesson(
+    @Path("lessonId") String lessonId,
+    @Body() Map<String, dynamic> lessonData,
+  );
 }

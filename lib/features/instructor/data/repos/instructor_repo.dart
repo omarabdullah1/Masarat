@@ -104,4 +104,15 @@ class InstructorRepo {
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }
+
+  Future<ApiResult<LessonModel>> updateLesson(
+      String lessonId, Map<String, dynamic> lessonData) async {
+    try {
+      final response = await _apiService.updateLesson(lessonId, lessonData);
+      return ApiResult.success(response);
+    } catch (error, stackTrace) {
+      log('Update Lesson error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
 }
