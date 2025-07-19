@@ -17,6 +17,7 @@ This document provides a guide for integrating with the Masarat API.
 **Endpoint**: `POST /auth/login`
 
 **Request Body**:
+
 ```json
 {
   "email": "user@example.com",
@@ -26,7 +27,9 @@ This document provides a guide for integrating with the Masarat API.
 ```
 
 **Response**:
+
 ```json
+
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -44,6 +47,7 @@ This document provides a guide for integrating with the Masarat API.
 **Endpoint**: `POST /auth/register`
 
 **Request Body**:
+
 ```json
 {
   "name": "John Doe",
@@ -54,6 +58,7 @@ This document provides a guide for integrating with the Masarat API.
 ```
 
 **Response**:
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -74,6 +79,7 @@ This document provides a guide for integrating with the Masarat API.
 **Endpoint**: `GET /courses`
 
 **Query Parameters**:
+
 - `page`: Page number (default: 1)
 - `limit`: Number of items per page (default: 10)
 - `search`: Search term for course title
@@ -81,6 +87,7 @@ This document provides a guide for integrating with the Masarat API.
 - `level`: Filter by level (beginner, intermediate, advanced)
 
 **Response**:
+
 ```json
 {
   "total": 100,
@@ -110,6 +117,7 @@ This document provides a guide for integrating with the Masarat API.
 **Endpoint**: `GET /courses/{courseId}`
 
 **Response**:
+
 ```json
 {
   "id": "course123",

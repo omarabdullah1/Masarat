@@ -7,15 +7,18 @@ This document provides a detailed overview of the Masarat Mobile application arc
 The application follows Clean Architecture principles, separating concerns into distinct layers:
 
 ### Presentation Layer
+
 - UI Components (Screens, Widgets)
 - State Management (BLoC/Cubit)
 
 ### Domain Layer
+
 - Business Logic
 - Use Cases
 - Domain Entities
 
 ### Data Layer
+
 - Repositories Implementation
 - Remote/Local Data Sources
 - Data Models/DTOs
@@ -24,7 +27,8 @@ The application follows Clean Architecture principles, separating concerns into 
 
 The application is organized by features, with each feature containing its own implementations of the layers described above.
 
-```
+```bash
+#!/arch
 features/
 ├── auth/                # Authentication feature
 │   ├── data/            # Data layer

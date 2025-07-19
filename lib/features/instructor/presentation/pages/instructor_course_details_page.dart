@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,6 +84,8 @@ class _TrainerCourseDetailsContentState
         allowMultiple: false,
       );
 
+      if (!mounted) return;
+
       if (result != null && result.files.isNotEmpty) {
         setState(() {
           selectedFile = result.files.first;
@@ -98,6 +102,8 @@ class _TrainerCourseDetailsContentState
         );
       }
     } catch (e) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('خطأ في اختيار الملف: $e'),
@@ -109,10 +115,10 @@ class _TrainerCourseDetailsContentState
 
   void addLecture() {
     // Debug: log values to check what's empty
-    print('Course name: ${courseNameController.text}');
-    print('Content: ${contentController.text}');
-    print('Order: ${orderController.text}');
-    print('Duration: ${durationController.text}');
+    log('Course name: ${courseNameController.text}');
+    log('Content: ${contentController.text}');
+    log('Order: ${orderController.text}');
+    log('Duration: ${durationController.text}');
 
     // Improved validation with specific messages
     String errorMessage = '';

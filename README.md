@@ -81,16 +81,16 @@ Each environment has its own configuration settings managed through the `Config`
 
 1. Clone the repository:
 
-```sh
-git clone https://github.com/RootCo1/masarat-mobile.git
-cd masarat-mobile
-```
+    ```sh
+    git clone https://github.com/RootCo1/masarat-mobile.git
+    cd masarat-mobile
+    ```
 
 2. Install dependencies:
 
-```sh
-flutter pub get
-```
+    ```sh
+    flutter pub get
+    ```
 
 3. Run the app in the desired flavor:
 

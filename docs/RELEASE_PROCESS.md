@@ -48,13 +48,11 @@ git checkout -b release/x.y.z
 
 Update version in:
 
-
 - `pubspec.yaml`
 - `android/app/build.gradle`
 - `ios/Runner/Info.plist`
 
 ### 3. Generate Release Notes
-
 
 Create a changelog entry in `CHANGELOG.md` including:
 
@@ -91,25 +89,23 @@ git push origin develop
 
 ### Google Play Store
 
-
 1. Build signed app bundle:
 
-```bash
-flutter build appbundle --flavor production --target lib/main_production.dart
-```
+   ```bash
+   flutter build appbundle --flavor production --target lib/main_production.dart
+   ```
 
 2. Upload to Google Play Console
 3. Fill in release notes and marketing materials
 4. Submit for review
 
-
 ### Apple App Store
 
 1. Build iOS archive:
 
-```bash
-flutter build ios --flavor production --target lib/main_production.dart
-```
+   ```bash
+   flutter build ios --flavor production --target lib/main_production.dart
+   ```
 
 2. Open Xcode and create archive
 3. Upload to App Store Connect
@@ -125,19 +121,21 @@ flutter build ios --flavor production --target lib/main_production.dart
 
 ## Hotfix Process
 
-
 For critical issues in production:
 
 1. Create hotfix branch from master:
 
-```bash
-git checkout master
-git checkout -b hotfix/x.y.(z+1)
-```
+   ```bash
+   git checkout master
+   git checkout -b hotfix/x.y.(z+1)
+   ```
 
 2. Fix the issue
+
 3. Update version numbers
+
 4. Follow steps 5-6 from the normal release process
+
 5. Create an additional tag for the hotfix
 
 ## Release Schedule

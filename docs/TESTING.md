@@ -9,12 +9,14 @@ This document outlines the testing strategy for the Masarat Mobile application.
 Unit tests verify that individual components work correctly in isolation.
 
 **What to test:**
+
 - Repository methods
 - Cubit/BLoC logic
 - Helper functions and utilities
 - Model class methods
 
 **Tools:**
+
 - Flutter Test
 - Mockito/Mocktail for mocking dependencies
 - BLoC Test for testing Cubits and BLoCs
@@ -60,6 +62,7 @@ void main() {
 Widget tests verify that UI components render correctly and handle user interactions as expected.
 
 **What to test:**
+
 - Screen rendering
 - Widget composition
 - User interaction handling
@@ -67,6 +70,7 @@ Widget tests verify that UI components render correctly and handle user interact
 - Navigation
 
 **Tools:**
+
 - Flutter Test
 - Flutter Widget Tester
 - Network Image Mock for image loading
@@ -97,12 +101,14 @@ void main() {
 Integration tests verify that different parts of the application work correctly together.
 
 **What to test:**
+
 - End-to-end user flows
 - API integration
 - Navigation between screens
 - State persistence
 
 **Tools:**
+
 - Flutter Integration Test
 - Mock HTTP server for API responses
 
@@ -136,6 +142,7 @@ void main() {
 ## Test Coverage
 
 The project aims to maintain:
+
 - 80% or higher unit test coverage
 - Key user flows covered by integration tests
 - Critical UI components covered by widget tests
