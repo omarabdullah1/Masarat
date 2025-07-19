@@ -70,13 +70,14 @@ This document outlines the development guidelines for the Masarat Mobile project
 
 Use the following format for commit messages:
 
-```
+```bash
 <type>(<scope>): <subject>
 
 <body>
 ```
 
 Types:
+
 - feat: A new feature
 - fix: A bug fix
 - docs: Documentation changes
@@ -87,7 +88,8 @@ Types:
 - chore: Changes to build process or tools
 
 Example:
-```
+
+```bash
 feat(auth): implement biometric login
 
 - Add Face ID and Touch ID support
