@@ -9,10 +9,12 @@ class LessonItemWidget extends StatelessWidget {
   const LessonItemWidget({
     required this.lesson,
     required this.onDelete,
+    required this.onEdit,
     super.key,
   });
   final LessonModel lesson;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class LessonItemWidget extends StatelessWidget {
                       padding:
                           EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1 * 255),
                         borderRadius: BorderRadius.circular(6.r),
                       ),
                       child: CustomText(
@@ -61,6 +63,11 @@ class LessonItemWidget extends StatelessWidget {
                       ),
                     ),
                     Gap(8.w),
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.blue),
+                      onPressed: onEdit,
+                      tooltip: 'تعديل الدرس',
+                    ),
                     IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: onDelete,
@@ -125,7 +132,7 @@ class LessonItemWidget extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: Colors.green.withValues(alpha: 0.1 * 255),
                   borderRadius: BorderRadius.circular(6.r),
                 ),
                 child: CustomText(

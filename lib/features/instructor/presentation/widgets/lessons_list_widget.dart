@@ -9,10 +9,12 @@ class LessonsListWidget extends StatelessWidget {
   const LessonsListWidget({
     required this.lessons,
     required this.onDeleteLesson,
+    required this.onEditLesson,
     super.key,
   });
   final List<LessonModel> lessons;
   final void Function(LessonModel lesson) onDeleteLesson;
+  final void Function(LessonModel lesson) onEditLesson;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class LessonsListWidget extends StatelessWidget {
             Icon(
               Icons.school_outlined,
               size: 64.sp,
-              color: AppColors.gray.withOpacity(0.5),
+              color: AppColors.gray.withValues(alpha: 0.5 * 255),
             ),
             SizedBox(height: 16.h),
             CustomText(
@@ -39,7 +41,7 @@ class LessonsListWidget extends StatelessWidget {
               text: 'اضغط على "إضافة محاضرة جديدة" لإضافة الدرس الأول',
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.gray.withOpacity(0.7),
+                color: AppColors.gray.withValues(alpha: 0.7 * 255),
               ),
               textAlign: TextAlign.center,
             ),
@@ -69,6 +71,7 @@ class LessonsListWidget extends StatelessWidget {
             return LessonItemWidget(
               lesson: lesson,
               onDelete: () => onDeleteLesson(lesson),
+              onEdit: () => onEditLesson(lesson),
             );
           }).toList(),
         ),

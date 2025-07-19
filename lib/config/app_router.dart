@@ -15,7 +15,7 @@ import 'package:masarat/features/instructor/home/presentation/pages/instructor_h
 import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 import 'package:masarat/features/instructor/presentation/pages/create_course_screen.dart';
-import 'package:masarat/features/instructor/presentation/pages/instructor_course_details_page.dart';
+import 'package:masarat/features/instructor/presentation/pages/instructor_course_management_page.dart';
 import 'package:masarat/features/profile/presentation/pages/profile_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
@@ -160,7 +160,7 @@ final GoRouter router = GoRouter(
           name: AppRoute.trainerCourseDetails,
           builder: (context, state) {
             final courseId = state.pathParameters['courseid'];
-            return InstructorCourseDetailsPage(courseId: courseId!);
+            return InstructorCourseManagementPage(courseId: courseId!);
           },
         ),
       ],

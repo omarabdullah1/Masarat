@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,30 +8,36 @@ import 'package:gap/gap.dart';
 import 'package:masarat/core/di/dependency_injection.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
+import 'package:masarat/core/widgets/app_text_form_field.dart';
+import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
+import 'package:masarat/core/widgets/loading_widget.dart';
 import 'package:masarat/features/instructor/data/models/add_lesson/add_lesson_request_body.dart';
+import 'package:masarat/features/instructor/data/models/lesson/lesson_model.dart';
 import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_cubit.dart';
 import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_state.dart';
 import 'package:masarat/features/instructor/logic/delete_lesson/delete_lesson_cubit.dart';
 import 'package:masarat/features/instructor/logic/delete_lesson/delete_lesson_state.dart';
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.dart';
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_state.dart';
+import 'package:masarat/features/instructor/logic/update_lesson/update_lesson_cubit.dart';
+import 'package:masarat/features/instructor/logic/update_lesson/update_lesson_state.dart';
 import 'package:masarat/features/instructor/presentation/widgets/lessons_list_widget.dart';
 import 'package:masarat/features/student/courses/presentation/widgets/add_lecture_button_widget.dart';
 import 'package:masarat/features/student/courses/presentation/widgets/add_lecture_form_widget.dart';
 
-class InstructorCourseDetailsPage extends StatefulWidget {
-  const InstructorCourseDetailsPage({required this.courseId, super.key});
+class InstructorCourseManagementPage extends StatefulWidget {
+  const InstructorCourseManagementPage({required this.courseId, super.key});
   final String courseId;
 
   @override
-  State<InstructorCourseDetailsPage> createState() =>
-      _InstructorCourseDetailsPageState();
+  State<InstructorCourseManagementPage> createState() =>
+      _InstructorCourseManagementPageState();
 }
 
-class _InstructorCourseDetailsPageState
-    extends State<InstructorCourseDetailsPage> {
+class _InstructorCourseManagementPageState
+    extends State<InstructorCourseManagementPage> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -39,40 +47,96 @@ class _InstructorCourseDetailsPageState
         BlocProvider(
             create: (context) =>
                 getIt<GetLessonsCubit>()..getLessons(widget.courseId)),
+        BlocProvider(create: (context) => getIt<UpdateLessonCubit>()),
       ],
-      child: _TrainerCourseDetailsContent(courseId: widget.courseId),
+      child: _CourseManagementContent(courseId: widget.courseId),
     );
   }
 }
 
-class _TrainerCourseDetailsContent extends StatefulWidget {
-  const _TrainerCourseDetailsContent({required this.courseId});
+class _CourseManagementContent extends StatefulWidget {
+  const _CourseManagementContent({required this.courseId});
   final String courseId;
 
   @override
-  State<_TrainerCourseDetailsContent> createState() =>
-      _TrainerCourseDetailsContentState();
+  State<_CourseManagementContent> createState() =>
+      _CourseManagementContentState();
 }
 
-class _TrainerCourseDetailsContentState
-    extends State<_TrainerCourseDetailsContent> {
+class _CourseManagementContentState extends State<_CourseManagementContent> {
   // State variables
   bool isAddingLecture = false;
+  bool isEditingLesson = false;
+  LessonModel? lessonBeingEdited;
+
+  // Controllers for add mode
   final TextEditingController courseNameController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   final TextEditingController sourceController = TextEditingController();
   final TextEditingController orderController = TextEditingController();
   final TextEditingController durationController = TextEditingController();
+
+  // Controllers for edit mode
+  final TextEditingController editTitleController = TextEditingController();
+  final TextEditingController editContentController = TextEditingController();
+  final TextEditingController editContentTypeController =
+      TextEditingController();
+  final TextEditingController editOrderController = TextEditingController();
+  final TextEditingController editDurationEstimateController =
+      TextEditingController();
+  bool isPreviewable = false;
+
+  // Form key for validation
+  final _editFormKey = GlobalKey<FormState>();
+
   PlatformFile? selectedFile;
 
   @override
   void dispose() {
+    // Dispose add mode controllers
     courseNameController.dispose();
     contentController.dispose();
     sourceController.dispose();
     orderController.dispose();
     durationController.dispose();
+
+    // Dispose edit mode controllers
+    editTitleController.dispose();
+    editContentController.dispose();
+    editContentTypeController.dispose();
+    editOrderController.dispose();
+    editDurationEstimateController.dispose();
     super.dispose();
+  }
+
+  void _setupEditMode(LessonModel lesson) {
+    setState(() {
+      isEditingLesson = true;
+      isAddingLecture = false;
+      lessonBeingEdited = lesson;
+
+      // Initialize controllers with lesson data
+      editTitleController.text = lesson.title;
+      editContentController.text = lesson.content;
+      editContentTypeController.text = lesson.contentType;
+      editOrderController.text = lesson.order.toString();
+      editDurationEstimateController.text = lesson.durationEstimate;
+      isPreviewable = lesson.isPreviewable;
+    });
+  }
+
+  void _cancelEditMode() {
+    setState(() {
+      isEditingLesson = false;
+      lessonBeingEdited = null;
+
+      // Clear edit controllers
+      editTitleController.clear();
+      editContentController.clear();
+      editContentTypeController.clear();
+      editOrderController.clear();
+      editDurationEstimateController.clear();
+    });
   }
 
   Future<void> pickFile() async {
@@ -81,6 +145,8 @@ class _TrainerCourseDetailsContentState
         type: FileType.any,
         allowMultiple: false,
       );
+
+      if (!mounted) return;
 
       if (result != null && result.files.isNotEmpty) {
         setState(() {
@@ -98,6 +164,8 @@ class _TrainerCourseDetailsContentState
         );
       }
     } catch (e) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('خطأ في اختيار الملف: $e'),
@@ -109,10 +177,10 @@ class _TrainerCourseDetailsContentState
 
   void addLecture() {
     // Debug: log values to check what's empty
-    print('Course name: ${courseNameController.text}');
-    print('Content: ${contentController.text}');
-    print('Order: ${orderController.text}');
-    print('Duration: ${durationController.text}');
+    log('Course name: ${courseNameController.text}');
+    log('Content: ${contentController.text}');
+    log('Order: ${orderController.text}');
+    log('Duration: ${durationController.text}');
 
     // Improved validation with specific messages
     String errorMessage = '';
@@ -147,6 +215,227 @@ class _TrainerCourseDetailsContentState
       isPreviewable: false, // Default to false, can be made dynamic
     ); // Call the BLoC to add the lesson
     context.read<AddLessonCubit>().addLesson(requestBody);
+  }
+
+  void _updateLesson() {
+    if (_editFormKey.currentState?.validate() ?? false) {
+      if (lessonBeingEdited == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('خطأ: لا يوجد درس للتعديل'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      final int order =
+          int.tryParse(editOrderController.text) ?? lessonBeingEdited!.order;
+
+      context.read<UpdateLessonCubit>().updateLesson(
+            lessonBeingEdited!.id,
+            editTitleController.text.trim(),
+            editContentTypeController.text.trim(),
+            editContentController.text.trim(),
+            order,
+            editDurationEstimateController.text.trim(),
+            isPreviewable,
+          );
+    }
+  }
+
+  Widget _buildEditLessonForm() {
+    return Container(
+      margin: EdgeInsets.all(8.w),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Form(
+        key: _editFormKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                  text: 'تعديل الدرس',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeightHelper.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: _cancelEditMode,
+                ),
+              ],
+            ),
+            Divider(height: 16.h),
+            Gap(8.h),
+
+            // Title
+            CustomText(
+              text: 'عنوان الدرس',
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeightHelper.medium,
+                color: AppColors.black,
+              ),
+            ),
+            Gap(8.h),
+            AppTextFormField(
+              controller: editTitleController,
+              hintText: 'أدخل عنوان الدرس',
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'يرجى إدخال عنوان الدرس';
+                }
+                return null;
+              },
+            ),
+            Gap(16.h),
+
+            // Content Type
+            CustomText(
+              text: 'نوع المحتوى',
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeightHelper.medium,
+                color: AppColors.black,
+              ),
+            ),
+            Gap(8.h),
+            AppTextFormField(
+              controller: editContentTypeController,
+              hintText: 'أدخل نوع المحتوى (فيديو، نص)',
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'يرجى إدخال نوع المحتوى';
+                }
+                return null;
+              },
+            ),
+            Gap(16.h),
+
+            // Content
+            CustomText(
+              text: 'المحتوى',
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeightHelper.medium,
+                color: AppColors.black,
+              ),
+            ),
+            Gap(8.h),
+            AppTextFormField(
+              controller: editContentController,
+              hintText: 'أدخل محتوى الدرس',
+              maxLines: 5,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'يرجى إدخال محتوى الدرس';
+                }
+                return null;
+              },
+            ),
+            Gap(16.h),
+
+            // Order
+            CustomText(
+              text: 'ترتيب الدرس',
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeightHelper.medium,
+                color: AppColors.black,
+              ),
+            ),
+            Gap(8.h),
+            AppTextFormField(
+              controller: editOrderController,
+              hintText: 'أدخل ترتيب الدرس',
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'يرجى إدخال ترتيب الدرس';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'يرجى إدخال رقم صحيح';
+                }
+                return null;
+              },
+            ),
+            Gap(16.h),
+
+            // Duration Estimate
+            CustomText(
+              text: 'المدة التقديرية',
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeightHelper.medium,
+                color: AppColors.black,
+              ),
+            ),
+            Gap(8.h),
+            AppTextFormField(
+              controller: editDurationEstimateController,
+              hintText: 'أدخل المدة التقديرية',
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'يرجى إدخال المدة التقديرية';
+                }
+                return null;
+              },
+            ),
+            Gap(16.h),
+
+            // Is Previewable Switch
+            Row(
+              children: [
+                Switch(
+                  value: isPreviewable,
+                  activeColor: AppColors.primary,
+                  onChanged: (bool value) {
+                    setState(() {
+                      isPreviewable = value;
+                    });
+                  },
+                ),
+                Gap(8.w),
+                CustomText(
+                  text: 'متاح للمعاينة',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeightHelper.regular,
+                    color: AppColors.black,
+                  ),
+                ),
+              ],
+            ),
+            Gap(24.h),
+
+            // Save Button
+            SizedBox(
+              width: double.infinity,
+              child: CustomButton(
+                labelText: 'حفظ التعديلات',
+                onTap: () => _updateLesson(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -221,6 +510,58 @@ class _TrainerCourseDetailsContentState
             );
           },
         ),
+        BlocListener<UpdateLessonCubit, UpdateLessonState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              loading: () {
+                // Show loading indicator
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => const LoadingWidget(
+                    loadingState: true,
+                    backgroundColor: AppColors.transparent,
+                  ),
+                );
+              },
+              success: (updatedLesson) {
+                // Close loading dialog
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                }
+
+                // Close edit mode
+                _cancelEditMode();
+
+                // Refresh lessons list
+                context.read<GetLessonsCubit>().getLessons(widget.courseId);
+
+                // Show success message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('تم تعديل الدرس بنجاح'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              error: (error) {
+                // Close loading dialog
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                }
+
+                // Show error message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('خطأ في تعديل الدرس: $error'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              },
+              orElse: () {},
+            );
+          },
+        ),
       ],
       child: CustomScaffold(
         haveAppBar: true,
@@ -246,15 +587,21 @@ class _TrainerCourseDetailsContentState
                     ),
                   ),
                   Gap(15.h),
-                  AddLectureButtonWidget(
-                    isAddingLecture: isAddingLecture,
-                    toggleAddLecture: () {
-                      setState(() {
-                        isAddingLecture = !isAddingLecture; // Toggle visibility
-                      });
-                    },
-                  ),
-                  if (isAddingLecture)
+
+                  // Only show add lesson button if not in edit mode
+                  if (!isEditingLesson)
+                    AddLectureButtonWidget(
+                      isAddingLecture: isAddingLecture,
+                      toggleAddLecture: () {
+                        setState(() {
+                          isAddingLecture =
+                              !isAddingLecture; // Toggle visibility
+                        });
+                      },
+                    ),
+
+                  // Show add lecture form if adding lecture and not editing
+                  if (isAddingLecture && !isEditingLesson)
                     AddLectureFormWidget(
                       courseNameController: courseNameController,
                       contentController: contentController,
@@ -264,6 +611,10 @@ class _TrainerCourseDetailsContentState
                       addLecture: addLecture,
                       onUploadPressed: pickFile,
                     ),
+
+                  // Show edit form if in edit mode
+                  if (isEditingLesson) _buildEditLessonForm(),
+
                   SizedBox(height: 16.h),
                   BlocBuilder<GetLessonsCubit, GetLessonsState>(
                     builder: (context, state) {
@@ -278,6 +629,10 @@ class _TrainerCourseDetailsContentState
                         ),
                         success: (lessons) => LessonsListWidget(
                           lessons: lessons,
+                          onEditLesson: (lesson) {
+                            // Setup edit mode with selected lesson
+                            _setupEditMode(lesson);
+                          },
                           onDeleteLesson: (lesson) {
                             // Show confirmation dialog before deleting
                             showDialog(

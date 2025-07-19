@@ -5,52 +5,57 @@ This directory contains the complete implementation for the instructor feature's
 ## API Endpoint
 
 The update course functionality uses the following endpoint:
-```
-PUT {{baseUrl}}/courses/{{courseId}}
-```
+
+  ```bash
+    PUT {{baseUrl}}/courses/{{courseId}}
+  ```
 
 ## API Response Format
 
 The endpoint returns the following response structure:
-```json
-{
-    "_id": "685f51d120f1071d71b356b4",
-    "title": "Updated - Intro to Backend",
-    "description": "Updated description with more details.",
-    "category": "68250048d551ebcf797f290f",
-    "instructor": "685f0d5f20f1071d71b35649",
-    "lessons": [
-        "685fb9fd20f1071d71b356df",
-        "685fe01820f1071d71b356fa",
-        "685ff6d520f1071d71b35742"
-    ],
-    "coverImageUrl": "default_course_cover.jpg",
-    "price": 59.99,
-    "level": "beginner",
-    "durationEstimate": "111",
-    "tags": ["test"],
-    "isPublished": false,
-    "verificationStatus": "Pending",
-    "createdAt": "2025-06-28T02:22:09.005Z",
-    "updatedAt": "2025-06-28T16:04:29.121Z",
-    "__v": 3
-}
-```
+
+  ```json
+  {
+      "_id": "685f51d120f1071d71b356b4",
+      "title": "Updated - Intro to Backend",
+      "description": "Updated description with more details.",
+      "category": "68250048d551ebcf797f290f",
+      "instructor": "685f0d5f20f1071d71b35649",
+      "lessons": [
+          "685fb9fd20f1071d71b356df",
+          "685fe01820f1071d71b356fa",
+          "685ff6d520f1071d71b35742"
+      ],
+      "coverImageUrl": "default_course_cover.jpg",
+      "price": 59.99,
+      "level": "beginner",
+      "durationEstimate": "111",
+      "tags": ["test"],
+      "isPublished": false,
+      "verificationStatus": "Pending",
+      "createdAt": "2025-06-28T02:22:09.005Z",
+      "updatedAt": "2025-06-28T16:04:29.121Z",
+      "__v": 3
+  }
+  ```
 
 ## File Structure
 
 ### Data Layer
 
 #### Models
+
 - `lib/features/instructor/data/models/course/update_course_request_body.dart` - Request model for updating courses
 - `lib/features/instructor/data/models/course/update_course_response.dart` - Response model for update course API
 - `lib/features/instructor/data/models/course/course_data.dart` - Simple data class for passing course information
 
 #### API Service
+
 - `lib/features/instructor/data/apis/instructor_service.dart` - Contains the `updateCourse` endpoint method
 - `lib/features/instructor/data/apis/instructor_api_constants.dart` - API endpoint constants
 
 #### Repository
+
 - `lib/features/instructor/data/repos/instructor_repo.dart` - Contains `updateCourse` method that handles API calls
 
 ### Logic Layer (Cubit)
@@ -61,10 +66,12 @@ The endpoint returns the following response structure:
 ### UI Layer
 
 #### Screens
+
 - `lib/features/instructor/ui/screens/update_course_screen_v2.dart` - Main update course screen UI
 - `lib/features/instructor/ui/screens/example_usage.dart` - Example of how to use the update course screen
 
 #### Widgets
+
 - `lib/features/instructor/ui/widgets/update_course_bloc_listener.dart` - Handles state changes and shows snackbar messages
 
 ## Usage
@@ -216,6 +223,7 @@ dart run build_runner build --delete-conflicting-outputs
 ```
 
 This will generate:
+
 - Freezed state files
 - JSON serialization files
 - Retrofit API service files

@@ -11,10 +11,10 @@ import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/features/instructor/logic/update_course/update_course_cubit.dart';
 import 'package:masarat/features/instructor/logic/update_course/update_course_state.dart';
-import 'package:masarat/features/instructor/ui/widgets/update_course_bloc_listener.dart';
+import 'package:masarat/features/instructor/presentation/widgets/update_course_bloc_listener.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../instructor/data/models/category/category_model.dart';
+import '../../data/models/category/category_model.dart';
 
 class UpdateCourseScreen extends StatefulWidget {
   const UpdateCourseScreen({
