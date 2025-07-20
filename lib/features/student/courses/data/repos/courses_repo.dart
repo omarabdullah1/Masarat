@@ -14,6 +14,7 @@ class CoursesRepo {
     String? level,
     int? limit,
     int? page,
+    String? search,
   }) async {
     try {
       final response = await _apiService.getCourses(
@@ -21,6 +22,7 @@ class CoursesRepo {
         level: level,
         limit: limit,
         page: page,
+        search: search,
       );
       return ApiResult.success(response);
     } catch (error, stackTrace) {

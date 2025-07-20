@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/config.dart';
@@ -39,171 +38,169 @@ class _TrainingCoursesScreenState extends State<TrainingCoursesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetIt.instance<TrainingCoursesCubit>()..getCourses(),
-      child: CustomScaffold(
-        haveAppBar: true,
-        backgroundColorAppColor: AppColors.background,
-        backgroundColor: AppColors.background,
-        drawerIconColor: AppColors.primary,
-        drawer: const CustomDrawer(),
-        body: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title
-              Center(
-                child: CustomText(
-                  text: 'الــدورات التدريبيــة',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 22.sp,
-                    fontWeight: FontWeightHelper.regular,
-                  ),
+    return CustomScaffold(
+      haveAppBar: true,
+      backgroundColorAppColor: AppColors.background,
+      backgroundColor: AppColors.background,
+      drawerIconColor: AppColors.primary,
+      drawer: const CustomDrawer(),
+      body: Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title
+            Center(
+              child: CustomText(
+                text: 'الــدورات التدريبيــة',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 22.sp,
+                  fontWeight: FontWeightHelper.regular,
                 ),
               ),
-              Gap(16.h),
-              Row(
-                children: [
-                  // Search Field
-                  Expanded(
-                    flex: 4,
-                    child: AppTextFormField(
-                      controller: _searchController,
-                      hintText: 'بحث عن الدورات التدريبية ...',
-                      backgroundColor: AppColors.white,
-                      validator: (value) {
-                        return null; // Replace with your validation logic
-                      },
-                      onSubmit: (value) {
-                        // Implement search functionality
-                        context
-                            .read<TrainingCoursesCubit>()
-                            .searchCourses(value);
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 16.w), // Space between search and dropdown
-                  // Dropdown
-                  Expanded(
-                    flex: 2,
-                    child: CustomDropdownButton(
-                      items: const ['الكل', 'مبتدئ', 'متوسط', 'متقدم'],
-                      hintText: 'فلترة حسب المستوى',
-                      onChanged: (value) {
-                        log('Selected Level: $value');
-                        final level = value == 'الكل' ? null : value;
-                        context
-                            .read<TrainingCoursesCubit>()
-                            .updateFilters(level: level);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Gap(24.h), // Space after row
-              Expanded(
-                child: BlocBuilder<TrainingCoursesCubit, TrainingCoursesState>(
-                  builder: (context, state) {
-                    return state.when(
-                      initial: () => const Center(
-                        child: Text('ابدأ البحث عن الدورات'),
+            ),
+            Gap(16.h),
+            BlocBuilder<TrainingCoursesCubit, TrainingCoursesState>(
+              builder: (context, _) {
+                return Row(
+                  children: [
+                    // Search Field
+                    Expanded(
+                      flex: 4,
+                      child: AppTextFormField(
+                        controller: _searchController,
+                        hintText: 'بحث عن الدورات التدريبية ...',
+                        backgroundColor: AppColors.white,
+                        validator: (value) {
+                          return null; // Replace with your validation logic
+                        },
+                        onSubmit: (value) {
+                          // Implement search functionality
+                          context
+                              .read<TrainingCoursesCubit>()
+                              .searchCourses(value);
+                          log('i want to search');
+                        },
                       ),
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
+                    ),
+                    SizedBox(width: 16.w), // Space between search and dropdown
+                    // Dropdown
+                    Expanded(
+                      flex: 2,
+                      child: CustomDropdownButton(
+                        items: const ['الكل', 'مبتدئ', 'متوسط', 'متقدم'],
+                        hintText: 'فلترة حسب المستوى',
+                        onChanged: (value) {
+                          log('Selected Level: $value');
+                          final level = value == 'الكل' ? null : value;
+                          context
+                              .read<TrainingCoursesCubit>()
+                              .updateFilters(level: level);
+                        },
                       ),
-                      success: (courses) {
-                        if (courses.isEmpty) {
-                          return const Center(
-                            child: Text('لا توجد دورات متاحة'),
-                          );
-                        }
-                        return ListView.builder(
-                          itemCount: courses.length,
-                          itemBuilder: (context, index) {
-                            final course = courses[index];
-                            return GestureDetector(
-                              onTap: () {
-                                context.goNamed(
-                                  AppRoute.courseDetails,
-                                  pathParameters: {'courseid': course.id},
-                                );
-                              },
-                              child: CourseCard(
-                                title: course.title,
-                                hours:
-                                    'عدد الساعات : ${course.durationEstimate}',
-                                lectures:
-                                    'عدد المحاضرات: ${course.lessons.length}',
-                                image:
-                                    '${Config.get('apiUrl').toString().endsWith('/') ? Config.get('apiUrl').toString().substring(0, Config.get('apiUrl').toString().length - 1) : Config.get('apiUrl')}${course.coverImageUrl}',
-                                actions: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: CustomButton(
-                                          height: 27.h,
-                                          radius: 58.r,
-                                          labelText:
-                                              'شــراء ${course.price} ر.س',
-                                          buttonColor: AppColors.primary,
-                                          textColor: AppColors.white,
-                                          onTap: () {},
-                                          textFontSize: 7.sp,
-                                          fontWeight: FontWeightHelper.light,
-                                        ),
-                                      ),
-                                      SizedBox(width: 5.w),
-                                      Expanded(
-                                        child: CustomButton(
-                                          height: 27.h,
-                                          labelText: 'إضافة للسلة',
-                                          radius: 58.r,
-                                          buttonColor: AppColors.background,
-                                          textColor: AppColors.yellow,
-                                          onTap: () {},
-                                          textFontSize: 7.sp,
-                                          borderColor: AppColors.yellow,
-                                          fontWeight: FontWeightHelper.light,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                                onSecondaryAction: () {},
-                                secondaryActionText: 'مشاهدة أول محاضرة مجاناً',
-                              ),
-                            );
-                          },
+                    ),
+                  ],
+                );
+              },
+            ),
+            Gap(24.h), // Space after row
+            Expanded(
+              child: BlocBuilder<TrainingCoursesCubit, TrainingCoursesState>(
+                builder: (context, state) {
+                  return state.when(
+                    initial: () => const Center(
+                      child: Text('ابدأ البحث عن الدورات'),
+                    ),
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    success: (courses) {
+                      if (courses.isEmpty) {
+                        return const Center(
+                          child: Text('لا توجد دورات متاحة'),
                         );
-                      },
-                      error: (message) => Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'حدث خطأ: $message',
-                              textAlign: TextAlign.center,
+                      }
+                      return ListView.builder(
+                        itemCount: courses.length,
+                        itemBuilder: (context, index) {
+                          final course = courses[index];
+                          return GestureDetector(
+                            onTap: () {
+                              context.goNamed(
+                                AppRoute.courseDetails,
+                                pathParameters: {'courseid': course.id},
+                              );
+                            },
+                            child: CourseCard(
+                              title: course.title,
+                              hours: 'عدد الساعات : ${course.durationEstimate}',
+                              lectures:
+                                  'عدد المحاضرات: ${course.lessons.length}',
+                              image:
+                                  '${Config.get('apiUrl').toString().endsWith('/') ? Config.get('apiUrl').toString().substring(0, Config.get('apiUrl').toString().length - 1) : Config.get('apiUrl')}${course.coverImageUrl}',
+                              actions: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: CustomButton(
+                                        height: 27.h,
+                                        radius: 58.r,
+                                        labelText: 'شــراء ${course.price} ر.س',
+                                        buttonColor: AppColors.primary,
+                                        textColor: AppColors.white,
+                                        onTap: () {},
+                                        textFontSize: 7.sp,
+                                        fontWeight: FontWeightHelper.light,
+                                      ),
+                                    ),
+                                    SizedBox(width: 5.w),
+                                    Expanded(
+                                      child: CustomButton(
+                                        height: 27.h,
+                                        labelText: 'إضافة للسلة',
+                                        radius: 58.r,
+                                        buttonColor: AppColors.background,
+                                        textColor: AppColors.yellow,
+                                        onTap: () {},
+                                        textFontSize: 7.sp,
+                                        borderColor: AppColors.yellow,
+                                        fontWeight: FontWeightHelper.light,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                              onSecondaryAction: () {},
+                              secondaryActionText: 'مشاهدة أول محاضرة مجاناً',
                             ),
-                            Gap(16.h),
-                            CustomButton(
-                              labelText: 'إعادة المحاولة',
-                              onTap: () {
-                                context
-                                    .read<TrainingCoursesCubit>()
-                                    .getCourses();
-                              },
-                            ),
-                          ],
-                        ),
+                          );
+                        },
+                      );
+                    },
+                    error: (message) => Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'حدث خطأ: $message',
+                            textAlign: TextAlign.center,
+                          ),
+                          Gap(16.h),
+                          CustomButton(
+                            labelText: 'إعادة المحاولة',
+                            onTap: () {
+                              context.read<TrainingCoursesCubit>().getCourses();
+                            },
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

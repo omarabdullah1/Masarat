@@ -21,6 +21,7 @@ class TrainingCoursesCubit extends Cubit<TrainingCoursesState> {
     String? level,
     int? limit,
     int? page,
+    String? search,
   }) async {
     emit(const TrainingCoursesState.loading());
 
@@ -29,6 +30,7 @@ class TrainingCoursesCubit extends Cubit<TrainingCoursesState> {
       level: level,
       limit: limit,
       page: page,
+      search: search,
     );
 
     result.when(
@@ -55,7 +57,19 @@ class TrainingCoursesCubit extends Cubit<TrainingCoursesState> {
   }
 
   void searchCourses(String query) {
-    // TODO: Implement search functionality when search API is available
     log('Search query: $query');
+    if (query.isNotEmpty) {
+      getCourses(
+        categoryId: _selectedCategoryId,
+        level: _selectedLevel,
+        search: query,
+      );
+    } else {
+      // If search query is empty, just get all courses with current filters
+      getCourses(
+        categoryId: _selectedCategoryId,
+        level: _selectedLevel,
+      );
+    }
   }
 }
