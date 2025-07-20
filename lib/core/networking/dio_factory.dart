@@ -136,7 +136,14 @@ class DioFactory {
 
   static void addDioInterceptor() {
     dio?.interceptors.addAll([
-      // Moved debouncing to be the first interceptor
+      // Adjust timeouts for multipart requests (like file uploads)
+      // This needs to be first so it can adjust timeouts before the request is processed
+      MultipartTimeoutInterceptor(
+        uploadTimeoutDuration:
+            const Duration(minutes: 10), // 10 minutes for uploads
+      ),
+
+      // Moved debouncing to be the second interceptor
       DebouncingInterceptor(debounceDelay: const Duration(milliseconds: 1000)),
 
       // Special handler for 408 Request Timeout errors
@@ -200,6 +207,14 @@ class _DebounceAwareRetryInterceptor extends Interceptor {
     final requestKey =
         '${err.requestOptions.path}${err.requestOptions.queryParameters}';
 
+    // Don't retry if this is a multipart request (FormData)
+    // This prevents the "Bad state: FormData is already finalized" error
+    final isMultipartRequest = _isMultipartRequest(err.requestOptions);
+    if (isMultipartRequest) {
+      logPrint('Skipping retry for multipart request: $requestKey');
+      return handler.next(err);
+    }
+
     // Don't retry if this isn't a network error
     if (err.type != DioExceptionType.connectionError &&
         err.type != DioExceptionType.connectionTimeout &&
@@ -242,6 +257,15 @@ class _DebounceAwareRetryInterceptor extends Interceptor {
     } on DioException catch (e) {
       handler.next(e);
     }
+  }
+
+  // Helper method to check if a request is multipart/form-data
+  bool _isMultipartRequest(RequestOptions options) {
+    final contentType = options.contentType?.toLowerCase() ?? '';
+    final isMultipart = contentType.contains('multipart/form-data');
+    final hasFormData = options.data is FormData;
+
+    return isMultipart || hasFormData;
   }
 }
 
@@ -292,6 +316,38 @@ class DebouncingInterceptor extends Interceptor {
     final requestKey = _getRequestKey(err.requestOptions);
     _lastRequestTimes.remove(requestKey);
     handler.next(err);
+  }
+}
+
+class MultipartTimeoutInterceptor extends Interceptor {
+  MultipartTimeoutInterceptor({
+    required this.uploadTimeoutDuration,
+  });
+  final Duration uploadTimeoutDuration;
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    // Check if this is a multipart request
+    final isMultipart = _isMultipartRequest(options);
+
+    // If it's a multipart request (like file upload), extend the timeout
+    if (isMultipart) {
+      log('Extending timeout for multipart request: ${options.path} to ${uploadTimeoutDuration.inMinutes} minutes');
+      options.sendTimeout = uploadTimeoutDuration;
+      options.receiveTimeout = uploadTimeoutDuration;
+      options.connectTimeout = uploadTimeoutDuration;
+    }
+
+    handler.next(options);
+  }
+
+  // Helper method to check if a request is multipart/form-data
+  bool _isMultipartRequest(RequestOptions options) {
+    final contentType = options.contentType?.toLowerCase() ?? '';
+    final isMultipart = contentType.contains('multipart/form-data');
+    final hasFormData = options.data is FormData;
+
+    return isMultipart || hasFormData;
   }
 }
 

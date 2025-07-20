@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_state.dart';
 import 'package:masarat/features/instructor/logic/update_lesson/update_lesson_cubit.dart';
 import 'package:masarat/features/instructor/logic/update_lesson/update_lesson_state.dart';
+import 'package:masarat/features/instructor/logic/upload_lesson_video/upload_lesson_video_cubit.dart';
+import 'package:masarat/features/instructor/logic/upload_lesson_video/upload_lesson_video_state.dart';
 import 'package:masarat/features/instructor/presentation/widgets/lessons_list_widget.dart';
 import 'package:masarat/features/student/courses/presentation/widgets/add_lecture_button_widget.dart';
 import 'package:masarat/features/student/courses/presentation/widgets/add_lecture_form_widget.dart';
@@ -48,6 +51,7 @@ class _InstructorCourseManagementPageState
             create: (context) =>
                 getIt<GetLessonsCubit>()..getLessons(widget.courseId)),
         BlocProvider(create: (context) => getIt<UpdateLessonCubit>()),
+        BlocProvider(create: (context) => getIt<UploadLessonVideoCubit>()),
       ],
       child: _CourseManagementContent(courseId: widget.courseId),
     );
@@ -175,6 +179,44 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
     }
   }
 
+  Future<void> pickVideoForLesson(String lessonId) async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.video,
+        allowMultiple: false,
+      );
+
+      if (!mounted) return;
+
+      if (result != null && result.files.isNotEmpty) {
+        final videoFile = File(result.files.first.path!);
+
+        // Show loading message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('جاري رفع الفيديو...'),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 1),
+          ),
+        );
+
+        // Upload the video
+        context
+            .read<UploadLessonVideoCubit>()
+            .uploadLessonVideo(lessonId, videoFile);
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('خطأ في اختيار الفيديو: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   void addLecture() {
     // Debug: log values to check what's empty
     log('Course name: ${courseNameController.text}');
@@ -253,7 +295,7 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withAlpha((0.1 * 255).toInt()),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -510,6 +552,55 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
             );
           },
         ),
+        BlocListener<UploadLessonVideoCubit, UploadLessonVideoState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              loading: () {
+                // Show loading indicator
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => const LoadingWidget(
+                    loadingState: true,
+                    backgroundColor: AppColors.transparent,
+                  ),
+                );
+              },
+              success: (lesson) {
+                // Close loading dialog
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                }
+
+                // Refresh lessons list
+                context.read<GetLessonsCubit>().getLessons(widget.courseId);
+
+                // Show success message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('تم رفع الفيديو بنجاح'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              error: (error) {
+                // Close loading dialog
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                }
+
+                // Show error message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('خطأ في رفع الفيديو: $error'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              },
+              orElse: () {},
+            );
+          },
+        ),
         BlocListener<UpdateLessonCubit, UpdateLessonState>(
           listener: (context, state) {
             state.maybeWhen(
@@ -632,6 +723,10 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
                           onEditLesson: (lesson) {
                             // Setup edit mode with selected lesson
                             _setupEditMode(lesson);
+                          },
+                          onUploadVideo: (lesson) {
+                            // Pick and upload video for this lesson
+                            pickVideoForLesson(lesson.id);
                           },
                           onDeleteLesson: (lesson) {
                             // Show confirmation dialog before deleting

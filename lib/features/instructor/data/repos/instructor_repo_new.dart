@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/helpers/shared_pref_helper.dart';
 import 'package:masarat/core/networking/api_error_handler.dart';
@@ -135,16 +134,13 @@ class InstructorRepo {
       try {
         log('Starting video upload attempt $attempts/$maxRetries for lesson $lessonId, file size: ${(videoFile.lengthSync() / 1024 / 1024).toStringAsFixed(2)} MB');
 
-        // Create a specialized Dio instance with optimized settings for uploads
-        // Use more aggressive timeouts and settings
+        // Create a custom Dio instance just for this upload with shorter timeouts
+        // This helps detect stalled uploads faster
         final dio = Dio()
           ..options.baseUrl = InstructorApiConstants.apiBaseUrl
-          ..options.connectTimeout = const Duration(seconds: 15)
-          ..options.receiveTimeout = const Duration(seconds: 30)
-          ..options.sendTimeout = const Duration(seconds: 30)
-          // More aggressive buffer size and keep-alive settings
-          ..options.listFormat = ListFormat.multiCompatible
-          ..options.validateStatus = (status) => status != null && status < 400;
+          ..options.connectTimeout = const Duration(seconds: 30)
+          ..options.receiveTimeout = const Duration(seconds: 45)
+          ..options.sendTimeout = const Duration(seconds: 60);
 
         // Add auth headers - get token from SharedPrefHelper
         final token =
@@ -161,23 +157,13 @@ class InstructorRepo {
         int lastProgressUpdateTime = DateTime.now().millisecondsSinceEpoch;
         int lastBytesSent = 0;
 
-        log('Preparing FormData for upload with optimized settings');
-
-        // Read the file bytes for more controlled upload
-        final fileBytes = await videoFile.readAsBytes();
-        final filename = videoFile.path.split(Platform.pathSeparator).last;
-
-        log('File loaded into memory: ${fileBytes.length} bytes');
-
-        // Create optimized FormData
+        log('Preparing FormData for upload');
         final formData = FormData();
         formData.files.add(MapEntry(
           'videoFile',
-          MultipartFile.fromBytes(
-            fileBytes,
-            filename: filename,
-            // Use smaller chunk size to avoid hanging on large data chunks
-            contentType: MediaType.parse('video/*'),
+          await MultipartFile.fromFile(
+            videoFile.path,
+            filename: videoFile.path.split(Platform.pathSeparator).last,
           ),
         ));
 
@@ -187,35 +173,26 @@ class InstructorRepo {
         // Create a completer to handle the upload with timeout
         final completer = Completer<Response>();
 
-        // Set up a timer to detect stalled uploads - more aggressive detection
-        final stallTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+        // Set up a timer to detect stalled uploads
+        final stallTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
           final now = DateTime.now().millisecondsSinceEpoch;
           final elapsedSinceLastProgress = now - lastProgressUpdateTime;
 
-          // If no progress for 10 seconds, consider it stalled (more sensitive than before)
-          if (elapsedSinceLastProgress > 10000 && !completer.isCompleted) {
+          // If no progress for 15 seconds, consider it stalled
+          if (elapsedSinceLastProgress > 15000 && !completer.isCompleted) {
             timer.cancel();
-            log('Upload appears to be stalled at ${lastBytesSent / 1024} KB - cancelling current attempt');
+            log('Upload appears to be stalled - cancelling current attempt');
             completer.completeError(DioException(
               requestOptions: RequestOptions(path: endpoint),
-              error: 'Upload stalled - no progress detected for 10 seconds',
+              error: 'Upload stalled - no progress detected for 15 seconds',
               type: DioExceptionType.connectionTimeout,
             ));
           }
         });
+
         dio.post(
           endpoint,
           data: formData,
-          options: Options(
-            // Set additional headers to improve upload performance
-            headers: {
-              'Connection': 'keep-alive',
-              'Keep-Alive': 'timeout=15, max=100',
-              'Content-Type': 'multipart/form-data',
-            },
-            // Set a specific content length to avoid issues with chunking
-            contentType: 'multipart/form-data',
-          ),
           onSendProgress: (int sent, int total) {
             if (total != -1) {
               final percentage = (sent / total * 100).toStringAsFixed(2);
@@ -229,11 +206,6 @@ class InstructorRepo {
               if (bytesSinceLastUpdate > 0) {
                 final kbps = (bytesSinceLastUpdate / 1024).toStringAsFixed(2);
                 log('Upload speed: $kbps KB/s');
-
-                // Extra diagnostics for the point where it usually stalls
-                if (sent > 300000 && sent < 350000) {
-                  log('Approaching critical section (31%) - actively monitoring progress');
-                }
               }
               lastBytesSent = sent;
             }
