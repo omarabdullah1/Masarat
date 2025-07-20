@@ -10,11 +10,13 @@ class LessonItemWidget extends StatelessWidget {
     required this.lesson,
     required this.onDelete,
     required this.onEdit,
+    required this.onUploadVideo,
     super.key,
   });
   final LessonModel lesson;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
+  final VoidCallback onUploadVideo;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,11 @@ class LessonItemWidget extends StatelessWidget {
                       ),
                     ),
                     Gap(8.w),
+                    IconButton(
+                      icon: const Icon(Icons.videocam, color: Colors.green),
+                      onPressed: onUploadVideo,
+                      tooltip: 'رفع فيديو',
+                    ),
                     IconButton(
                       icon: const Icon(Icons.edit, color: Colors.blue),
                       onPressed: onEdit,

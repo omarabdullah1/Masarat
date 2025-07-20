@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:masarat/features/instructor/data/models/course/instructor_courses_response.dart';
 import 'package:masarat/features/instructor/data/models/course/update_course_request_body.dart';
@@ -63,5 +65,13 @@ abstract class InstructorService {
   Future<LessonModel> updateLesson(
     @Path("lessonId") String lessonId,
     @Body() Map<String, dynamic> lessonData,
+  );
+
+  // Changed from @Part() to @Body() to avoid FormData reuse issues with retries
+  @MultiPart()
+  @POST(InstructorApiConstants.uploadLessonVideo)
+  Future<dynamic> uploadLessonVideo(
+    @Path("lessonId") String lessonId,
+    @Part() File videoFile,
   );
 }

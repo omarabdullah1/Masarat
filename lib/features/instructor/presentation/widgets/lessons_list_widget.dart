@@ -10,11 +10,13 @@ class LessonsListWidget extends StatelessWidget {
     required this.lessons,
     required this.onDeleteLesson,
     required this.onEditLesson,
+    required this.onUploadVideo,
     super.key,
   });
   final List<LessonModel> lessons;
   final void Function(LessonModel lesson) onDeleteLesson;
   final void Function(LessonModel lesson) onEditLesson;
+  final void Function(LessonModel lesson) onUploadVideo;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,7 @@ class LessonsListWidget extends StatelessWidget {
               lesson: lesson,
               onDelete: () => onDeleteLesson(lesson),
               onEdit: () => onEditLesson(lesson),
+              onUploadVideo: () => onUploadVideo(lesson),
             );
           }).toList(),
         ),

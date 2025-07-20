@@ -13,6 +13,7 @@ import 'package:masarat/features/instructor/logic/delete_lesson/delete_lesson_cu
 import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 import 'package:masarat/features/instructor/logic/update_lesson/update_lesson_cubit.dart';
+import 'package:masarat/features/instructor/logic/upload_lesson_video/upload_lesson_video_cubit.dart';
 import 'package:masarat/features/student/courses/apis/courses_service.dart';
 import 'package:masarat/features/student/courses/data/repos/courses_repo.dart';
 import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
@@ -68,6 +69,8 @@ Future<void> setupGetIt() async {
     ..registerFactory<DeleteLessonCubit>(() => DeleteLessonCubit(getIt()))
     ..registerFactory<GetLessonsCubit>(() => GetLessonsCubit(getIt()))
     ..registerFactory<UpdateLessonCubit>(() => UpdateLessonCubit(getIt()))
+    ..registerFactory<UploadLessonVideoCubit>(
+        () => UploadLessonVideoCubit(getIt()))
     ..registerFactory<InstructorCoursesCubit>(
         () => InstructorCoursesCubit(getIt()))
     ..registerFactory<TrainingCoursesCubit>(
