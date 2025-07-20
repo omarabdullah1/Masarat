@@ -1,10 +1,10 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
-// Temporarily removed YouTube player due to compatibility issues
-// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:video_player/video_player.dart';
 
 class LectureDetailsScreen extends StatefulWidget {
   const LectureDetailsScreen({required this.lectureId, super.key});
@@ -15,20 +15,153 @@ class LectureDetailsScreen extends StatefulWidget {
 }
 
 class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
-  // Placeholder for video state
+  // Video player controllers
+  late VideoPlayerController _videoPlayerController;
+  ChewieController? _chewieController;
+  bool _isLoading = true;
+  bool _hasError = false;
   String videoTitle = "Introduction to Accounting";
-  String videoStatus = "Video player temporarily unavailable";
+
+  // Sample M3U playlist URL - replace with your actual M3U links in production
+  String _m3uUrl =
+      'https://raw.githubusercontent.com/benmoose39/YouTube_to_m3u/main/assets/moose_na.m3u';
+
+  // Method to fetch real M3U URL based on lecture ID
+  // In production, you would fetch this from your API
+  String _getM3uUrl(String lectureId) {
+    // This is a placeholder. In a real implementation, you would
+    // fetch the URL from your API based on the lecture ID
+    Map<String, String> lectureVideoMap = {
+      // Using publicly available sample M3U playlists
+      'lec1':
+          'https://raw.githubusercontent.com/benmoose39/YouTube_to_m3u/main/assets/moose_na.m3u',
+      'lec2':
+          'https://raw.githubusercontent.com/iptv-org/iptv/master/streams/sa.m3u',
+      'lec3':
+          'https://raw.githubusercontent.com/iptv-org/iptv/master/streams/eg.m3u',
+    };
+    return lectureVideoMap[lectureId] ?? _m3uUrl;
+  }
 
   @override
   void initState() {
     super.initState();
-    // YouTube player initialization code was here
+    // Get M3U URL based on the lecture ID
+    _m3uUrl = _getM3uUrl(widget.lectureId);
+    _initializePlayer();
+  }
+
+  Future<void> _initializePlayer() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
+
+    try {
+      _videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse(_m3uUrl),
+      );
+
+      await _videoPlayerController.initialize();
+
+      _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController,
+        aspectRatio: 16 / 9,
+        autoPlay: false,
+        looping: false,
+        allowPlaybackSpeedChanging: true,
+        placeholder: Container(
+          color: Colors.black,
+          child: const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          ),
+        ),
+        errorBuilder: (context, errorMessage) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  color: Colors.white,
+                  size: 30.sp,
+                ),
+                SizedBox(height: 8.h),
+                CustomText(
+                  text: 'فشل تحميل الفيديو',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _hasError = true;
+      });
+      debugPrint('Error initializing video player: $e');
+    }
   }
 
   @override
   void dispose() {
-    // YouTube player disposal code was here
+    _videoPlayerController.dispose();
+    _chewieController?.dispose();
     super.dispose();
+  }
+
+  // Function to change the video source
+  Future<void> changeVideoSource(String url) async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
+
+    // Dispose previous controllers
+    _chewieController?.dispose();
+    await _videoPlayerController.dispose();
+
+    try {
+      // Initialize new controllers
+      _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url));
+      await _videoPlayerController.initialize();
+
+      _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController,
+        aspectRatio: 16 / 9,
+        autoPlay: true,
+        looping: false,
+        allowPlaybackSpeedChanging: true,
+        placeholder: Container(
+          color: Colors.black,
+          child: const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          ),
+        ),
+        errorBuilder: (context, errorMessage) {
+          return _buildVideoErrorWidget();
+        },
+      );
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _hasError = true;
+      });
+      debugPrint('Error changing video source: $e');
+    }
   }
 
   @override
@@ -41,84 +174,42 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
       title: 'المحاضرة الأولى: أساسيات المحاسبة',
       body: Column(
         children: [
-          // Interactive placeholder for video player
-          InkWell(
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content:
-                      Text('Video player will be available in future updates'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            },
-            child: Container(
-              height: 220.h,
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-              decoration: BoxDecoration(
-                color: Colors.black87,
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.video_library,
-                        size: 50.sp,
-                        color: Colors.white,
-                      ),
-                      SizedBox(height: 16.h),
-                      CustomText(
-                        text: videoTitle,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      CustomText(
-                        text: videoStatus,
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    bottom: 16.h,
-                    right: 16.w,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withAlpha((0.7 * 255).toInt()),
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.calendar_today,
-                              size: 14.sp, color: Colors.white),
-                          SizedBox(width: 4.w),
-                          CustomText(
-                            text: 'Coming Soon',
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+          // M3U Video Player
+          Container(
+            height: 220.h,
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            decoration: BoxDecoration(
+              color: Colors.black87,
+              borderRadius: BorderRadius.circular(8.r),
             ),
+            clipBehavior: Clip.hardEdge,
+            child: _isLoading
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircularProgressIndicator(
+                            color: AppColors.primary),
+                        SizedBox(height: 16.h),
+                        CustomText(
+                          text: 'جاري تحميل الفيديو...',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : _hasError
+                    ? _buildVideoErrorWidget()
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(8.r),
+                        child: _chewieController != null
+                            ? Chewie(controller: _chewieController!)
+                            : _buildVideoErrorWidget(),
+                      ),
           ),
 
           // Lecture Content
@@ -225,6 +316,42 @@ class _LectureDetailsScreenState extends State<LectureDetailsScreen> {
             ),
           ),
           Icon(Icons.download, size: 20.sp, color: AppColors.gray),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVideoErrorWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: 40.sp,
+            color: Colors.white70,
+          ),
+          SizedBox(height: 12.h),
+          CustomText(
+            text: 'فشل تحميل الفيديو',
+            style: TextStyle(
+              fontSize: 16.sp,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          ElevatedButton(
+            onPressed: _initializePlayer,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            ),
+            child: const CustomText(
+              text: 'إعادة المحاولة',
+            ),
+          ),
         ],
       ),
     );

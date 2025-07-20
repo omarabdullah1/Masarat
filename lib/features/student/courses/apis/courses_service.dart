@@ -21,5 +21,6 @@ abstract class CoursesService {
     @Query("level") String? level,
     @Query("limit") int? limit,
     @Query("page") int? page,
+    @Query("search") String? search,
   });
 }

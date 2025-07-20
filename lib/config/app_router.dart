@@ -20,6 +20,7 @@ import 'package:masarat/features/profile/presentation/pages/profile_screen.dart'
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
 import 'package:masarat/features/splash/ui/splash_screen.dart';
+import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
 import 'package:masarat/features/student/courses/presentation/pages/course_details_screen.dart';
 import 'package:masarat/features/student/courses/presentation/pages/lecture_details.dart';
 import 'package:masarat/features/student/courses/presentation/pages/lecture_screen.dart';
@@ -105,7 +106,10 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: AppRoute.trainingCourses,
           name: AppRoute.trainingCourses,
-          builder: (context, state) => const TrainingCoursesScreen(),
+          builder: (context, state) => BlocProvider(
+            create: (context) => getIt<TrainingCoursesCubit>()..getCourses(),
+            child: const TrainingCoursesScreen(),
+          ),
           routes: [
             GoRoute(
               path: AppRoute.courseDetails,

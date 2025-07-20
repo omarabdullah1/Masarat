@@ -27,6 +27,7 @@ class _CoursesService implements CoursesService {
     String? level,
     int? limit,
     int? page,
+    String? search,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -34,6 +35,7 @@ class _CoursesService implements CoursesService {
       r'level': level,
       r'limit': limit,
       r'page': page,
+      r'search': search,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
