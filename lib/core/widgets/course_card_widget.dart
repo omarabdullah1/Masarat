@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
+import 'package:masarat/core/utils/image_url_helper.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
@@ -140,7 +141,7 @@ class CourseCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   child: image != null
                       ? CachedNetworkImage(
-                          imageUrl: image!,
+                          imageUrl: ImageUrlHelper.formatImageUrl(image!),
                           height: 100.h,
                           width: 90.w,
                           fit: BoxFit.cover,
@@ -152,11 +153,20 @@ class CourseCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                          errorWidget: (context, url, error) => Container(
-                            color: AppColors.lighterGray,
-                            child: const Icon(Icons.broken_image_outlined,
-                                color: AppColors.gray),
-                          ),
+                          errorWidget: (context, url, error) {
+                            // Fallback to default course image
+                            return CachedNetworkImage(
+                              imageUrl: ImageUrlHelper.defaultCourseImage,
+                              height: 100.h,
+                              width: 90.w,
+                              fit: BoxFit.cover,
+                              errorWidget: (context, url, error) => Container(
+                                color: AppColors.lighterGray,
+                                child: const Icon(Icons.broken_image_outlined,
+                                    color: AppColors.gray),
+                              ),
+                            );
+                          },
                         )
                       : Container(
                           height: 130.h,

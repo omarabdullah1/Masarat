@@ -9,6 +9,9 @@ class LessonModel {
     required this.title,
     required this.contentType,
     required this.order,
+    this.content,
+    this.durationEstimate,
+    this.isPreviewable = false,
   });
 
   factory LessonModel.fromJson(Map<String, dynamic> json) =>
@@ -19,6 +22,9 @@ class LessonModel {
   final String title;
   final String contentType;
   final int order;
+  final String? content;
+  final int? durationEstimate;
+  final bool? isPreviewable;
 
   Map<String, dynamic> toJson() => _$LessonModelToJson(this);
 }
