@@ -26,8 +26,8 @@ import 'package:masarat/features/student/courses/logic/cubit/student_lessons_cub
 import 'package:masarat/features/student/courses/logic/cubit/student_lessons_state.dart';
 import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
 import 'package:masarat/features/student/courses/presentation/pages/course_details_screen.dart';
-import 'package:masarat/features/student/courses/presentation/pages/lecture_details_screen.dart';
-import 'package:masarat/features/student/courses/presentation/pages/lecture_list_screen.dart';
+import 'package:masarat/features/student/courses/presentation/pages/lesson_details_screen.dart';
+import 'package:masarat/features/student/courses/presentation/pages/lesson_list_screen.dart';
 import 'package:masarat/features/student/courses/presentation/pages/training_courses_screen.dart';
 import 'package:masarat/features/student/courses/services/course_state_service.dart';
 
@@ -163,7 +163,7 @@ final GoRouter router = GoRouter(
                     // Get course data from our service
                     final courseService = getIt<CourseStateService>();
                     final course = courseService.selectedCourse;
-                    return LectureListScreen(course: course);
+                    return LessonListScreen(course: course);
                   },
                   routes: [
                     GoRoute(
@@ -234,7 +234,7 @@ final GoRouter router = GoRouter(
                               'Lesson content: ${matchingLesson.content}');
                         }
 
-                        return LectureDetailsScreen(
+                        return LessonDetailsScreen(
                           lectureId: lectureId!,
                           lesson: matchingLesson,
                         );

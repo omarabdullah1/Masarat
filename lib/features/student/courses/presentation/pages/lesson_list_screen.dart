@@ -15,16 +15,16 @@ import 'package:masarat/features/student/courses/logic/cubit/student_lessons_cub
 import 'package:masarat/features/student/courses/logic/cubit/student_lessons_state.dart';
 import 'package:masarat/features/student/courses/services/course_state_service.dart';
 
-class LectureListScreen extends StatefulWidget {
-  const LectureListScreen({this.course, super.key});
+class LessonListScreen extends StatefulWidget {
+  const LessonListScreen({this.course, super.key});
 
   final CourseModel? course;
 
   @override
-  State<LectureListScreen> createState() => _LectureListScreenState();
+  State<LessonListScreen> createState() => _LessonListScreenState();
 }
 
-class _LectureListScreenState extends State<LectureListScreen> {
+class _LessonListScreenState extends State<LessonListScreen> {
   StudentLessonsCubit? _lessonsCubit;
   bool _hasCubitError = false;
 
