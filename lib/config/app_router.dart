@@ -20,11 +20,16 @@ import 'package:masarat/features/profile/presentation/pages/profile_screen.dart'
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
 import 'package:masarat/features/splash/ui/splash_screen.dart';
+import 'package:masarat/features/student/courses/data/models/course_model.dart';
+import 'package:masarat/features/student/courses/data/models/lesson_model.dart';
+import 'package:masarat/features/student/courses/logic/cubit/student_lessons_cubit.dart';
+import 'package:masarat/features/student/courses/logic/cubit/student_lessons_state.dart';
 import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
 import 'package:masarat/features/student/courses/presentation/pages/course_details_screen.dart';
-import 'package:masarat/features/student/courses/presentation/pages/lecture_details.dart';
-import 'package:masarat/features/student/courses/presentation/pages/lecture_screen.dart';
+import 'package:masarat/features/student/courses/presentation/pages/lesson_details_screen.dart';
+import 'package:masarat/features/student/courses/presentation/pages/lesson_list_screen.dart';
 import 'package:masarat/features/student/courses/presentation/pages/training_courses_screen.dart';
+import 'package:masarat/features/student/courses/services/course_state_service.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: AppRoute.splash, // Start at onboarding
@@ -115,21 +120,124 @@ final GoRouter router = GoRouter(
               path: AppRoute.courseDetails,
               name: AppRoute.courseDetails,
               builder: (context, state) {
-                final courseId = state.pathParameters['courseid'];
-                return CourseDetailsScreen(courseId: courseId!);
+                final courseService = getIt<CourseStateService>();
+
+                // Try to get course from extra parameters first
+                final courseFromExtra = state.extra as CourseModel?;
+
+                // If we have course from extra, update our service and return the screen
+                if (courseFromExtra != null) {
+                  courseService.selectedCourse = courseFromExtra;
+                  return CourseDetailsScreen(course: courseFromExtra);
+                }
+
+                // If no course in extra, try to get from our service
+                final savedCourse = courseService.selectedCourse;
+                if (savedCourse != null) {
+                  return CourseDetailsScreen(course: savedCourse);
+                }
+
+                // If we still don't have course data, show error
+                return Scaffold(
+                  appBar: AppBar(
+                    title: const Text('خطأ'),
+                    leading: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                  body: const Center(
+                    child: Text(
+                      'بيانات الدورة غير متوفرة. يرجى العودة والمحاولة مرة أخرى.',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                );
               },
               routes: [
                 GoRoute(
                   path: AppRoute.lectureScreen,
                   name: AppRoute.lectureScreen,
-                  builder: (context, state) => const LectureScreen(),
+                  builder: (context, state) {
+                    // Get course data from our service
+                    final courseService = getIt<CourseStateService>();
+                    final course = courseService.selectedCourse;
+                    return LessonListScreen(course: course);
+                  },
                   routes: [
                     GoRoute(
                       path: AppRoute.lectureDetails,
                       name: AppRoute.lectureDetails,
                       builder: (context, state) {
                         final lectureId = state.pathParameters['lectureid'];
-                        return LectureDetailsScreen(lectureId: lectureId!);
+                        // Get course data from our service
+                        final courseService = getIt<CourseStateService>();
+                        final course = courseService.selectedCourse;
+
+                        // Find the lesson that matches the lecture ID
+                        LessonModel? matchingLesson;
+
+                        // First check if we have the lesson from API in our CourseStateService
+                        if (lectureId != null) {
+                          matchingLesson =
+                              courseService.getLessonById(lectureId);
+                          if (matchingLesson != null) {
+                            debugPrint(
+                                'Found lesson from CourseStateService: ${matchingLesson.title}');
+                            debugPrint(
+                                'Lesson content: ${matchingLesson.content}');
+                          }
+                        }
+
+                        // If no lesson found in CourseStateService, try to get from the cubit state
+                        if (matchingLesson == null) {
+                          try {
+                            final lessonsState =
+                                getIt<StudentLessonsCubit>().state;
+                            if (lessonsState.status ==
+                                    StudentLessonsStatus.success &&
+                                lessonsState.lessons != null &&
+                                lessonsState.lessons!.isNotEmpty) {
+                              // Try to find the lesson in the API response
+                              try {
+                                matchingLesson =
+                                    lessonsState.lessons!.firstWhere(
+                                  (lesson) => lesson.id == lectureId,
+                                );
+                                debugPrint(
+                                    'Found lesson from API via cubit: ${matchingLesson.title}');
+                                debugPrint(
+                                    'Lesson content: ${matchingLesson.content}');
+                              } catch (e) {
+                                // No matching lesson found in the API response
+                                debugPrint(
+                                    'No matching lesson found in cubit state for ID: $lectureId');
+                              }
+                            }
+                          } catch (e) {
+                            debugPrint('Error getting lesson from cubit: $e');
+                          }
+                        }
+
+                        // If still no matching lesson found, fall back to course model
+                        if (matchingLesson == null &&
+                            course != null &&
+                            course.lessons.isNotEmpty) {
+                          matchingLesson = course.lessons.firstWhere(
+                            (lesson) => lesson.id == lectureId,
+                            orElse: () => course.lessons.first,
+                          );
+                          debugPrint(
+                              'Using lesson from course model: ${matchingLesson.title}');
+                          debugPrint(
+                              'Lesson content: ${matchingLesson.content}');
+                        }
+
+                        return LessonDetailsScreen(
+                          lectureId: lectureId!,
+                          lesson: matchingLesson,
+                        );
                       },
                     ),
                   ],

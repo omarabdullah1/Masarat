@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
-import 'package:masarat/core/config.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/widgets/app_text_form_field.dart';
@@ -130,6 +129,7 @@ class _TrainingCoursesScreenState extends State<TrainingCoursesScreen> {
                               context.goNamed(
                                 AppRoute.courseDetails,
                                 pathParameters: {'courseid': course.id},
+                                extra: course, // Pass the entire course object
                               );
                             },
                             child: CourseCard(
@@ -137,8 +137,7 @@ class _TrainingCoursesScreenState extends State<TrainingCoursesScreen> {
                               hours: 'عدد الساعات : ${course.durationEstimate}',
                               lectures:
                                   'عدد المحاضرات: ${course.lessons.length}',
-                              image:
-                                  '${Config.get('apiUrl').toString().endsWith('/') ? Config.get('apiUrl').toString().substring(0, Config.get('apiUrl').toString().length - 1) : Config.get('apiUrl')}${course.coverImageUrl}',
+                              image: course.coverImageUrl,
                               actions: [
                                 Row(
                                   children: [

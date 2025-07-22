@@ -1,24 +1,31 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
+import 'package:masarat/core/di/dependency_injection.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
+import 'package:masarat/core/utils/image_url_helper.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_drawer.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
+import 'package:masarat/features/student/courses/data/models/course_model.dart';
+import 'package:masarat/features/student/courses/services/course_state_service.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
   const CourseDetailsScreen({
-    required this.courseId,
+    required this.course,
     super.key,
   });
-  final String courseId;
+  final CourseModel course;
 
   @override
   Widget build(BuildContext context) {
+    // Store the current course in our service for persistence
+    getIt<CourseStateService>().selectedCourse = course;
     return CustomScaffold(
       haveAppBar: true,
       backgroundColorAppColor: AppColors.background,
@@ -42,21 +49,21 @@ class CourseDetailsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildCourseImage(),
+              _buildCourseImage(course.coverImageUrl),
               Gap(20.h),
-              _buildCourseDetails(),
+              _buildCourseDetails(course),
               Gap(15.h),
               _buildSectionTitle('عن الدورة'),
               Gap(10.h),
-              _buildCourseDescription(),
+              _buildCourseDescription(course.description),
               Gap(20.h),
-              _buildSectionTitle('تعليقات المتدربين'),
-              Gap(10.h),
-              _buildCommentsSection(),
+              // _buildSectionTitle('تعليقات المتدربين'),
+              // Gap(10.h),
+              // _buildCommentsSection(),
               Gap(20.h),
-              _buildActionButtons(),
+              _buildActionButtons(course.price),
               Gap(15.h),
-              _buildWatchButton(context),
+              _buildWatchButton(context, course.id),
               Gap(20.h),
             ],
           ),
@@ -66,27 +73,52 @@ class CourseDetailsScreen extends StatelessWidget {
   }
 
   // Course Image
-  Widget _buildCourseImage() {
+  Widget _buildCourseImage(String imageUrl) {
+    // Format the image URL properly using our helper
+    final fullImageUrl = ImageUrlHelper.formatImageUrl(imageUrl);
+
     return Center(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(11.0.r),
-        child: Image.network(
-          'https://images.pexels.com/photos/29090307/pexels-photo-29090307/free-photo-of-cyclist-riding-past-parisian-building-facade.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+        child: CachedNetworkImage(
+          imageUrl: fullImageUrl,
           height: 200.h,
           width: 290.w,
           fit: BoxFit.cover,
+          placeholder: (context, url) => Container(
+            height: 200.h,
+            width: 290.w,
+            color: Colors.grey[300],
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+          errorWidget: (context, url, error) {
+            // Fallback image in case of error
+            return CachedNetworkImage(
+              imageUrl: ImageUrlHelper.defaultCourseImage,
+              height: 200.h,
+              width: 290.w,
+              fit: BoxFit.cover,
+              errorWidget: (context, url, error) => Container(
+                height: 200.h,
+                width: 290.w,
+                color: Colors.grey[300],
+                child: const Icon(Icons.error_outline,
+                    size: 40, color: Colors.red),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
   // Course Details Section
-  Widget _buildCourseDetails() {
+  Widget _buildCourseDetails(CourseModel course) {
     return Column(
       children: [
         Center(
           child: CustomText(
-            text: 'مهارات أخصائي محاسبة',
+            text: course.title,
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.bold,
@@ -97,7 +129,7 @@ class CourseDetailsScreen extends StatelessWidget {
         Gap(8.h),
         Center(
           child: CustomText(
-            text: 'SAR 1200',
+            text: 'SAR ${course.price}',
             style: TextStyle(
               fontSize: 15.sp,
               fontWeight: FontWeight.bold,
@@ -106,9 +138,9 @@ class CourseDetailsScreen extends StatelessWidget {
           ),
         ),
         Gap(8.h),
-        _buildTrainerInfo('اسم المدرب: مصطفى محمد'),
-        _buildTrainerInfo('عدد الساعات: 7 ساعات'),
-        _buildTrainerInfo('عدد المحاضرات: 42'),
+        _buildTrainerInfo('اسم المدرب: ${course.instructor.fullName}'),
+        _buildTrainerInfo('عدد الساعات: ${course.durationEstimate}'),
+        _buildTrainerInfo('عدد المحاضرات: ${course.lessons.length}'),
       ],
     );
   }
@@ -138,12 +170,9 @@ class CourseDetailsScreen extends StatelessWidget {
   }
 
   // Course Description
-  Widget _buildCourseDescription() {
+  Widget _buildCourseDescription(String description) {
     return Text(
-      'تهدف دورة تنمية مهارات أخصائي المحاسبة المالية إلى تحسين وتطوير مهارات '
-      'المحاسبين العاملين في مجال المحاسبة والمال. وتشمل محاور الدورة موضوعات '
-      'مثل المحاسبة الإدارية والمحاسبة المالية '
-      'والتحليل المالي والتقارير المالية والقوانين ذات العلاقة بالمجال.',
+      description,
       style: TextStyle(
         fontSize: 9.5.sp,
         color: Colors.grey[700],
@@ -211,7 +240,7 @@ class CourseDetailsScreen extends StatelessWidget {
   }
 
   // Action Buttons
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(int price) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -220,7 +249,7 @@ class CourseDetailsScreen extends StatelessWidget {
           child: CustomButton(
             height: 27.h,
             radius: 58.r,
-            labelText: 'شــراء الأن',
+            labelText: 'شــراء الأن - SAR $price',
             buttonColor: AppColors.primary,
             textColor: AppColors.white,
             onTap: () {},
@@ -248,7 +277,9 @@ class CourseDetailsScreen extends StatelessWidget {
   }
 
   // Watch Button
-  Widget _buildWatchButton(BuildContext context) {
+  Widget _buildWatchButton(BuildContext context, String courseId) {
+    // We'll fetch up-to-date lessons from the API in the lectures list screen
+
     return CustomButton(
       height: 36.h,
       width: double.infinity,
@@ -257,9 +288,14 @@ class CourseDetailsScreen extends StatelessWidget {
       buttonColor: AppColors.background,
       textColor: AppColors.gray,
       onTap: () {
+        // Store the course in our service for persistence between screens
+        getIt<CourseStateService>().selectedCourse = course;
+
+        // Navigate to lectures list screen which will show all lessons
+        // The screen will fetch up-to-date lessons from the API
         context.goNamed(
           AppRoute.lectureScreen,
-          pathParameters: {'courseid': '554'},
+          pathParameters: {'courseid': courseId},
         );
       },
       textFontSize: 10.sp,

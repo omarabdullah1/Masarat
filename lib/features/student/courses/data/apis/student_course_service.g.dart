@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'courses_service.dart';
+part of 'student_course_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'courses_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
 
-class _CoursesService implements CoursesService {
-  _CoursesService(
+class _StudentCourseService implements StudentCourseService {
+  _StudentCourseService(
     this._dio, {
     this.baseUrl,
     this.errorLogger,
@@ -22,65 +22,19 @@ class _CoursesService implements CoursesService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<CoursesResponse> getCourses({
-    String? categoryId,
-    String? level,
-    int? limit,
-    int? page,
-    String? search,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'category': categoryId,
-      r'level': level,
-      r'limit': limit,
-      r'page': page,
-      r'search': search,
-    };
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<CoursesResponse>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          'api/v1/courses',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late CoursesResponse _value;
-    try {
-      _value = CoursesResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<LessonDetailsModel> getLessonDetails(String lessonId) async {
+  Future<List<LessonModel>> getLessons(String courseId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<LessonDetailsModel>(Options(
+    final _options = _setStreamType<List<LessonModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          'api/v1/lessons/${lessonId}',
+          'api/v1/lessons/course/${courseId}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -89,10 +43,12 @@ class _CoursesService implements CoursesService {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late LessonDetailsModel _value;
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<LessonModel> _value;
     try {
-      _value = LessonDetailsModel.fromJson(_result.data!);
+      _value = _result.data!
+          .map((dynamic i) => LessonModel.fromJson(i as Map<String, dynamic>))
+          .toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

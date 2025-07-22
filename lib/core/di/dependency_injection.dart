@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:masarat/core/cubit/general_cubit.dart';
 import 'package:masarat/core/networking/dio_factory.dart';
@@ -15,8 +16,14 @@ import 'package:masarat/features/instructor/logic/instructor_courses/instructor_
 import 'package:masarat/features/instructor/logic/update_lesson/update_lesson_cubit.dart';
 import 'package:masarat/features/instructor/logic/upload_lesson_video/upload_lesson_video_cubit.dart';
 import 'package:masarat/features/student/courses/apis/courses_service.dart';
+import 'package:masarat/features/student/courses/data/apis/student_api_constants.dart';
+import 'package:masarat/features/student/courses/data/apis/student_course_service.dart';
 import 'package:masarat/features/student/courses/data/repos/courses_repo.dart';
+import 'package:masarat/features/student/courses/data/repos/student_course_repo.dart';
+import 'package:masarat/features/student/courses/logic/cubit/student_lessons_cubit.dart';
+import 'package:masarat/features/student/courses/logic/lesson_details/lesson_details_cubit.dart';
 import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
+import 'package:masarat/features/student/courses/services/course_state_service.dart';
 
 import '../../features/auth/signup/logic/cubit/register_cubit.dart';
 
@@ -30,6 +37,9 @@ Future<void> setupGetIt() async {
 
   final dio = DioFactory.getDio();
 
+  // Register Dio instance first so it can be used by other services
+  getIt.registerLazySingleton<Dio>(() => dio);
+
   getIt
     ..registerLazySingleton<AuthenticationService>(
       () => AuthenticationService(dio),
@@ -40,6 +50,12 @@ Future<void> setupGetIt() async {
     ..registerLazySingleton<InstructorService>(
       () => InstructorService(dio),
     )
+    ..registerLazySingleton<StudentCourseService>(
+      () => StudentCourseService(dio, baseUrl: StudentApiConstants.apiBaseUrl),
+    )
+
+    // Add Course State Service as singleton
+    ..registerLazySingleton(() => CourseStateService())
 
     /************************* */
     /* ******** REPOS *********
@@ -55,6 +71,9 @@ Future<void> setupGetIt() async {
     )
     ..registerLazySingleton<InstructorRepo>(
       () => InstructorRepo(getIt()),
+    )
+    ..registerLazySingleton<StudentCourseRepo>(
+      () => StudentCourseRepo(getIt<StudentCourseService>()),
     )
 
     /************************* */
@@ -73,6 +92,8 @@ Future<void> setupGetIt() async {
         () => UploadLessonVideoCubit(getIt()))
     ..registerFactory<InstructorCoursesCubit>(
         () => InstructorCoursesCubit(getIt()))
-    ..registerFactory<TrainingCoursesCubit>(
-        () => TrainingCoursesCubit(getIt()));
+    ..registerFactory<StudentLessonsCubit>(
+        () => StudentLessonsCubit(getIt<StudentCourseRepo>()))
+    ..registerFactory<TrainingCoursesCubit>(() => TrainingCoursesCubit(getIt()))
+    ..registerFactory<LessonDetailsCubit>(() => LessonDetailsCubit(getIt()));
 }
