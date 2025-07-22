@@ -9,16 +9,19 @@ import 'package:masarat/features/student/courses/data/models/lesson_model.dart';
 import 'package:masarat/features/student/courses/services/course_state_service.dart';
 import 'package:video_player/video_player.dart';
 
-class LessonDetailsScreen extends StatefulWidget {
-  const LessonDetailsScreen({required this.lectureId, this.lesson, super.key});
+class StudentLessonDetailsScreen extends StatefulWidget {
+  const StudentLessonDetailsScreen(
+      {required this.lectureId, this.lesson, super.key});
   final String lectureId;
   final LessonModel? lesson;
 
   @override
-  State<LessonDetailsScreen> createState() => _LessonDetailsScreenState();
+  State<StudentLessonDetailsScreen> createState() =>
+      _StudentLessonDetailsScreenState();
 }
 
-class _LessonDetailsScreenState extends State<LessonDetailsScreen> {
+class _StudentLessonDetailsScreenState
+    extends State<StudentLessonDetailsScreen> {
   // Video player controllers
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;

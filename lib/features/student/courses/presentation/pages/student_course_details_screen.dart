@@ -16,8 +16,8 @@ import 'package:masarat/features/student/cart/logic/student_cart/student_cart_cu
 import 'package:masarat/features/student/courses/data/models/course_model.dart';
 import 'package:masarat/features/student/courses/services/course_state_service.dart';
 
-class CourseDetailsScreen extends StatelessWidget {
-  CourseDetailsScreen({
+class StudentCourseDetailsScreen extends StatelessWidget {
+  StudentCourseDetailsScreen({
     required this.course,
     super.key,
   });

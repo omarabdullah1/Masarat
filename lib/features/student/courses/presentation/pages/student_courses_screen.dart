@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
@@ -21,43 +20,17 @@ import 'package:masarat/features/student/courses/logic/training_courses/training
 import 'package:masarat/features/student/courses/logic/training_courses/training_courses_state.dart';
 import 'package:masarat/features/student/courses/presentation/widgets/level_filter_dropdown.dart';
 
-class TrainingCoursesScreen extends StatefulWidget {
-  const TrainingCoursesScreen({super.key});
+class StudentCoursesScreen extends StatefulWidget {
+  const StudentCoursesScreen({super.key});
 
   @override
-  State<TrainingCoursesScreen> createState() => _TrainingCoursesScreenState();
+  State<StudentCoursesScreen> createState() => _StudentCoursesScreenState();
 }
 
-class _TrainingCoursesScreenState extends State<TrainingCoursesScreen> {
+class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
   String? selectedOption; // Moved outside build to retain state
   final TextEditingController _searchController = TextEditingController();
   late StudentCartCubit cartCubit;
-
-  @override
-  void initState() {
-    super.initState();
-    cartCubit = GetIt.instance<StudentCartCubit>();
-
-    // Always load the cart data when the screen initializes
-    // This ensures we have the latest cart state
-    cartCubit.getCart().then((_) {
-      // After loading cart data, examine its state
-      cartCubit.state.maybeWhen(success: (cartData) {
-        debugPrint('INIT: Cart loaded with ${cartData.items.length} items');
-        // List all items in cart
-        for (var item in cartData.items) {
-          debugPrint(
-              'INIT: Cart contains: ${item.course.id} - ${item.course.title}');
-        }
-      }, orElse: () {
-        debugPrint(
-            'INIT: Cart data not available, state is ${cartCubit.state.runtimeType}');
-      });
-    });
-
-    // Debug print the current cart state
-    debugPrint('Initial cart state: ${cartCubit.state.runtimeType}');
-  }
 
   void _addToCart(BuildContext context, String courseId) {
     // Debug log before adding
