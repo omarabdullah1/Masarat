@@ -1,4 +1,3 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class CustomDropdownButton extends StatelessWidget {
@@ -13,6 +12,7 @@ class CustomDropdownButton extends StatelessWidget {
     this.buttonColor = Colors.white,
     this.textColor = Colors.black,
     this.dropdownColor = Colors.white,
+    this.selectedValue,
   });
   final List<String> items;
   final String hintText;
@@ -23,79 +23,57 @@ class CustomDropdownButton extends StatelessWidget {
   final Color buttonColor;
   final Color textColor;
   final Color dropdownColor;
+  final String? selectedValue; // Current selected value
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButton2<String>(
-        isExpanded: true,
-        hint: Row(
-          children: [
-            const SizedBox(width: 4),
-            Expanded(
+    // Debug print to see what value is being set
+    debugPrint('Building dropdown with selected value: $selectedValue');
+
+    return Container(
+      height: height,
+      width: width,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.black26),
+        color: buttonColor,
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isExpanded: true,
+          value: items.contains(selectedValue) ? selectedValue : null,
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: iconColor,
+            size: 14,
+          ),
+          hint: Text(
+            hintText,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: iconColor,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+          items: items.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item,
               child: Text(
-                hintText,
+                item,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: iconColor,
+                  color: textColor,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
-            ),
-          ],
-        ),
-        items: items.map((String item) {
-          return DropdownItem<String>(
-            value: item,
-            height: height,
-            child: Text(
-              item,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: textColor,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-          );
-        }).toList(),
-        onChanged: onChanged,
-        buttonStyleData: ButtonStyleData(
-          height: height,
-          width: width,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.black26),
-            color: buttonColor,
-          ),
+            );
+          }).toList(),
+          onChanged: onChanged,
+          dropdownColor: dropdownColor,
           elevation: 0,
-        ),
-        iconStyleData: IconStyleData(
-          icon: const Icon(
-            Icons.keyboard_arrow_down_rounded,
-          ),
-          iconSize: 14,
-          iconEnabledColor: iconColor,
-          iconDisabledColor: Colors.grey,
-        ),
-        dropdownStyleData: DropdownStyleData(
-          maxHeight: 200,
-          width: width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: dropdownColor,
-          ),
-          offset: const Offset(-20, 0),
-          scrollbarTheme: ScrollbarThemeData(
-            radius: const Radius.circular(40),
-            thickness: WidgetStateProperty.all(6),
-            thumbVisibility: WidgetStateProperty.all(true),
-          ),
-        ),
-        menuItemStyleData: const MenuItemStyleData(
-          padding: EdgeInsets.symmetric(horizontal: 14),
         ),
       ),
     );

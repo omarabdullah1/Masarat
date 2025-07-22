@@ -16,6 +16,23 @@ class TrainingCoursesCubit extends Cubit<TrainingCoursesState> {
   String? get selectedCategoryId => _selectedCategoryId;
   String? get selectedLevel => _selectedLevel;
 
+  // Get the display value (Arabic) for the selected level
+  String? get selectedLevelDisplay {
+    log('Getting display value for level: $_selectedLevel');
+    if (_selectedLevel == null) return 'الكل';
+
+    switch (_selectedLevel) {
+      case 'beginner':
+        return 'مبتدئ';
+      case 'intermediate':
+        return 'متوسط';
+      case 'advanced':
+        return 'متقدم';
+      default:
+        return _selectedLevel;
+    }
+  }
+
   Future<void> getCourses({
     String? categoryId,
     String? level,
@@ -47,12 +64,43 @@ class TrainingCoursesCubit extends Cubit<TrainingCoursesState> {
   }
 
   void updateFilters({String? categoryId, String? level}) {
+    // Map Arabic level names to English API values
+    String? apiLevel;
+    if (level != null) {
+      switch (level) {
+        case 'مبتدئ':
+          apiLevel = 'beginner';
+          break;
+        case 'متوسط':
+          apiLevel = 'intermediate';
+          break;
+        case 'متقدم':
+          apiLevel = 'advanced';
+          break;
+        case 'الكل':
+          apiLevel = null; // No filter
+          break;
+        default:
+          apiLevel = level; // Use as-is if not recognized
+      }
+    }
+
+    // Store the original level for display (the Arabic version)
+    final displayLevel = level;
+
     _selectedCategoryId = categoryId;
-    _selectedLevel = level;
-    // Reload courses with new filters
+    _selectedLevel = apiLevel;
+
+    log('Setting _selectedLevel to: $apiLevel (was: $_selectedLevel)');
+    log('Selected display level: $displayLevel');
+
+    // First emit a loading state to trigger a UI rebuild
+    emit(const TrainingCoursesState.loading());
+
+    // Then reload courses with new filters
     getCourses(
       categoryId: categoryId,
-      level: level,
+      level: apiLevel,
     );
   }
 
@@ -61,14 +109,14 @@ class TrainingCoursesCubit extends Cubit<TrainingCoursesState> {
     if (query.isNotEmpty) {
       getCourses(
         categoryId: _selectedCategoryId,
-        level: _selectedLevel,
+        level: _selectedLevel, // _selectedLevel is already mapped to English
         search: query,
       );
     } else {
       // If search query is empty, just get all courses with current filters
       getCourses(
         categoryId: _selectedCategoryId,
-        level: _selectedLevel,
+        level: _selectedLevel, // _selectedLevel is already mapped to English
       );
     }
   }
