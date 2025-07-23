@@ -161,13 +161,16 @@ class ShoppingCartScreen extends StatelessWidget {
       itemCount: cartData.items.length,
       itemBuilder: (context, index) {
         final item = cartData.items[index];
+        // Use dynamic data from the item model and include the image
         return CourseCard(
           title: item.course.title,
           price: 'السعر : SAR ${item.price.toStringAsFixed(2)}',
           havePrice: true,
-          hours: '7 ساعات', // This should come from the API if available
-          lectures:
-              'عدد المحاضرات: -', // This should come from the API if available
+          // Pass the image URL
+          image: item.course.coverImageUrl,
+          // Use empty strings for hours and lectures as we want to remove them
+          hours: '',
+          lectures: '',
           actions: [
             ElevatedButton(
               onPressed: () {

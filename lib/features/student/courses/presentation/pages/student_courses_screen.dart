@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
+import 'package:masarat/core/di/dependency_injection.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/widgets/app_text_form_field.dart';
@@ -32,10 +33,18 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
   final TextEditingController _searchController = TextEditingController();
   late StudentCartCubit cartCubit;
 
+  @override
+  void initState() {
+    super.initState();
+    // Initialize cartCubit from dependency injection
+    cartCubit = getIt<StudentCartCubit>();
+    // Load cart data
+    cartCubit.getCart();
+  }
+
   void _addToCart(BuildContext context, String courseId) {
-    // Debug log before adding
-    debugPrint(
-        'Before adding - is course in cart: ${cartCubit.isCourseInCart(courseId)}');
+    // Don't check if course is in cart first - just try to add it
+    debugPrint('Adding course to cart: $courseId');
 
     // Show loading indicator
     ScaffoldMessenger.of(context).showSnackBar(
@@ -87,8 +96,7 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
         );
 
         // Debug log after adding
-        debugPrint(
-            'After adding - Success: $success - is course in cart: ${cartCubit.isCourseInCart(courseId)}');
+        debugPrint('After adding - Success: $success');
 
         // Get direct access to cart data
         cartCubit.state.maybeWhen(success: (cartData) {
@@ -124,8 +132,7 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
         );
 
         // Debug log after failure
-        debugPrint(
-            'After failure - is course in cart: ${cartCubit.isCourseInCart(courseId)}');
+        debugPrint('Failed to add course: $courseId');
 
         // Still refresh cart data to ensure UI consistency
         cartCubit.getCart();
@@ -258,29 +265,21 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
                                             StudentCartState>(
                                           bloc: cartCubit,
                                           builder: (context, cartState) {
-                                            // Check if the course is in cart
-                                            final isInCart = cartCubit
-                                                .isCourseInCart(course.id);
+                                            // Don't check the cart state at all for UI
+                                            // Always show the default appearance of the button
 
-                                            // Debug: Log course status
                                             debugPrint(
-                                                'Buy button - Course ${course.id}: isInCart = $isInCart');
+                                                'Buy button - Course ${course.id}');
 
-                                            // TEMPORARY FIX: Force enable button
                                             return CustomButton(
                                               height: 27.h,
                                               radius: 58.r,
-                                              labelText: isInCart
-                                                  ? 'تم الإضافة ${course.price} ر.س'
-                                                  : 'شــراء ${course.price} ر.س',
-                                              buttonColor: isInCart
-                                                  ? Colors.grey
-                                                  : AppColors.primary,
+                                              labelText:
+                                                  'شــراء ${course.price} ر.س',
+                                              buttonColor: AppColors.primary,
                                               textColor: AppColors.white,
-                                              onTap: () {
-                                                // Force enable
-                                                _addToCart(context, course.id);
-                                              },
+                                              onTap: () => _addToCart(
+                                                  context, course.id),
                                               textFontSize: 7.sp,
                                               fontWeight:
                                                   FontWeightHelper.light,
@@ -294,35 +293,22 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
                                             StudentCartState>(
                                           bloc: cartCubit,
                                           builder: (context, cartState) {
-                                            // Check if the course is in cart
-                                            final isInCart = cartCubit
-                                                .isCourseInCart(course.id);
+                                            // Don't check the cart state at all for UI
+                                            // Always show the default appearance of the button
 
-                                            // Debug: Log course status
                                             debugPrint(
-                                                'Add to cart button - Course ${course.id}: isInCart = $isInCart');
+                                                'Add to cart button - Course ${course.id}');
 
-                                            // TEMPORARY FIX: Force enable button
                                             return CustomButton(
                                               height: 27.h,
-                                              labelText: isInCart
-                                                  ? 'موجود في السلة'
-                                                  : 'إضافة للسلة',
+                                              labelText: 'إضافة للسلة',
                                               radius: 58.r,
-                                              buttonColor: isInCart
-                                                  ? Colors.grey.shade300
-                                                  : AppColors.background,
-                                              textColor: isInCart
-                                                  ? Colors.grey.shade700
-                                                  : AppColors.yellow,
-                                              onTap: () {
-                                                // Force enable
-                                                _addToCart(context, course.id);
-                                              },
+                                              buttonColor: AppColors.background,
+                                              textColor: AppColors.yellow,
+                                              onTap: () => _addToCart(
+                                                  context, course.id),
                                               textFontSize: 7.sp,
-                                              borderColor: isInCart
-                                                  ? Colors.grey.shade400
-                                                  : AppColors.yellow,
+                                              borderColor: AppColors.yellow,
                                               fontWeight:
                                                   FontWeightHelper.light,
                                             );
