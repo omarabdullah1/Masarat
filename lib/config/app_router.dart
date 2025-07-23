@@ -8,7 +8,6 @@ import 'package:masarat/features/auth/login/ui/screens/login_screen.dart';
 import 'package:masarat/features/auth/signup/logic/cubit/register_cubit.dart';
 import 'package:masarat/features/auth/signup/ui/screens/sign_up_screen.dart';
 import 'package:masarat/features/auth/ui/screens/onboarding_screen.dart';
-import 'package:masarat/features/cart/presentation/pages/shopping_cart_screen.dart';
 import 'package:masarat/features/home/presentation/pages/home_screen.dart';
 import 'package:masarat/features/home/presentation/pages/my_library.dart';
 import 'package:masarat/features/instructor/home/presentation/pages/instructor_home_screen.dart';
@@ -20,15 +19,16 @@ import 'package:masarat/features/profile/presentation/pages/profile_screen.dart'
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
 import 'package:masarat/features/splash/ui/splash_screen.dart';
+import 'package:masarat/features/student/cart/presentation/pages/shopping_cart_screen.dart';
 import 'package:masarat/features/student/courses/data/models/course_model.dart';
 import 'package:masarat/features/student/courses/data/models/lesson_model.dart';
 import 'package:masarat/features/student/courses/logic/cubit/student_lessons_cubit.dart';
 import 'package:masarat/features/student/courses/logic/cubit/student_lessons_state.dart';
 import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
-import 'package:masarat/features/student/courses/presentation/pages/course_details_screen.dart';
-import 'package:masarat/features/student/courses/presentation/pages/lesson_details_screen.dart';
-import 'package:masarat/features/student/courses/presentation/pages/lesson_list_screen.dart';
-import 'package:masarat/features/student/courses/presentation/pages/training_courses_screen.dart';
+import 'package:masarat/features/student/courses/presentation/pages/student_course_details_screen.dart';
+import 'package:masarat/features/student/courses/presentation/pages/student_courses_screen.dart';
+import 'package:masarat/features/student/courses/presentation/pages/student_lesson_details_screen.dart';
+import 'package:masarat/features/student/courses/presentation/pages/student_lesson_list_screen.dart';
 import 'package:masarat/features/student/courses/services/course_state_service.dart';
 
 final GoRouter router = GoRouter(
@@ -113,7 +113,7 @@ final GoRouter router = GoRouter(
           name: AppRoute.trainingCourses,
           builder: (context, state) => BlocProvider(
             create: (context) => getIt<TrainingCoursesCubit>()..getCourses(),
-            child: const TrainingCoursesScreen(),
+            child: const StudentCoursesScreen(),
           ),
           routes: [
             GoRoute(
@@ -128,13 +128,13 @@ final GoRouter router = GoRouter(
                 // If we have course from extra, update our service and return the screen
                 if (courseFromExtra != null) {
                   courseService.selectedCourse = courseFromExtra;
-                  return CourseDetailsScreen(course: courseFromExtra);
+                  return StudentCourseDetailsScreen(course: courseFromExtra);
                 }
 
                 // If no course in extra, try to get from our service
                 final savedCourse = courseService.selectedCourse;
                 if (savedCourse != null) {
-                  return CourseDetailsScreen(course: savedCourse);
+                  return StudentCourseDetailsScreen(course: savedCourse);
                 }
 
                 // If we still don't have course data, show error
@@ -163,7 +163,7 @@ final GoRouter router = GoRouter(
                     // Get course data from our service
                     final courseService = getIt<CourseStateService>();
                     final course = courseService.selectedCourse;
-                    return LessonListScreen(course: course);
+                    return StudentLessonListScreen(course: course);
                   },
                   routes: [
                     GoRoute(
@@ -234,7 +234,7 @@ final GoRouter router = GoRouter(
                               'Lesson content: ${matchingLesson.content}');
                         }
 
-                        return LessonDetailsScreen(
+                        return StudentLessonDetailsScreen(
                           lectureId: lectureId!,
                           lesson: matchingLesson,
                         );

@@ -15,6 +15,9 @@ import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 import 'package:masarat/features/instructor/logic/update_lesson/update_lesson_cubit.dart';
 import 'package:masarat/features/instructor/logic/upload_lesson_video/upload_lesson_video_cubit.dart';
+import 'package:masarat/features/student/cart/data/apis/student_cart_api_constants.dart';
+import 'package:masarat/features/student/cart/data/apis/student_cart_service.dart';
+import 'package:masarat/features/student/cart/data/repos/student_cart_repo.dart';
 import 'package:masarat/features/student/courses/apis/courses_service.dart';
 import 'package:masarat/features/student/courses/data/apis/student_api_constants.dart';
 import 'package:masarat/features/student/courses/data/apis/student_course_service.dart';
@@ -26,6 +29,7 @@ import 'package:masarat/features/student/courses/logic/training_courses/training
 import 'package:masarat/features/student/courses/services/course_state_service.dart';
 
 import '../../features/auth/signup/logic/cubit/register_cubit.dart';
+import '../../features/student/cart/logic/student_cart/student_cart_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -53,6 +57,10 @@ Future<void> setupGetIt() async {
     ..registerLazySingleton<StudentCourseService>(
       () => StudentCourseService(dio, baseUrl: StudentApiConstants.apiBaseUrl),
     )
+    ..registerLazySingleton<StudentCartService>(
+      () =>
+          StudentCartService(dio, baseUrl: StudentCartApiConstants.apiBaseUrl),
+    )
 
     // Add Course State Service as singleton
     ..registerLazySingleton(() => CourseStateService())
@@ -75,6 +83,9 @@ Future<void> setupGetIt() async {
     ..registerLazySingleton<StudentCourseRepo>(
       () => StudentCourseRepo(getIt<StudentCourseService>()),
     )
+    ..registerLazySingleton<StudentCartRepo>(
+      () => StudentCartRepo(getIt<StudentCartService>()),
+    )
 
     /************************* */
     /* ******** CUBIT *********
@@ -95,5 +106,6 @@ Future<void> setupGetIt() async {
     ..registerFactory<StudentLessonsCubit>(
         () => StudentLessonsCubit(getIt<StudentCourseRepo>()))
     ..registerFactory<TrainingCoursesCubit>(() => TrainingCoursesCubit(getIt()))
-    ..registerFactory<LessonDetailsCubit>(() => LessonDetailsCubit(getIt()));
+    ..registerFactory<LessonDetailsCubit>(() => LessonDetailsCubit(getIt()))
+    ..registerFactory<StudentCartCubit>(() => StudentCartCubit(getIt()));
 }

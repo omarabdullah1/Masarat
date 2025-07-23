@@ -12,21 +12,24 @@ import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_drawer.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
+import 'package:masarat/features/student/cart/logic/student_cart/student_cart_cubit.dart';
 import 'package:masarat/features/student/courses/data/models/course_model.dart';
 import 'package:masarat/features/student/courses/services/course_state_service.dart';
 
-class CourseDetailsScreen extends StatelessWidget {
-  const CourseDetailsScreen({
+class StudentCourseDetailsScreen extends StatelessWidget {
+  StudentCourseDetailsScreen({
     required this.course,
     super.key,
   });
   final CourseModel course;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     // Store the current course in our service for persistence
     getIt<CourseStateService>().selectedCourse = course;
     return CustomScaffold(
+      key: scaffoldKey,
       haveAppBar: true,
       backgroundColorAppColor: AppColors.background,
       backgroundColor: AppColors.background,
@@ -102,8 +105,9 @@ class CourseDetailsScreen extends StatelessWidget {
                 height: 200.h,
                 width: 290.w,
                 color: Colors.grey[300],
-                child: const Icon(Icons.error_outline,
-                    size: 40, color: Colors.red),
+                child: const Center(
+                  child: Icon(Icons.error, color: Colors.red),
+                ),
               ),
             );
           },
@@ -112,48 +116,52 @@ class CourseDetailsScreen extends StatelessWidget {
     );
   }
 
-  // Course Details Section
+  // Course Details
   Widget _buildCourseDetails(CourseModel course) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
-          child: CustomText(
-            text: course.title,
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+        CustomText(
+          text: course.title,
+          style: TextStyle(
+            fontSize: 24.sp,
+            fontWeight: FontWeightHelper.semiBold,
+            color: AppColors.primary,
           ),
         ),
         Gap(8.h),
-        Center(
-          child: CustomText(
-            text: 'SAR ${course.price}',
-            style: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.teal,
+        Row(
+          children: [
+            const Icon(
+              Icons.access_time,
+              color: AppColors.gray,
+              size: 16,
             ),
-          ),
+            Gap(4.w),
+            CustomText(
+              text: '${course.durationEstimate} ساعات',
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: AppColors.gray,
+              ),
+            ),
+            Gap(16.w),
+            const Icon(
+              Icons.video_library,
+              color: AppColors.gray,
+              size: 16,
+            ),
+            Gap(4.w),
+            CustomText(
+              text: '${course.lessons.length} محاضرة',
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: AppColors.gray,
+              ),
+            ),
+          ],
         ),
-        Gap(8.h),
-        _buildTrainerInfo('اسم المدرب: ${course.instructor.fullName}'),
-        _buildTrainerInfo('عدد الساعات: ${course.durationEstimate}'),
-        _buildTrainerInfo('عدد المحاضرات: ${course.lessons.length}'),
       ],
-    );
-  }
-
-  Widget _buildTrainerInfo(String text) {
-    return Center(
-      child: CustomText(
-        text: text,
-        style: TextStyle(
-          fontSize: 12.sp,
-          color: Colors.grey[700],
-        ),
-      ),
     );
   }
 
@@ -162,85 +170,29 @@ class CourseDetailsScreen extends StatelessWidget {
     return CustomText(
       text: title,
       style: TextStyle(
-        fontSize: 12.sp,
-        fontWeight: FontWeightHelper.regular,
-        color: Colors.black,
+        fontSize: 18.sp,
+        fontWeight: FontWeightHelper.semiBold,
+        color: AppColors.primary,
       ),
     );
   }
 
   // Course Description
   Widget _buildCourseDescription(String description) {
-    return Text(
-      description,
+    return CustomText(
+      text: description,
       style: TextStyle(
-        fontSize: 9.5.sp,
-        color: Colors.grey[700],
+        fontSize: 14.sp,
+        color: Colors.black87,
         height: 1.5,
-      ),
-    );
-  }
-
-  // Comments Section
-  Widget _buildCommentsSection() {
-    return SizedBox(
-      height: 100.h,
-      child: ListView.separated(
-        separatorBuilder: (context, index) => Gap(10.h),
-        itemCount: 2,
-        itemBuilder: (context, index) => _buildComment(),
-      ),
-    );
-  }
-
-  Widget _buildComment() {
-    return Container(
-      padding: EdgeInsets.all(12.r),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.lighterGray),
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 15.r,
-            backgroundColor: Colors.teal,
-            child: const Icon(Icons.person, color: Colors.white),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'فاطمة علي',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeightHelper.regular,
-                    color: Colors.black,
-                  ),
-                ),
-                Gap(5.h),
-                Text(
-                  'في عام 94% استفدت بشكل استثنائي في المجال المحاسبي تحت مسمى '
-                  'مصنف المحاسبة المالية تعلمت كل من الخطط.',
-                  style: TextStyle(
-                    fontSize: 9.sp,
-                    color: Colors.grey[700],
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
 
   // Action Buttons
   Widget _buildActionButtons(int price) {
+    final cartCubit = getIt<StudentCartCubit>();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -252,7 +204,11 @@ class CourseDetailsScreen extends StatelessWidget {
             labelText: 'شــراء الأن - SAR $price',
             buttonColor: AppColors.primary,
             textColor: AppColors.white,
-            onTap: () {},
+            onTap: () {
+              // Navigate to the checkout screen or purchase flow
+              // For now, we'll just add to cart
+              _addToCart(cartCubit);
+            },
             textFontSize: 10.sp,
             fontWeight: FontWeightHelper.light,
           ),
@@ -266,7 +222,9 @@ class CourseDetailsScreen extends StatelessWidget {
             labelText: 'إضافة إلى السلة',
             buttonColor: AppColors.background,
             textColor: AppColors.red,
-            onTap: () {},
+            onTap: () {
+              _addToCart(cartCubit);
+            },
             textFontSize: 10.sp,
             borderColor: AppColors.red,
             fontWeight: FontWeightHelper.light,
@@ -274,6 +232,71 @@ class CourseDetailsScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  // Add to Cart Helper Method
+  void _addToCart(StudentCartCubit cartCubit) {
+    // Get the current context from the scaffold key
+    final BuildContext context = scaffoldKey.currentContext!;
+
+    // Show loading indicator
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('جاري إضافة الدورة إلى السلة...'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+
+    // Add to cart via cubit
+    cartCubit.addToCart(course.id).then((success) {
+      // Check current state after operation completes
+      String? errorMessage;
+      bool isErrorState = false;
+
+      cartCubit.state.maybeWhen(
+        error: (message) {
+          errorMessage = message;
+          isErrorState = true;
+        },
+        orElse: () {},
+      );
+
+      if (isErrorState && errorMessage != null) {
+        // Check if it's an "already in cart" type of message
+        // We've already checked that errorMessage is not null
+        final String nonNullMessage = errorMessage!; // Use non-null assertion
+        final isAlreadyInCartMessage =
+            nonNullMessage.contains('موجودة بالفعل') ||
+                nonNullMessage.contains('already in') ||
+                nonNullMessage.toLowerCase().contains('already in your cart');
+
+        // Show the specific error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(nonNullMessage),
+            backgroundColor: isAlreadyInCartMessage || success
+                ? Colors.orange // Orange for "already in cart" warnings
+                : Colors.red, // Red for actual errors
+          ),
+        );
+      } else if (success) {
+        // Normal success case
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        // Generic failure case (shouldn't reach here if errors are properly handled)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('فشل في إضافة الدورة إلى السلة'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
   }
 
   // Watch Button
@@ -291,15 +314,26 @@ class CourseDetailsScreen extends StatelessWidget {
         // Store the course in our service for persistence between screens
         getIt<CourseStateService>().selectedCourse = course;
 
-        // Navigate to lectures list screen which will show all lessons
-        // The screen will fetch up-to-date lessons from the API
+        // Navigate to the lessons screen
         context.goNamed(
           AppRoute.lectureScreen,
           pathParameters: {'courseid': courseId},
+          extra: course, // Pass the entire course object
         );
       },
-      textFontSize: 10.sp,
+      textFontSize: 16.sp,
+      borderColor: AppColors.gray,
       fontWeight: FontWeightHelper.light,
     );
+  }
+
+  // Comments Section - currently unused
+}
+
+extension BuildContextExtension on BuildContext? {
+  void let(Function(BuildContext context) block) {
+    if (this != null) {
+      block(this!);
+    }
   }
 }

@@ -80,22 +80,26 @@ class CourseCard extends StatelessWidget {
                         ),
                       ],
                       Gap(8.h),
-                      CustomText(
-                        text: hours,
-                        style: TextStyle(
-                          color: AppColors.greyLight200,
-                          fontWeight: FontWeightHelper.light,
-                          fontSize: 10.sp,
+                      // Only show hours if not empty
+                      if (hours.isNotEmpty)
+                        CustomText(
+                          text: hours,
+                          style: TextStyle(
+                            color: AppColors.greyLight200,
+                            fontWeight: FontWeightHelper.light,
+                            fontSize: 10.sp,
+                          ),
                         ),
-                      ),
-                      CustomText(
-                        text: lectures,
-                        style: TextStyle(
-                          color: AppColors.greyLight200,
-                          fontWeight: FontWeightHelper.light,
-                          fontSize: 10.sp,
+                      // Only show lectures if not empty
+                      if (lectures.isNotEmpty)
+                        CustomText(
+                          text: lectures,
+                          style: TextStyle(
+                            color: AppColors.greyLight200,
+                            fontWeight: FontWeightHelper.light,
+                            fontSize: 10.sp,
+                          ),
                         ),
-                      ),
                       if (progress != null) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

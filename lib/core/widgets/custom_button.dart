@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-
 import 'package:masarat/core/widgets/custom_text.dart';
 
 class CustomButton extends StatelessWidget {
@@ -41,14 +40,21 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Check if the button is disabled
+    final bool isDisabled = onTap == null;
+
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-        backgroundColor: buttonColor ?? AppColors.primary,
+        backgroundColor: isDisabled
+            ? (buttonColor ?? AppColors.primary).withOpacity(0.7)
+            : buttonColor ?? AppColors.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius ?? 14.r),
           side: BorderSide(
-            color: borderColor ?? AppColors.primary,
+            color: isDisabled
+                ? (borderColor ?? AppColors.primary).withOpacity(0.7)
+                : borderColor ?? AppColors.primary,
             width: borderWidth,
           ),
         ),
@@ -62,7 +68,9 @@ class CustomButton extends StatelessWidget {
             child: CustomText(
               text: labelText,
               style: TextStyle(
-                color: textColor,
+                color: onTap == null
+                    ? (textColor ?? Colors.white).withOpacity(0.7)
+                    : textColor,
                 fontSize: textFontSize,
                 fontWeight: fontWeight ?? FontWeightHelper.bold,
                 fontFamily: Constants.fontName,
