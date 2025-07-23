@@ -30,6 +30,7 @@ import 'package:masarat/features/student/courses/services/course_state_service.d
 
 import '../../features/auth/signup/logic/cubit/register_cubit.dart';
 import '../../features/student/cart/logic/student_cart/student_cart_cubit.dart';
+import '../../features/student/payment/presentation/cubits/payment_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -107,5 +108,7 @@ Future<void> setupGetIt() async {
         () => StudentLessonsCubit(getIt<StudentCourseRepo>()))
     ..registerFactory<TrainingCoursesCubit>(() => TrainingCoursesCubit(getIt()))
     ..registerFactory<LessonDetailsCubit>(() => LessonDetailsCubit(getIt()))
-    ..registerFactory<StudentCartCubit>(() => StudentCartCubit(getIt()));
+    ..registerFactory<StudentCartCubit>(() => StudentCartCubit(getIt()))
+    ..registerFactory<PaymentCubit>(
+        () => PaymentCubit(getIt<StudentCartRepo>()));
 }

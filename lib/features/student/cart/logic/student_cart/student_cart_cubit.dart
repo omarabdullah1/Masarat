@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masarat/features/student/cart/data/models/cart_response_model.dart';
+import 'package:masarat/features/student/cart/data/models/checkout_request_model.dart';
+import 'package:masarat/features/student/cart/data/models/checkout_response_model.dart';
 import 'package:masarat/features/student/cart/data/repos/student_cart_repo.dart';
 import 'package:masarat/features/student/cart/logic/student_cart/student_cart_state.dart';
 
@@ -202,6 +204,39 @@ class StudentCartCubit extends Cubit<StudentCartState> {
           log('Emitting Error for general error: $displayMessage');
           return false;
         }
+      },
+    );
+  }
+
+  /// Initiates the checkout process
+  /// Returns the checkout response if successful
+  Future<CheckoutResponseModel?> initiateCheckout() async {
+    log('Initiating checkout');
+    emit(const StudentCartState.checkoutLoading());
+
+    // Create a checkout request model
+    const checkoutRequest = CheckoutRequestModel(
+      sourceId: SourceIdModel(id: 'src_all'),
+      currency: 'SAR',
+    );
+
+    // Log the request body for debugging
+    log('Checkout request: ${checkoutRequest.toJson()}');
+
+    final result = await _cartRepo.initiateCheckout(checkoutRequest);
+
+    return result.when(
+      success: (checkoutData) {
+        log('Checkout success: $checkoutData');
+        emit(StudentCartState.checkoutSuccess(checkoutData));
+        return checkoutData;
+      },
+      failure: (error) {
+        final errorMessage = error.getAllErrorMessages();
+        log('Checkout error: $errorMessage');
+        emit(StudentCartState.checkoutError(
+            'فشل في إتمام عملية الدفع: $errorMessage'));
+        return null;
       },
     );
   }

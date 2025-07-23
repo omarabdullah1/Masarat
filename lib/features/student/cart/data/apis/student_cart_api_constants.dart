@@ -16,4 +16,7 @@ class StudentCartApiConstants {
 
   /// Path for adding course to cart
   static const String addToCart = 'api/v1/cart/items';
+
+  /// Path for initiating checkout
+  static const String initiateCheckout = 'api/v1/checkout/initiate';
 }

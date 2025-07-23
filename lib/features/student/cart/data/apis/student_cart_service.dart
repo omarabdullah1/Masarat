@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:masarat/features/student/cart/data/apis/student_cart_api_constants.dart';
 import 'package:masarat/features/student/cart/data/models/cart_root_response.dart';
+import 'package:masarat/features/student/cart/data/models/checkout_response_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'student_cart_service.g.dart';
@@ -17,4 +18,8 @@ abstract class StudentCartService {
 
   @POST(StudentCartApiConstants.addToCart)
   Future<CartRootResponse> addToCart(@Body() Map<String, dynamic> body);
+
+  @POST('api/v1/checkout/initiate')
+  Future<CheckoutRootResponse> initiateCheckout(
+      @Body() Map<String, dynamic> body);
 }
