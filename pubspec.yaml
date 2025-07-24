@@ -66,6 +66,7 @@ dependencies:
   # youtube_player_flutter: ^8.1.2 (commented out due to dependency on flutter_inappwebview)
   video_player: ^2.8.1
   chewie: ^1.7.5
+  flutter_image_compress: ^2.4.0
 
 dev_dependencies:
   bloc_test: ^9.1.7

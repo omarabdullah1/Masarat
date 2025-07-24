@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,8 +10,10 @@ import 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
   final CreateAccountRepo _createAccountRepo;
+  final bool isTrainer;
 
-  RegisterCubit(this._createAccountRepo) : super(const RegisterState.initial());
+  RegisterCubit(this._createAccountRepo, {this.isTrainer = false})
+      : super(const RegisterState.initial());
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController idController = TextEditingController();
@@ -20,6 +23,17 @@ class RegisterCubit extends Cubit<RegisterState> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController academicDegreeController =
       TextEditingController();
+
+  // Additional fields for instructor registration
+  final TextEditingController nationalityController = TextEditingController();
+  final TextEditingController countryOfResidenceController =
+      TextEditingController();
+  final TextEditingController governorateController = TextEditingController();
+  final TextEditingController academicDegreeTextController =
+      TextEditingController();
+  final TextEditingController specialtyController = TextEditingController();
+  final TextEditingController jobTitleController = TextEditingController();
+  final TextEditingController workEntityController = TextEditingController();
 
   final GlobalKey<TooltipState> fullNameTooltipKey = GlobalKey<TooltipState>();
   final GlobalKey<TooltipState> emailTooltipKey = GlobalKey<TooltipState>();
@@ -47,17 +61,39 @@ class RegisterCubit extends Cubit<RegisterState> {
         phone != null && phone.trim().isNotEmpty ? phone : null;
     // final String? phoneCountryCode = phoneNumber != null ? countryCode : null;
 
-    final response = await _createAccountRepo.createAccount(
-      CreateAccountRequestBody(
-        email: email,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        phoneNumber: phoneNumber!,
-        academicDegreePath: academicDegreeFilePath,
-        idNumber: idNumber,
-      ),
-    );
+    final response = isTrainer && academicDegreeFilePath != null
+        ? await _createAccountRepo.createAccount(
+            createAccountRequestBody: CreateAccountRequestBody(
+              email: email,
+              password: password,
+              firstName: firstName,
+              lastName: lastName,
+              phoneNumber: phoneNumber!,
+              academicDegreePath: academicDegreeFilePath,
+              idNumber: idNumber,
+            ),
+            isInstructor: true,
+            nationalIdFile: File(academicDegreeFilePath!),
+            // Pass instructor fields as defined in repo
+            nationality: nationalityController.text.trim(),
+            countryOfResidence: countryOfResidenceController.text.trim(),
+            governorate: governorateController.text.trim(),
+            academicDegree: academicDegreeFilePath ?? '',
+            specialty: specialtyController.text.trim(),
+            jobTitle: jobTitleController.text.trim(),
+            workEntity: workEntityController.text.trim(),
+          )
+        : await _createAccountRepo.createAccount(
+            createAccountRequestBody: CreateAccountRequestBody(
+              email: email,
+              password: password,
+              firstName: firstName,
+              lastName: lastName,
+              phoneNumber: phoneNumber!,
+              // academicDegreePath and idNumber removed for student
+            ),
+            isInstructor: false,
+          );
 
     log('Registration API response: $response');
 
