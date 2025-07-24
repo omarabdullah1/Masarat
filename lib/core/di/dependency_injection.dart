@@ -94,7 +94,8 @@ Future<void> setupGetIt() async {
   */
     ..registerFactory<GeneralCubit>(GeneralCubit.new)
     ..registerFactory<LoginCubit>(() => LoginCubit(getIt()))
-    ..registerFactory<RegisterCubit>(() => RegisterCubit(getIt()))
+    ..registerFactoryParam<RegisterCubit, bool, void>(
+        (isTrainer, _) => RegisterCubit(getIt(), isTrainer: isTrainer))
     ..registerFactory<CreateCourseCubit>(() => CreateCourseCubit(getIt()))
     ..registerFactory<AddLessonCubit>(() => AddLessonCubit(getIt()))
     ..registerFactory<DeleteLessonCubit>(() => DeleteLessonCubit(getIt()))

@@ -29,6 +29,12 @@ abstract class AuthenticationService {
     @Body() CreateAccountRequestBody createAccountRequestBody,
   );
 
+  @POST(AuthenticationApiConstants.createInstructorAccount)
+  @MultiPart()
+  Future<CreateAccountResponse> createInstructorAccount(
+    @Body() FormData createAccountRequestBody,
+  );
+
   // For uploading academic degree file with form data
   @POST(AuthenticationApiConstants.uploadAcademicDegree)
   @MultiPart()

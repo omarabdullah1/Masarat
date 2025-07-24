@@ -19,10 +19,10 @@ import 'package:masarat/features/profile/presentation/pages/profile_screen.dart'
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
 import 'package:masarat/features/splash/ui/splash_screen.dart';
+import 'package:masarat/features/student/cart/presentation/pages/checkout_webview_screen.dart';
 import 'package:masarat/features/student/cart/presentation/pages/shopping_cart_screen.dart';
 import 'package:masarat/features/student/courses/data/models/course_model.dart';
 import 'package:masarat/features/student/courses/data/models/lesson_model.dart';
-import 'package:masarat/features/student/cart/presentation/pages/checkout_webview_screen.dart';
 import 'package:masarat/features/student/courses/logic/cubit/student_lessons_cubit.dart';
 import 'package:masarat/features/student/courses/logic/cubit/student_lessons_state.dart';
 import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
@@ -66,9 +66,10 @@ final GoRouter router = GoRouter(
       path: AppRoute.signUp,
       name: AppRoute.signUp,
       builder: (context, state) {
+        final isTrainer = (state.extra as bool?) ?? false;
         return BlocProvider(
-          create: (context) => getIt<RegisterCubit>(),
-          child: const SignUpScreen(),
+          create: (context) => getIt<RegisterCubit>(param1: isTrainer),
+          child: SignUpScreen(isTrainer: isTrainer),
         );
       },
     ),
