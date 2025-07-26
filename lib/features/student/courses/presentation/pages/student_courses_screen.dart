@@ -56,38 +56,32 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
 
     // Add to cart via cubit
     cartCubit.addToCart(courseId).then((success) {
-      // Check current state after operation completes
       String? errorMessage;
       bool isErrorState = false;
 
       cartCubit.state.maybeWhen(
-          error: (message) {
-            errorMessage = message;
-            isErrorState = true;
-          },
-          orElse: () {});
+        error: (message) {
+          errorMessage = message;
+          isErrorState = true;
+        },
+        orElse: () {},
+      );
 
       if (isErrorState && errorMessage != null) {
-        // Check if it's an "already in cart" type of message
-        // We've already checked that errorMessage is not null
-        final String nonNullMessage = errorMessage!; // Use non-null assertion
+        final String nonNullMessage = errorMessage!;
         final isAlreadyInCartMessage =
             nonNullMessage.contains('موجودة بالفعل') ||
                 nonNullMessage.contains('already in') ||
                 nonNullMessage.toLowerCase().contains('already in your cart');
 
-        // Show the specific error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(nonNullMessage),
-            backgroundColor: isAlreadyInCartMessage || success
-                ? Colors
-                    .orange // Orange for "already in cart" or other warnings
-                : Colors.red, // Red for actual errors
+            backgroundColor:
+                isAlreadyInCartMessage || success ? Colors.orange : Colors.red,
           ),
         );
       } else if (success) {
-        // Normal success case
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
@@ -95,47 +89,111 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
           ),
         );
 
-        // Debug log after adding
         debugPrint('After adding - Success: $success');
 
-        // Get direct access to cart data
         cartCubit.state.maybeWhen(success: (cartData) {
-          debugPrint('Direct cart access: ${cartData.items.length} items');
+          debugPrint('Direct cart access: \\${cartData.items.length} items');
           final directCheck =
               cartData.items.any((item) => item.course.id == courseId);
           debugPrint('Direct check - Course $courseId in cart: $directCheck');
-
-          // List all items in cart
           for (var item in cartData.items) {
             debugPrint(
-                'Cart contains: ${item.course.id} - ${item.course.title}');
+                'Cart contains: \\${item.course.id} - \\${item.course.title}');
           }
         }, orElse: () {
           debugPrint(
-              'Cannot directly access cart data, state is ${cartCubit.state.runtimeType}');
+              'Cannot directly access cart data, state is \\${cartCubit.state.runtimeType}');
         });
 
-        // Reload cart data to ensure we have the latest state
-        cartCubit.getCart().then((_) {
-          // Force UI update after cart is refreshed
-          setState(() {
-            debugPrint('UI updated after cart refresh');
-          });
-        });
+        // Optionally refresh cart in background (not blocking navigation)
+        cartCubit.getCart();
       } else {
-        // Generic failure case (shouldn't reach here if errors are properly handled)
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('فشل في إضافة الدورة إلى السلة'),
             backgroundColor: Colors.red,
           ),
         );
+      }
+    });
+  }
 
-        // Debug log after failure
-        debugPrint('Failed to add course: $courseId');
+  void _addToCartBuy(BuildContext context, String courseId) {
+    // Don't check if course is in cart first - just try to add it
+    debugPrint('Adding course to cart: $courseId');
 
-        // Still refresh cart data to ensure UI consistency
+    // Show loading indicator
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('جاري إضافة الدورة إلى السلة...'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+
+    // Add to cart via cubit
+    cartCubit.addToCart(courseId).then((success) {
+      String? errorMessage;
+      bool isErrorState = false;
+
+      cartCubit.state.maybeWhen(
+        error: (message) {
+          errorMessage = message;
+          isErrorState = true;
+        },
+        orElse: () {},
+      );
+
+      if (isErrorState && errorMessage != null) {
+        final String nonNullMessage = errorMessage!;
+        final isAlreadyInCartMessage =
+            nonNullMessage.contains('موجودة بالفعل') ||
+                nonNullMessage.contains('already in') ||
+                nonNullMessage.toLowerCase().contains('already in your cart');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(nonNullMessage),
+            backgroundColor:
+                isAlreadyInCartMessage || success ? Colors.orange : Colors.red,
+          ),
+        );
+        context.goNamed(AppRoute.shoppingCart);
+      } else if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        context.goNamed(AppRoute.shoppingCart);
+
+        debugPrint('After adding - Success: $success');
+
+        cartCubit.state.maybeWhen(success: (cartData) {
+          debugPrint('Direct cart access: \\${cartData.items.length} items');
+          final directCheck =
+              cartData.items.any((item) => item.course.id == courseId);
+          debugPrint('Direct check - Course $courseId in cart: $directCheck');
+          for (var item in cartData.items) {
+            debugPrint(
+                'Cart contains: \\${item.course.id} - \\${item.course.title}');
+          }
+        }, orElse: () {
+          debugPrint(
+              'Cannot directly access cart data, state is \\${cartCubit.state.runtimeType}');
+        });
+
+        // Navigate to the cart screen immediately after success
+        context.goNamed(AppRoute.shoppingCart);
+        // Optionally refresh cart in background (not blocking navigation)
         cartCubit.getCart();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('فشل في إضافة الدورة إلى السلة'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     });
   }
@@ -278,7 +336,7 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
                                                   'شــراء ${course.price} ر.س',
                                               buttonColor: AppColors.primary,
                                               textColor: AppColors.white,
-                                              onTap: () => _addToCart(
+                                              onTap: () => _addToCartBuy(
                                                   context, course.id),
                                               textFontSize: 7.sp,
                                               fontWeight:
