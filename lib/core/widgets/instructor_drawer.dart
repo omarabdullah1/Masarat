@@ -47,7 +47,7 @@ class InstructorDrawer extends StatelessWidget {
                     title: 'الصـفحة الشخصــية',
                     onTap: () {
                       Scaffold.of(context).closeDrawer();
-                      context.goNamed(AppRoute.profile, extra: true);
+                      context.goNamed(AppRoute.instructorProfile);
                     },
                   ),
                   _divider(),

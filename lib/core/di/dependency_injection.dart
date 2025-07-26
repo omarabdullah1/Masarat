@@ -6,6 +6,7 @@ import 'package:masarat/features/auth/apis/auth_service.dart';
 import 'package:masarat/features/auth/login/data/repos/login_repo.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/signup/data/repos/create_account_repo.dart';
+import 'package:masarat/features/instructor/data/apis/instructor_api_constants.dart';
 import 'package:masarat/features/instructor/data/apis/instructor_service.dart';
 import 'package:masarat/features/instructor/data/repos/instructor_repo.dart';
 import 'package:masarat/features/instructor/logic/add_lesson/add_lesson_cubit.dart';
@@ -15,6 +16,9 @@ import 'package:masarat/features/instructor/logic/get_lessons/get_lessons_cubit.
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 import 'package:masarat/features/instructor/logic/update_lesson/update_lesson_cubit.dart';
 import 'package:masarat/features/instructor/logic/upload_lesson_video/upload_lesson_video_cubit.dart';
+import 'package:masarat/features/instructor/profile/data/apis/instructor_profile_service.dart';
+import 'package:masarat/features/instructor/profile/data/repositories/instructor_profile_repository.dart';
+import 'package:masarat/features/instructor/profile/logic/cubit/instructor_profile_cubit.dart';
 import 'package:masarat/features/student/cart/data/apis/student_cart_api_constants.dart';
 import 'package:masarat/features/student/cart/data/apis/student_cart_service.dart';
 import 'package:masarat/features/student/cart/data/repos/student_cart_repo.dart';
@@ -27,6 +31,9 @@ import 'package:masarat/features/student/courses/logic/cubit/student_lessons_cub
 import 'package:masarat/features/student/courses/logic/lesson_details/lesson_details_cubit.dart';
 import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
 import 'package:masarat/features/student/courses/services/course_state_service.dart';
+import 'package:masarat/features/student/profile/data/apis/student_profile_service.dart';
+import 'package:masarat/features/student/profile/data/repositories/student_profile_repository.dart';
+import 'package:masarat/features/student/profile/logic/cubit/student_profile_cubit.dart';
 
 import '../../features/auth/signup/logic/cubit/register_cubit.dart';
 import '../../features/student/cart/logic/student_cart/student_cart_cubit.dart';
@@ -40,10 +47,31 @@ Future<void> setupGetIt() async {
   /************************ */
   */
 
+  // Shared Dio for general use
   final dio = DioFactory.getDio();
-
-  // Register Dio instance first so it can be used by other services
   getIt.registerLazySingleton<Dio>(() => dio);
+
+  // Student Profile: Use a Dio instance with the student baseUrl
+  final studentDio = DioFactory.getDio();
+  studentDio.options.baseUrl = StudentApiConstants.apiBaseUrl;
+  getIt.registerLazySingleton<StudentProfileService>(() =>
+      StudentProfileService(studentDio,
+          baseUrl: StudentApiConstants.apiBaseUrl));
+  getIt.registerLazySingleton<StudentProfileRepository>(() =>
+      StudentProfileRepository(getIt<StudentProfileService>(), studentDio));
+  getIt.registerLazySingleton<StudentProfileCubit>(
+      () => StudentProfileCubit(getIt<StudentProfileRepository>()));
+
+  // Instructor Profile: Use a Dio instance with the instructor baseUrl
+  getIt.registerFactory<InstructorProfileService>(() {
+    final instructorDio = DioFactory.getDio();
+    instructorDio.options.baseUrl = InstructorApiConstants.apiBaseUrl;
+    return InstructorProfileService(instructorDio);
+  });
+  getIt.registerFactory<InstructorProfileRepository>(
+      () => InstructorProfileRepository(getIt<InstructorProfileService>()));
+  getIt.registerFactory<InstructorProfileCubit>(
+      () => InstructorProfileCubit(getIt<InstructorProfileRepository>()));
 
   getIt
     ..registerLazySingleton<AuthenticationService>(

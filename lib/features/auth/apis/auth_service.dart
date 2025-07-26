@@ -47,6 +47,5 @@ abstract class AuthenticationService {
   //   @Body() ForgetPasswordRequest forgetPasswordRequest,
   // );
 
-  // @GET(AuthenticationApiConstants.myProfile)
-  // Future<ProfileResponse> getProfile();
+  // Profile API is now handled by ProfileService
 }

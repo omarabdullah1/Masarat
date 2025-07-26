@@ -15,7 +15,8 @@ import 'package:masarat/features/instructor/logic/create_course/create_course_cu
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 import 'package:masarat/features/instructor/presentation/pages/create_course_screen.dart';
 import 'package:masarat/features/instructor/presentation/pages/instructor_course_management_page.dart';
-import 'package:masarat/features/profile/presentation/pages/profile_screen.dart';
+import 'package:masarat/features/instructor/profile/logic/cubit/instructor_profile_cubit.dart';
+import 'package:masarat/features/instructor/profile/presentation/pages/instructor_profile_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/about_us_screen.dart';
 import 'package:masarat/features/settings/presentation/pages/policies_screen.dart';
 import 'package:masarat/features/splash/ui/splash_screen.dart';
@@ -31,6 +32,8 @@ import 'package:masarat/features/student/courses/presentation/pages/student_cour
 import 'package:masarat/features/student/courses/presentation/pages/student_lesson_details_screen.dart';
 import 'package:masarat/features/student/courses/presentation/pages/student_lesson_list_screen.dart';
 import 'package:masarat/features/student/courses/services/course_state_service.dart';
+import 'package:masarat/features/student/profile/logic/cubit/student_profile_cubit.dart';
+import 'package:masarat/features/student/profile/presentation/pages/student_profile_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: AppRoute.splash, // Start at onboarding
@@ -83,12 +86,20 @@ final GoRouter router = GoRouter(
       routes: [
         // Nested Routes
         GoRoute(
-          path: AppRoute.profile,
-          name: AppRoute.profile,
-          builder: (context, state) {
-            final isTrainer = (state.extra as bool?) ?? false;
-            return ProfileScreen(isTrainer: isTrainer);
-          },
+          path: AppRoute.studentProfile,
+          name: AppRoute.studentProfile,
+          builder: (context, state) => BlocProvider<StudentProfileCubit>.value(
+            value: getIt<StudentProfileCubit>(),
+            child: const StudentProfileScreen(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoute.instructorProfile,
+          name: AppRoute.instructorProfile,
+          builder: (context, state) => BlocProvider(
+            create: (context) => getIt<InstructorProfileCubit>(),
+            child: const InstructorProfileScreen(),
+          ),
         ),
         GoRoute(
           path: AppRoute.myLibrary,
