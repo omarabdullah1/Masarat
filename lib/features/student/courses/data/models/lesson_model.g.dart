@@ -11,6 +11,9 @@ LessonModel _$LessonModelFromJson(Map<String, dynamic> json) => LessonModel(
       title: json['title'] as String,
       contentType: json['contentType'] as String,
       order: (json['order'] as num).toInt(),
+      content: json['content'] as String?,
+      durationEstimate: (json['durationEstimate'] as num?)?.toInt(),
+      isPreviewable: json['isPreviewable'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
@@ -19,4 +22,7 @@ Map<String, dynamic> _$LessonModelToJson(LessonModel instance) =>
       'title': instance.title,
       'contentType': instance.contentType,
       'order': instance.order,
+      'content': instance.content,
+      'durationEstimate': instance.durationEstimate,
+      'isPreviewable': instance.isPreviewable,
     };

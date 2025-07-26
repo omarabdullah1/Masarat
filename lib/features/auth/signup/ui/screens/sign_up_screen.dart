@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,10 +16,11 @@ import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:masarat/features/auth/signup/logic/cubit/register_cubit.dart';
 import 'package:masarat/features/auth/signup/logic/cubit/register_state.dart';
-import 'package:file_picker/file_picker.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  final bool isTrainer;
+
+  const SignUpScreen({super.key, this.isTrainer = false});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -66,8 +68,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
             // Show success message
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('تم إنشاء الحساب بنجاح'),
+              SnackBar(
+                content: Text(widget.isTrainer
+                    ? 'تم إنشاء حساب المدرب بنجاح'
+                    : 'تم إنشاء حساب المتعلم بنجاح'),
                 backgroundColor: Colors.green,
               ),
             );
@@ -149,7 +153,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
         Gap(20.h),
         CustomText(
-          text: 'مرحباً بك !',
+          text: widget.isTrainer ? 'تسجيل كمدرب' : 'تسجيل كمتعلم',
           style: TextStyles.font24GreenBold,
           textAlign: TextAlign.center,
         ),
@@ -186,13 +190,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
           validator: AppValidator.phoneValidator,
           controller: cubit.phoneController,
         ),
-        _buildAcademicDegreeField(),
-        _buildFormField(
-          label: 'الهوية',
-          hintText: 'أدخل رقم الهوية',
-          validator: AppValidator.emptyValidator,
-          controller: cubit.idController,
-        ),
+        // Conditional fields for instructor
+        if (widget.isTrainer) ...[
+          _buildFormField(
+            label: 'الجنسية',
+            hintText: 'أدخل الجنسية',
+            validator: AppValidator.emptyValidator,
+            controller: cubit.nationalityController,
+          ),
+          _buildFormField(
+            label: 'بلد الإقامة',
+            hintText: 'أدخل بلد الإقامة',
+            validator: AppValidator.emptyValidator,
+            controller: cubit.countryOfResidenceController,
+          ),
+          _buildFormField(
+            label: 'المحافظة',
+            hintText: 'أدخل المحافظة',
+            validator: AppValidator.emptyValidator,
+            controller: cubit.governorateController,
+          ),
+          _buildFormField(
+            label: 'الدرجة العلمية',
+            hintText: 'أدخل الدرجة العلمية',
+            validator: AppValidator.emptyValidator,
+            controller: cubit.academicDegreeTextController,
+          ),
+          _buildFormField(
+            label: 'التخصص',
+            hintText: 'أدخل التخصص',
+            validator: AppValidator.emptyValidator,
+            controller: cubit.specialtyController,
+          ),
+          _buildFormField(
+            label: 'المسمى الوظيفي',
+            hintText: 'أدخل المسمى الوظيفي',
+            validator: AppValidator.emptyValidator,
+            controller: cubit.jobTitleController,
+          ),
+          _buildFormField(
+            label: 'جهة العمل',
+            hintText: 'أدخل جهة العمل',
+            validator: AppValidator.emptyValidator,
+            controller: cubit.workEntityController,
+          ),
+          _buildAcademicDegreeField(),
+          _buildFormField(
+            label: 'الهوية',
+            hintText: 'أدخل رقم الهوية',
+            validator: AppValidator.emptyValidator,
+            controller: cubit.idController,
+          ),
+        ],
         _buildPasswordField(),
         _buildFormField(
           label: 'تأكيد كلمة السر',
@@ -262,8 +311,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               // The disabled text field
               AppTextFormField(
-                hintText: 'أدخل الدرجة العلمية',
-                validator: AppValidator.emptyValidator,
+                hintText: 'أدخل الدرجة العلمية (اختياري)',
+                validator: (value) => null, // Make it optional
                 backgroundColor: AppColors.white,
                 enabled: false,
                 controller: cubit.academicDegreeController,
@@ -379,11 +428,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return;
       }
 
-      // Check if academic degree file is selected
-      if (cubit.academicDegreeFilePath == null) {
-        _showErrorSnackBar('يرجى اختيار ملف الدرجة العلمية');
-        return;
+      // Additional validation for instructor fields
+      if (widget.isTrainer) {
+        if (cubit.nationalityController.text.isEmpty) {
+          _showErrorSnackBar('يرجى إدخال الجنسية');
+          return;
+        }
+
+        if (cubit.countryOfResidenceController.text.isEmpty) {
+          _showErrorSnackBar('يرجى إدخال بلد الإقامة');
+          return;
+        }
+
+        if (cubit.governorateController.text.isEmpty) {
+          _showErrorSnackBar('يرجى إدخال المحافظة');
+          return;
+        }
+
+        if (cubit.academicDegreeTextController.text.isEmpty) {
+          _showErrorSnackBar('يرجى إدخال الدرجة العلمية');
+          return;
+        }
+
+        if (cubit.specialtyController.text.isEmpty) {
+          _showErrorSnackBar('يرجى إدخال التخصص');
+          return;
+        }
+
+        if (cubit.jobTitleController.text.isEmpty) {
+          _showErrorSnackBar('يرجى إدخال المسمى الوظيفي');
+          return;
+        }
+
+        if (cubit.workEntityController.text.isEmpty) {
+          _showErrorSnackBar('يرجى إدخال جهة العمل');
+          return;
+        }
       }
+
+      // Academic degree file is optional for now since the upload endpoint seems to be missing
+      // if (cubit.academicDegreeFilePath == null) {
+      //   _showErrorSnackBar('يرجى اختيار ملف الدرجة العلمية');
+      //   return;
+      // }
 
       // Submit the registration form
       cubit.emitRegisterStates(

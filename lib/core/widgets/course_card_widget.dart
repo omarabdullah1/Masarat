@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:masarat/core/theme/font_weight_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
+import 'package:masarat/core/utils/image_url_helper.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 
@@ -54,8 +55,10 @@ class CourseCard extends StatelessWidget {
         child: Column(
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
+                  flex: 3, // Give more space to the content column
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -77,22 +80,26 @@ class CourseCard extends StatelessWidget {
                         ),
                       ],
                       Gap(8.h),
-                      CustomText(
-                        text: hours,
-                        style: TextStyle(
-                          color: AppColors.greyLight200,
-                          fontWeight: FontWeightHelper.light,
-                          fontSize: 10.sp,
+                      // Only show hours if not empty
+                      if (hours.isNotEmpty)
+                        CustomText(
+                          text: hours,
+                          style: TextStyle(
+                            color: AppColors.greyLight200,
+                            fontWeight: FontWeightHelper.light,
+                            fontSize: 10.sp,
+                          ),
                         ),
-                      ),
-                      CustomText(
-                        text: lectures,
-                        style: TextStyle(
-                          color: AppColors.greyLight200,
-                          fontWeight: FontWeightHelper.light,
-                          fontSize: 10.sp,
+                      // Only show lectures if not empty
+                      if (lectures.isNotEmpty)
+                        CustomText(
+                          text: lectures,
+                          style: TextStyle(
+                            color: AppColors.greyLight200,
+                            fontWeight: FontWeightHelper.light,
+                            fontSize: 10.sp,
+                          ),
                         ),
-                      ),
                       if (progress != null) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,22 +123,31 @@ class CourseCard extends StatelessWidget {
                         ),
                       ],
                       Gap(8.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: actions, // Render dynamic actions.
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: actions.map((action) {
+                            // If the action is an Expanded widget, replace it with the child
+                            if (action is Expanded) {
+                              return action.child;
+                            }
+                            return action;
+                          }).toList(),
+                        ),
                       ),
                       Gap(4.h),
                     ],
                   ),
                 ),
-                Gap(16.w),
+                Gap(8.w), // Reduced gap
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: image != null
                       ? CachedNetworkImage(
-                          imageUrl: image!,
-                          height: 130.h,
-                          width: 104.w,
+                          imageUrl: ImageUrlHelper.formatImageUrl(image!),
+                          height: 100.h,
+                          width: 90.w,
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Container(
                             color: AppColors.lighterGray,
@@ -141,15 +157,24 @@ class CourseCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                          errorWidget: (context, url, error) => Container(
-                            color: AppColors.lighterGray,
-                            child: const Icon(Icons.broken_image_outlined,
-                                color: AppColors.gray),
-                          ),
+                          errorWidget: (context, url, error) {
+                            // Fallback to default course image
+                            return CachedNetworkImage(
+                              imageUrl: ImageUrlHelper.defaultCourseImage,
+                              height: 100.h,
+                              width: 90.w,
+                              fit: BoxFit.cover,
+                              errorWidget: (context, url, error) => Container(
+                                color: AppColors.lighterGray,
+                                child: const Icon(Icons.broken_image_outlined,
+                                    color: AppColors.gray),
+                              ),
+                            );
+                          },
                         )
                       : Container(
                           height: 130.h,
-                          width: 104.w,
+                          width: 90.w,
                           color: AppColors.lighterGray,
                           // child: const Center(
                           //   child: Icon(
@@ -163,15 +188,20 @@ class CourseCard extends StatelessWidget {
             ),
             if (onSecondaryAction != null && secondaryActionText != null) ...[
               Gap(8.h),
-              CustomButton(
-                height: 27.h,
-                radius: 58.r,
-                labelText: secondaryActionText!,
-                buttonColor: AppColors.background,
-                textColor: AppColors.gray,
-                onTap: onSecondaryAction,
-                textFontSize: 10.sp,
-                fontWeight: FontWeightHelper.light,
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 4.w),
+                width: double.infinity,
+                child: CustomButton(
+                  height: 30.h,
+                  radius: 58.r,
+                  labelText: secondaryActionText!,
+                  buttonColor: AppColors.background,
+                  textColor: AppColors.primary,
+                  onTap: onSecondaryAction,
+                  textFontSize: 9.sp,
+                  fontWeight: FontWeightHelper.light,
+                  borderColor: AppColors.primary,
+                ),
               ),
             ],
           ],

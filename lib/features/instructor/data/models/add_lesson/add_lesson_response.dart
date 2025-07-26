@@ -25,12 +25,24 @@ class AddLessonResponse {
   final String content;
   final String course;
   final int order;
+  // Changed to dynamic to handle both String and int from API
+  @JsonKey(fromJson: _durationEstimateFromJson)
   final String durationEstimate;
   final bool isPreviewable;
   final String createdAt;
   final String updatedAt;
   @JsonKey(name: '__v')
   final int v;
+
+  // Custom converter for durationEstimate that can handle both String and int
+  static String _durationEstimateFromJson(dynamic value) {
+    if (value is int) {
+      return value.toString();
+    } else if (value is String) {
+      return value;
+    }
+    return '';
+  }
 
   Map<String, dynamic> toJson() => _$AddLessonResponseToJson(this);
 

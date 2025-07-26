@@ -239,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSignUpPrompt() {
     return GestureDetector(
       onTap: () {
-        context.go(AppRoute.signUp);
+        context.goNamed(AppRoute.signUp, extra: widget.isTrainer);
       },
       child: RichText(
         text: TextSpan(

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:masarat/features/auth/apis/auth_api_constants.dart';
 import 'package:masarat/features/student/courses/apis/courses_api_constants.dart';
 import 'package:masarat/features/student/courses/data/models/courses_response.dart';
+import 'package:masarat/features/student/courses/data/models/lesson_details_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'courses_service.g.dart';
@@ -21,5 +22,11 @@ abstract class CoursesService {
     @Query("level") String? level,
     @Query("limit") int? limit,
     @Query("page") int? page,
+    @Query("search") String? search,
   });
+
+  @GET(CoursesApiConstants.lessonDetails)
+  Future<LessonDetailsModel> getLessonDetails(
+    @Path("lessonId") String lessonId,
+  );
 }

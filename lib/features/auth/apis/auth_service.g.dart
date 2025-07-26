@@ -35,7 +35,7 @@ class _AuthenticationService implements AuthenticationService {
     )
         .compose(
           _dio.options,
-          'api/auth/login',
+          'api/v1/auth/login',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -70,7 +70,42 @@ class _AuthenticationService implements AuthenticationService {
     )
         .compose(
           _dio.options,
-          'api/auth/register',
+          'api/v1/auth/register',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CreateAccountResponse _value;
+    try {
+      _value = CreateAccountResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<CreateAccountResponse> createInstructorAccount(
+      FormData createAccountRequestBody) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = createAccountRequestBody;
+    final _options = _setStreamType<CreateAccountResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          'api/v1/auth/register-instructor',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -111,7 +146,7 @@ class _AuthenticationService implements AuthenticationService {
     )
         .compose(
           _dio.options,
-          'api/auth/upload-academic-degree',
+          'api/v1/auth/upload-academic-degree',
           queryParameters: queryParameters,
           data: _data,
         )

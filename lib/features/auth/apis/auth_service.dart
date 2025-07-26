@@ -29,6 +29,12 @@ abstract class AuthenticationService {
     @Body() CreateAccountRequestBody createAccountRequestBody,
   );
 
+  @POST(AuthenticationApiConstants.createInstructorAccount)
+  @MultiPart()
+  Future<CreateAccountResponse> createInstructorAccount(
+    @Body() FormData createAccountRequestBody,
+  );
+
   // For uploading academic degree file with form data
   @POST(AuthenticationApiConstants.uploadAcademicDegree)
   @MultiPart()
@@ -41,6 +47,5 @@ abstract class AuthenticationService {
   //   @Body() ForgetPasswordRequest forgetPasswordRequest,
   // );
 
-  // @GET(AuthenticationApiConstants.myProfile)
-  // Future<ProfileResponse> getProfile();
+  // Profile API is now handled by ProfileService
 }

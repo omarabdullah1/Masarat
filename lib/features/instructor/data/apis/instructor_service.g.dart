@@ -45,7 +45,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/courses/my-courses',
+          'api/v1/courses/my-courses',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -80,7 +80,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/courses',
+          'api/v1/courses',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -150,7 +150,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/categories',
+          'api/v1/categories',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -187,7 +187,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/lessons',
+          'api/v1/lessons',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -220,7 +220,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/lessons/course/${courseId}',
+          'api/v1/lessons/course/${courseId}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -255,7 +255,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/lessons/${lessonId}',
+          'api/v1/lessons/${lessonId}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -265,6 +265,81 @@ class _InstructorService implements InstructorService {
           baseUrl,
         )));
     await _dio.fetch<void>(_options);
+  }
+
+  @override
+  Future<LessonModel> updateLesson(
+    String lessonId,
+    Map<String, dynamic> lessonData,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(lessonData);
+    final _options = _setStreamType<LessonModel>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/lessons/${lessonId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late LessonModel _value;
+    try {
+      _value = LessonModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<dynamic> uploadLessonVideo(
+    String lessonId,
+    File videoFile,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.files.add(MapEntry(
+      'videoFile',
+      MultipartFile.fromFileSync(
+        videoFile.path,
+        filename: videoFile.path.split(Platform.pathSeparator).last,
+      ),
+    ));
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          'api/v1/lessons/${lessonId}/video',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

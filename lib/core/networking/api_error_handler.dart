@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-
 import 'package:masarat/core/networking/api_error_model.dart';
 
 class ApiErrorHandler {
@@ -106,6 +105,9 @@ ApiErrorModel _handleError(dynamic data) {
   } else if (errorData.containsKey('message')) {
     errorMessage = errorData['message']?.toString();
     errorCode = errorData['code']?.toString() ?? 'Error';
+
+    // Log the found message for debugging
+    log('Found message in error response: $errorMessage');
   }
 
   return ApiErrorModel(
