@@ -64,7 +64,7 @@ class StudentCourseDetailsScreen extends StatelessWidget {
               // Gap(10.h),
               // _buildCommentsSection(),
               Gap(20.h),
-              _buildActionButtons(course.price),
+              _buildActionButtons(context, course.price),
               Gap(15.h),
               _buildWatchButton(context, course.id),
               Gap(20.h),
@@ -190,7 +190,7 @@ class StudentCourseDetailsScreen extends StatelessWidget {
   }
 
   // Action Buttons
-  Widget _buildActionButtons(int price) {
+  Widget _buildActionButtons(BuildContext context, int price) {
     final cartCubit = getIt<StudentCartCubit>();
 
     return Row(
@@ -207,7 +207,7 @@ class StudentCourseDetailsScreen extends StatelessWidget {
             onTap: () {
               // Navigate to the checkout screen or purchase flow
               // For now, we'll just add to cart
-              _addToCart(cartCubit);
+              _addToCartBuy(context, cartCubit);
             },
             textFontSize: 10.sp,
             fontWeight: FontWeightHelper.light,
@@ -289,6 +289,84 @@ class StudentCourseDetailsScreen extends StatelessWidget {
         );
       } else {
         // Generic failure case (shouldn't reach here if errors are properly handled)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('فشل في إضافة الدورة إلى السلة'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+  }
+
+  void _addToCartBuy(BuildContext context, StudentCartCubit cartCubit) {
+    // Show loading indicator
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('جاري إضافة الدورة إلى السلة...'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+
+    // Add to cart via cubit
+    cartCubit.addToCart(course.id).then((success) {
+      String? errorMessage;
+      bool isErrorState = false;
+
+      cartCubit.state.maybeWhen(
+        error: (message) {
+          errorMessage = message;
+          isErrorState = true;
+        },
+        orElse: () {},
+      );
+
+      if (isErrorState && errorMessage != null) {
+        final String nonNullMessage = errorMessage!;
+        final isAlreadyInCartMessage =
+            nonNullMessage.contains('موجودة بالفعل') ||
+                nonNullMessage.contains('already in') ||
+                nonNullMessage.toLowerCase().contains('already in your cart');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(nonNullMessage),
+            backgroundColor:
+                isAlreadyInCartMessage || success ? Colors.orange : Colors.red,
+          ),
+        );
+        context.goNamed(AppRoute.shoppingCart);
+      } else if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        context.goNamed(AppRoute.shoppingCart);
+
+        debugPrint('After adding - Success: $success');
+
+        cartCubit.state.maybeWhen(success: (cartData) {
+          debugPrint('Direct cart access: \\${cartData.items.length} items');
+          final directCheck =
+              cartData.items.any((item) => item.course.id == course.id);
+          debugPrint(
+              'Direct check - Course ${course.id} in cart: $directCheck');
+          for (var item in cartData.items) {
+            debugPrint(
+                'Cart contains: \\${item.course.id} - \\${item.course.title}');
+          }
+        }, orElse: () {
+          debugPrint(
+              'Cannot directly access cart data, state is \\${cartCubit.state.runtimeType}');
+        });
+
+        // Navigate to the cart screen immediately after success
+        context.goNamed(AppRoute.shoppingCart);
+        // Optionally refresh cart in background (not blocking navigation)
+        cartCubit.getCart();
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('فشل في إضافة الدورة إلى السلة'),

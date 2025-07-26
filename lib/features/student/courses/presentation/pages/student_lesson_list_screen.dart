@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +43,7 @@ class _StudentLessonListScreenState extends State<StudentLessonListScreen> {
         _loadLessons();
       }
     } catch (e) {
-      print('Error initializing StudentLessonsCubit: $e');
+      log('Error initializing StudentLessonsCubit: $e');
       _hasCubitError = true;
     }
   }
@@ -52,7 +54,7 @@ class _StudentLessonListScreenState extends State<StudentLessonListScreen> {
         _lessonsCubit!.getLessons(widget.course!.id);
       }
     } catch (e) {
-      print('Error loading lessons: $e');
+      log('Error loading lessons: $e');
       _hasCubitError = true;
     }
   }
@@ -231,63 +233,74 @@ class _StudentLessonListScreenState extends State<StudentLessonListScreen> {
       itemCount: lessons.length,
       itemBuilder: (context, index) {
         final lesson = lessons[index];
-        return InkWell(
-          onTap: () {
-            // Before navigation, ensure the current API lessons are stored in CourseStateService
-            try {
-              if (_lessonsCubit != null) {
-                final currentState = _lessonsCubit!.state;
-                if (currentState.status == StudentLessonsStatus.success &&
-                    currentState.lessons != null) {
-                  final courseService = getIt<CourseStateService>();
-                  courseService.storeLessonsForCourse(
-                      widget.course!.id, currentState.lessons!);
-                  debugPrint(
-                      'Stored updated lessons in CourseStateService before navigation');
-                }
-              }
-            } catch (e) {
-              debugPrint('Error storing lessons before navigation: $e');
-            }
+        final isEnabled = lesson.isPreviewable == true;
+        return AbsorbPointer(
+          absorbing: !isEnabled,
+          child: Opacity(
+            opacity: isEnabled ? 1.0 : 0.5,
+            child: InkWell(
+              onTap: isEnabled
+                  ? () {
+                      // Before navigation, ensure the current API lessons are stored in CourseStateService
+                      try {
+                        if (_lessonsCubit != null) {
+                          final currentState = _lessonsCubit!.state;
+                          if (currentState.status ==
+                                  StudentLessonsStatus.success &&
+                              currentState.lessons != null) {
+                            final courseService = getIt<CourseStateService>();
+                            courseService.storeLessonsForCourse(
+                                widget.course!.id, currentState.lessons!);
+                            debugPrint(
+                                'Stored updated lessons in CourseStateService before navigation');
+                          }
+                        }
+                      } catch (e) {
+                        debugPrint(
+                            'Error storing lessons before navigation: $e');
+                      }
 
-            context.goNamed(
-              AppRoute.lectureDetails,
-              pathParameters: {
-                'courseid': widget.course!.id,
-                'lectureid': lesson.id,
-              },
-            );
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.0.h),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: index == 0 ? AppColors.primary : Colors.grey[300]!,
-                ),
-                borderRadius: BorderRadius.circular(4.r),
-                color: index == 0 ? Colors.white : Colors.grey[300],
-              ),
-              width: double.infinity,
-              height: 40.h,
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Padding(
-                  padding: EdgeInsets.all(8.0.r),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: CustomText(
-                          text: 'المحاضرة ${index + 1}: ${lesson.title}',
-                        ),
+                      context.goNamed(
+                        AppRoute.lectureDetails,
+                        pathParameters: {
+                          'courseid': widget.course!.id,
+                          'lectureid': lesson.id,
+                        },
+                      );
+                    }
+                  : null,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 4.0.h),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: index == 0 ? AppColors.primary : Colors.grey[300]!,
+                    ),
+                    borderRadius: BorderRadius.circular(4.r),
+                    color: index == 0 ? Colors.white : Colors.grey[300],
+                  ),
+                  width: double.infinity,
+                  height: 40.h,
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0.r),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CustomText(
+                              text: 'المحاضرة ${index + 1}: ${lesson.title}',
+                            ),
+                          ),
+                          if (lesson.isPreviewable == true)
+                            const Icon(
+                              Icons.visibility,
+                              color: AppColors.primary,
+                              size: 16,
+                            ),
+                        ],
                       ),
-                      if (lesson.isPreviewable == true)
-                        const Icon(
-                          Icons.visibility,
-                          color: AppColors.primary,
-                          size: 16,
-                        ),
-                    ],
+                    ),
                   ),
                 ),
               ),
