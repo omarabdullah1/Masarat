@@ -13,5 +13,15 @@ class InstructorApiConstants {
   static const String updateLesson = 'api/v1/lessons';
   static const String uploadLessonVideo = 'api/v1/lessons/{lessonId}/video';
 
-  static String imageUrl(String image) => '$apiBaseUrl$image';
+  static String imageUrl(String image) {
+    if (image.startsWith('http')) {
+      return image;
+    }
+    // Remove trailing slash from base URL and leading slash from image path
+    final base = apiBaseUrl.endsWith('/')
+        ? apiBaseUrl.substring(0, apiBaseUrl.length - 1)
+        : apiBaseUrl;
+    final path = image.startsWith('/') ? image.substring(1) : image;
+    return '$base/$path';
+  }
 }

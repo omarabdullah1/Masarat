@@ -8,6 +8,7 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
+  textfield_tags: 3.0.1
   bloc: ^8.1.4
   cached_network_image: ^3.4.1
   country_picker: ^2.0.25

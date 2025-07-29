@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -53,9 +54,11 @@ class ImageNetworkWidget extends StatelessWidget {
       width: width,
       imageUrl: imageUrl!,
       fit: boxFit ?? BoxFit.fill,
-      placeholder: (context, url) => Padding(
-        padding: EdgeInsets.all(padding ?? 25.w),
-        child: const Center(child: CircularProgressIndicator.adaptive()),
+      placeholder: (context, url) => Skeletonizer(
+        child: SizedBox(
+          height: height,
+          width: width,
+        ),
       ),
       errorWidget: (context, url, error) => Padding(
         padding: EdgeInsets.all(padding ?? 0.w),

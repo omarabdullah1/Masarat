@@ -38,7 +38,7 @@ class PublishedCoursesBlocListener extends StatelessWidget {
                   barrierDismissible: false,
                   builder: (context) => const LoadingWidget(
                     loadingState: true,
-                    backgroundColor: AppColors.transparent,
+                    backgroundColor: AppColors.white,
                   ),
                 );
               });

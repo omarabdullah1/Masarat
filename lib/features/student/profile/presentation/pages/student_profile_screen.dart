@@ -184,6 +184,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
               ),
             ],
             body: RefreshIndicator(
+              color: AppColors.primary,
               onRefresh: () async {
                 await cubit.fetchProfile();
               },

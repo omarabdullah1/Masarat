@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/helpers/shared_pref_helper.dart';
@@ -22,6 +23,71 @@ import '../models/course/create_course_response.dart';
 import '../models/lesson/lesson_model.dart';
 
 class InstructorRepo {
+  /// Create course with multipart/form-data (for file upload)
+  Future<ApiResult<CreateCourseResponse>> createCourseMultipart({
+    required String title,
+    required String description,
+    required String category,
+    required String level,
+    required String durationEstimate,
+    required String tags,
+    required double price,
+    required PlatformFile coverImage,
+  }) async {
+    try {
+      final dio = Dio();
+      dio.options.baseUrl = InstructorApiConstants.apiBaseUrl;
+
+      // Retrieve token and add Authorization header
+      final token =
+          await SharedPrefHelper.getSecuredString(SharedPrefKeys.userToken);
+      if (token == null || token.isEmpty) {
+        log('No auth token found for multipart course creation');
+        return ApiResult.failure(
+            ApiErrorHandler.handle('Not authorized, no token'));
+      }
+      dio.options.headers['Authorization'] = 'Bearer $token';
+
+      // Determine contentType based on file extension
+      String? ext = coverImage.extension?.toLowerCase();
+      MediaType? mediaType;
+      if (ext == 'jpg' || ext == 'jpeg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (ext == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else if (ext == 'gif') {
+        mediaType = MediaType('image', 'gif');
+      } else if (ext == 'pdf') {
+        mediaType = MediaType('application', 'pdf');
+      }
+
+      final formData = FormData.fromMap({
+        'title': title,
+        'description': description,
+        'category': category,
+        'level': level,
+        'durationEstimate': durationEstimate,
+        'tags': tags,
+        'price': price,
+        'coverImage': MultipartFile.fromBytes(
+          coverImage.bytes!,
+          filename: coverImage.name,
+          contentType: mediaType,
+        ),
+      });
+
+      final response = await dio.post(
+        InstructorApiConstants.createCourse,
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+      return ApiResult.success(CreateCourseResponse.fromJson(response.data));
+    } catch (error, stackTrace) {
+      log('Create course (multipart) error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
   InstructorRepo(this._apiService);
   final InstructorService _apiService;
 
@@ -33,6 +99,72 @@ class InstructorRepo {
       return ApiResult.success(response);
     } catch (error, stackTrace) {
       log('Create course error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
+  /// Update course with multipart/form-data (for file upload)
+  Future<ApiResult<UpdateCourseResponse>> updateCourseMultipart({
+    required String courseId,
+    required String title,
+    required String description,
+    required String category,
+    required String level,
+    required String durationEstimate,
+    required String tags,
+    required double price,
+    required PlatformFile coverImage,
+  }) async {
+    try {
+      final dio = Dio();
+      dio.options.baseUrl = InstructorApiConstants.apiBaseUrl;
+
+      // Retrieve token and add Authorization header
+      final token =
+          await SharedPrefHelper.getSecuredString(SharedPrefKeys.userToken);
+      if (token == null || token.isEmpty) {
+        log('No auth token found for multipart course update');
+        return ApiResult.failure(
+            ApiErrorHandler.handle('Not authorized, no token'));
+      }
+      dio.options.headers['Authorization'] = 'Bearer $token';
+
+      // Determine contentType based on file extension
+      String? ext = coverImage.extension?.toLowerCase();
+      MediaType? mediaType;
+      if (ext == 'jpg' || ext == 'jpeg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (ext == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else if (ext == 'gif') {
+        mediaType = MediaType('image', 'gif');
+      } else if (ext == 'pdf') {
+        mediaType = MediaType('application', 'pdf');
+      }
+
+      final formData = FormData.fromMap({
+        'title': title,
+        'description': description,
+        'category': category,
+        'level': level,
+        'durationEstimate': durationEstimate,
+        'tags': tags,
+        'price': price,
+        'coverImage': MultipartFile.fromBytes(
+          coverImage.bytes!,
+          filename: coverImage.name,
+          contentType: mediaType,
+        ),
+      });
+
+      final response = await dio.put(
+        '${InstructorApiConstants.updateCourse}/$courseId',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+      return ApiResult.success(UpdateCourseResponse.fromJson(response.data));
+    } catch (error, stackTrace) {
+      log('Update course (multipart) error: $error', stackTrace: stackTrace);
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }
@@ -108,6 +240,17 @@ class InstructorRepo {
       return const ApiResult.success(null);
     } catch (error, stackTrace) {
       log('Delete Lesson error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
+  Future<ApiResult<void>> deleteCourse(String courseId) async {
+    try {
+      // Use the same endpoint as updateCourse but with DELETE method
+      final response = await _apiService.deleteCourse(courseId);
+      return const ApiResult.success(null);
+    } catch (error, stackTrace) {
+      log('Delete Course error: $error', stackTrace: stackTrace);
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }

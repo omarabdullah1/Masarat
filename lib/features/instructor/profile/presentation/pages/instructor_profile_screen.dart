@@ -122,6 +122,7 @@ class _InstructorProfileContentState extends State<_InstructorProfileContent> {
         },
         builder: (context, state) {
           return RefreshIndicator(
+            color: AppColors.primary,
             onRefresh: () async {
               _fetchProfile();
             },

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +12,8 @@ import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:masarat/features/instructor/data/apis/instructor_api_constants.dart';
-import 'package:masarat/features/instructor/data/models/course/course_model.dart';
+import 'package:masarat/features/instructor/data/models/course/course_model.dart'
+    as instructor;
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_state.dart';
 import 'package:masarat/features/instructor/presentation/widgets/published_courses_bloc_listener.dart';
@@ -173,7 +176,7 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                     }
 
                     // Filter courses if search query is not empty
-                    final List<CourseModel> filteredCourses =
+                    final List<instructor.CourseModel> filteredCourses =
                         _searchQuery.isEmpty
                             ? coursesResponse.courses
                             : coursesResponse.courses
@@ -183,6 +186,7 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                                 .toList();
 
                     return RefreshIndicator(
+                      color: AppColors.primary,
                       onRefresh: () async {
                         await context
                             .read<InstructorCoursesCubit>()
@@ -192,7 +196,8 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         itemCount: filteredCourses.length,
                         itemBuilder: (context, index) {
-                          final course = filteredCourses[index];
+                          final instructor.CourseModel course =
+                              filteredCourses[index];
                           return GestureDetector(
                             onTap: () {
                               context.goNamed(
@@ -205,31 +210,61 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                               hours: 'عدد الساعات: ${course.durationEstimate}',
                               lectures:
                                   'المستوى: ${_getArabicLevel(course.level)}',
-                              image: InstructorApiConstants.imageUrl(course
-                                      .coverImageUrl
-                                      .contains('default_course_cover')
-                                  ? 'uploads/${course.coverImageUrl}'
-                                  : course
-                                      .coverImageUrl), // Use the course image URL
+                              image: InstructorApiConstants.imageUrl(
+                                  course.coverImageUrl),
+                              verificationStatus: course.verificationStatus,
                               actions: [
                                 Expanded(
-                                  child: CustomButton(
-                                    height: 27.h,
-                                    radius: 58.r,
-                                    labelText: 'تعديل الدورة التدريبية',
-                                    buttonColor: AppColors.background,
-                                    textColor: AppColors.primary,
-                                    borderColor: AppColors.orange,
-                                    onTap: () {
-                                      context
-                                          .read<InstructorCoursesCubit>()
-                                          .navigateToUpdateCourse(
-                                            context,
-                                            course,
-                                          );
-                                    },
-                                    textFontSize: 8.sp,
-                                    fontWeight: FontWeightHelper.light,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 5,
+                                        child: CustomButton(
+                                          height: 27.h,
+                                          radius: 58.r,
+                                          labelText: 'تعديل الدورة التدريبية',
+                                          buttonColor: AppColors.background,
+                                          textColor: AppColors.primary,
+                                          borderColor: AppColors.orange,
+                                          onTap: () {
+                                            log('Navigating to edit course with data: $course');
+                                            context.goNamed(
+                                              AppRoute.editCourseName,
+                                              extra: course,
+                                            );
+                                          },
+                                          textFontSize: 8.sp,
+                                          fontWeight: FontWeightHelper.light,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Expanded(
+                                        flex: 1,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            _showDeleteConfirmationDialog(
+                                                context, course);
+                                          },
+                                          child: Container(
+                                            height: 27.h,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.background,
+                                              borderRadius:
+                                                  BorderRadius.circular(58.r),
+                                              border: Border.all(
+                                                  color: AppColors.red),
+                                            ),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.delete_outline,
+                                                color: AppColors.red,
+                                                size: 16.sp,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -290,5 +325,75 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
       default:
         return level;
     }
+  }
+
+  // Show confirmation dialog before deleting a course
+  void _showDeleteConfirmationDialog(
+      BuildContext context, instructor.CourseModel course) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const CustomText(
+            text: 'حذف الدورة التدريبية',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: CustomText(
+            text: 'هل أنت متأكد من حذف الدورة التدريبية "${course.title}"؟',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Close the dialog
+              },
+              child: const CustomText(
+                text: 'إلغاء',
+                style: TextStyle(color: AppColors.primary),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(dialogContext).pop(); // Close the dialog
+
+                // Show loading indicator
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('جاري حذف الدورة...'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+
+                // Call the delete method from the cubit
+                final success = await context
+                    .read<InstructorCoursesCubit>()
+                    .deleteCourse(course.id);
+
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('تم حذف الدورة بنجاح'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('فشل في حذف الدورة'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              child: const CustomText(
+                text: 'حذف',
+                style: TextStyle(color: AppColors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

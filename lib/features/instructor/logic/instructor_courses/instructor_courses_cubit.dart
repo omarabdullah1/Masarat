@@ -144,7 +144,6 @@ class InstructorCoursesCubit extends Cubit<InstructorCoursesState> {
   }
 
   // Navigation method to update course
-  // Navigation method to update course
   void navigateToUpdateCourse(
     BuildContext context,
     CourseModel courseData,
@@ -152,5 +151,26 @@ class InstructorCoursesCubit extends Cubit<InstructorCoursesState> {
     // TODO: Implement navigation to update course screen
     // The UpdateCourseScreen file doesn't exist yet
     log('Navigate to update course: ${courseData.title}');
+  }
+
+  // Delete course method
+  Future<bool> deleteCourse(String courseId) async {
+    emit(const InstructorCoursesState.loading());
+    
+    final result = await _homeRepo.deleteCourse(courseId);
+    
+    return result.when(
+      success: (_) {
+        // Refresh the courses list after successful deletion
+        getPublishedCourses();
+        return true;
+      },
+      failure: (error) {
+        emit(InstructorCoursesState.error(
+          error: error.message ?? 'Failed to delete course',
+        ));
+        return false;
+      },
+    );
   }
 }
