@@ -10,6 +10,8 @@ import 'package:masarat/features/auth/signup/ui/screens/sign_up_screen.dart';
 import 'package:masarat/features/auth/ui/screens/onboarding_screen.dart';
 import 'package:masarat/features/home/presentation/pages/home_screen.dart';
 import 'package:masarat/features/home/presentation/pages/my_library.dart';
+import 'package:masarat/features/instructor/data/models/course/course_model.dart'
+    as instructor;
 import 'package:masarat/features/instructor/home/presentation/pages/instructor_home_screen.dart';
 import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
@@ -298,6 +300,19 @@ final GoRouter router = GoRouter(
           builder: (context, state) {
             final courseId = state.pathParameters['courseid'];
             return InstructorCourseManagementPage(courseId: courseId!);
+          },
+        ),
+        GoRoute(
+          path: AppRoute.editCourseName,
+          name: AppRoute.editCourseName,
+          builder: (context, state) {
+            final course = state.extra;
+            final instructor.CourseModel? courseModel =
+                course is instructor.CourseModel ? course : null;
+            return BlocProvider(
+              create: (context) => getIt<CreateCourseCubit>(),
+              child: CreateCourseScreen(course: courseModel),
+            );
           },
         ),
       ],

@@ -37,7 +37,7 @@ abstract class InstructorService {
     @Body() CreateCourseRequestBody createCourseRequestBody,
   );
 
-  @PUT('api/courses/{courseId}')
+  @PUT('${InstructorApiConstants.updateCourse}/{courseId}')
   Future<UpdateCourseResponse> updateCourse(
     @Path('courseId') String courseId,
     @Body() UpdateCourseRequestBody updateCourseRequestBody,
@@ -59,6 +59,11 @@ abstract class InstructorService {
   @DELETE('${InstructorApiConstants.deleteLesson}/{lessonId}')
   Future<void> deleteLesson(
     @Path("lessonId") String lessonId,
+  );
+
+  @DELETE('${InstructorApiConstants.updateCourse}/{courseId}')
+  Future<void> deleteCourse(
+    @Path("courseId") String courseId,
   );
 
   @PUT('${InstructorApiConstants.updateLesson}/{lessonId}')

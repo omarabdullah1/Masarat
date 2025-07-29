@@ -23,4 +23,5 @@ class AppRoute {
   static const String pricing = 'pricing';
   static const String checkout = 'checkout';
   static const String paymentWebView = 'payment-webview';
+  static const String editCourseName = 'edit-course';
 }

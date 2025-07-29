@@ -117,7 +117,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/courses/${courseId}',
+          'api/v1/courses/${courseId}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -256,6 +256,31 @@ class _InstructorService implements InstructorService {
         .compose(
           _dio.options,
           'api/v1/lessons/${lessonId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    await _dio.fetch<void>(_options);
+  }
+
+  @override
+  Future<void> deleteCourse(String courseId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<void>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/courses/${courseId}',
           queryParameters: queryParameters,
           data: _data,
         )
