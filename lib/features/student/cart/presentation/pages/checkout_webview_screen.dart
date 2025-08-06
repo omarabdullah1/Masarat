@@ -423,7 +423,9 @@ class _CheckoutWebViewScreenState extends State<CheckoutWebViewScreen> {
 
     Future.delayed(const Duration(seconds: 2), () {
       // Navigate back to the home or cart screen
-      context.pop();
+      if (mounted) {
+        context.pop();
+      }
     });
   }
 
@@ -584,7 +586,7 @@ class _CheckoutWebViewScreenState extends State<CheckoutWebViewScreen> {
               width: 80.r,
               height: 80.r,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withAlpha((0.1 * 255).toInt()),
                 shape: BoxShape.circle,
               ),
               child: Center(

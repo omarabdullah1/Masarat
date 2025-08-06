@@ -144,7 +144,7 @@ class DioFactory {
       ),
 
       // Moved debouncing to be the second interceptor
-      DebouncingInterceptor(debounceDelay: const Duration(milliseconds: 1000)),
+      DebouncingInterceptor(debounceDelay: const Duration(milliseconds: 1500)),
 
       // Special handler for 408 Request Timeout errors
       SessionTimeoutInterceptor(),

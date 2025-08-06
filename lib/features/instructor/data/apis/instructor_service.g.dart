@@ -117,7 +117,7 @@ class _InstructorService implements InstructorService {
     )
         .compose(
           _dio.options,
-          'api/courses/${courseId}',
+          'api/v1/courses/${courseId}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -165,41 +165,6 @@ class _InstructorService implements InstructorService {
       _value = _result.data!
           .map((dynamic i) => CategoryModel.fromJson(i as Map<String, dynamic>))
           .toList();
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<AddLessonResponse> addLesson(
-      AddLessonRequestBody addLessonRequestBody) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(addLessonRequestBody.toJson());
-    final _options = _setStreamType<AddLessonResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          'api/v1/lessons',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late AddLessonResponse _value;
-    try {
-      _value = AddLessonResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -256,6 +221,31 @@ class _InstructorService implements InstructorService {
         .compose(
           _dio.options,
           'api/v1/lessons/${lessonId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    await _dio.fetch<void>(_options);
+  }
+
+  @override
+  Future<void> deleteCourse(String courseId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<void>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'api/v1/courses/${courseId}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -339,6 +329,93 @@ class _InstructorService implements InstructorService {
         )));
     final _result = await _dio.fetch(_options);
     final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<AddLessonResponse> addLessonMultipart(
+    String title,
+    String contentType,
+    String courseId,
+    String order,
+    String isPreviewable,
+    File? videoFile,
+    List<File>? resources,
+    String? content,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'title',
+      title,
+    ));
+    _data.fields.add(MapEntry(
+      'contentType',
+      contentType,
+    ));
+    _data.fields.add(MapEntry(
+      'courseId',
+      courseId,
+    ));
+    _data.fields.add(MapEntry(
+      'order',
+      order,
+    ));
+    _data.fields.add(MapEntry(
+      'isPreviewable',
+      isPreviewable,
+    ));
+    if (videoFile != null) {
+      _data.files.add(MapEntry(
+        'videoFile',
+        MultipartFile.fromFileSync(
+          videoFile.path,
+          filename: videoFile.path.split(Platform.pathSeparator).last,
+        ),
+      ));
+    }
+    if (resources != null) {
+      _data.files.addAll(resources.map((i) => MapEntry(
+          'resources',
+          MultipartFile.fromFileSync(
+            i.path,
+            filename: i.path.split(Platform.pathSeparator).last,
+          ))));
+    }
+    if (content != null) {
+      _data.fields.add(MapEntry(
+        'content',
+        content,
+      ));
+    }
+    final _options = _setStreamType<AddLessonResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          'api/v1/lessons/new',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AddLessonResponse _value;
+    try {
+      _value = AddLessonResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 

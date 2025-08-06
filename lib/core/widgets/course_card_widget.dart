@@ -9,6 +9,7 @@ import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/image_url_helper.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CourseCard extends StatelessWidget {
   // Optional text for the secondary action
@@ -25,6 +26,7 @@ class CourseCard extends StatelessWidget {
     this.onSecondaryAction,
     this.secondaryActionText,
     this.havePrice = false,
+    this.verificationStatus,
   });
   final String title;
   final String hours;
@@ -37,6 +39,38 @@ class CourseCard extends StatelessWidget {
   final VoidCallback? onSecondaryAction;
   // Optional secondary action (e.g., "Watch First Lecture")
   final String? secondaryActionText;
+  final String? verificationStatus;
+
+  // Helper method to get color based on verification status
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'published':
+        return Colors.green;
+      case 'pending':
+        return AppColors.orange;
+      case 'declined':
+      case 'canceled':
+        return AppColors.red;
+      default:
+        return AppColors.gray;
+    }
+  }
+
+  // Helper method to convert English status to Arabic
+  String _getArabicStatus(String status) {
+    switch (status.toLowerCase()) {
+      case 'published':
+        return 'منشور';
+      case 'pending':
+        return 'قيد الانتظار';
+      case 'declined':
+        return 'مرفوض';
+      case 'canceled':
+        return 'ملغي';
+      default:
+        return status;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +96,14 @@ class CourseCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(
-                        text: title,
+                      Text(
+                        title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 12.sp,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Gap(5.h),
                       if (havePrice) ...[
@@ -100,6 +136,25 @@ class CourseCard extends StatelessWidget {
                             fontSize: 10.sp,
                           ),
                         ),
+                      if (verificationStatus != null) ...[
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 4.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8.w, vertical: 4.h),
+                          decoration: BoxDecoration(
+                            color: _getStatusColor(verificationStatus!),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: CustomText(
+                            text: _getArabicStatus(verificationStatus!),
+                            style: TextStyle(
+                              color: AppColors.white,
+                              fontWeight: FontWeightHelper.medium,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                        ),
+                      ],
                       if (progress != null) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,12 +204,11 @@ class CourseCard extends StatelessWidget {
                           height: 100.h,
                           width: 90.w,
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: AppColors.lighterGray,
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.primary,
-                              ),
+                          placeholder: (context, url) => Skeletonizer(
+                            child: Container(
+                              color: AppColors.lighterGray,
+                              height: 100.h,
+                              width: 90.w,
                             ),
                           ),
                           errorWidget: (context, url, error) {

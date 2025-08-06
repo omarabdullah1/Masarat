@@ -47,13 +47,14 @@ class CustomButton extends StatelessWidget {
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         backgroundColor: isDisabled
-            ? (buttonColor ?? AppColors.primary).withOpacity(0.7)
+            ? (buttonColor ?? AppColors.primary).withAlpha((0.7 * 255).toInt())
             : buttonColor ?? AppColors.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius ?? 14.r),
           side: BorderSide(
             color: isDisabled
-                ? (borderColor ?? AppColors.primary).withOpacity(0.7)
+                ? (borderColor ?? AppColors.primary)
+                    .withAlpha((0.7 * 255).toInt())
                 : borderColor ?? AppColors.primary,
             width: borderWidth,
           ),
@@ -69,7 +70,7 @@ class CustomButton extends StatelessWidget {
               text: labelText,
               style: TextStyle(
                 color: onTap == null
-                    ? (textColor ?? Colors.white).withOpacity(0.7)
+                    ? (textColor ?? Colors.white).withAlpha((0.7 * 255).toInt())
                     : textColor,
                 fontSize: textFontSize,
                 fontWeight: fontWeight ?? FontWeightHelper.bold,

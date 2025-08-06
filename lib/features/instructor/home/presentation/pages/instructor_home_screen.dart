@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +12,8 @@ import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:masarat/features/instructor/data/apis/instructor_api_constants.dart';
-import 'package:masarat/features/instructor/data/models/course/course_model.dart';
+import 'package:masarat/features/instructor/data/models/course/course_model.dart'
+    as instructor;
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_state.dart';
 import 'package:masarat/features/instructor/presentation/widgets/published_courses_bloc_listener.dart';
@@ -19,6 +22,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../../core/widgets/app_text_form_field.dart';
 import '../../../../../core/widgets/course_card_widget.dart';
 import '../../../../../core/widgets/custom_drawer.dart';
+import '../../../data/models/course/instructor_courses_response.dart';
 
 class InstructorHomeScreen extends StatefulWidget {
   const InstructorHomeScreen({super.key});
@@ -122,6 +126,7 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                 return state.maybeWhen(
                   loading: () => Skeletonizer(
                     child: ListView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       itemCount: 6,
                       itemBuilder: (context, index) {
@@ -159,21 +164,9 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                       },
                     ),
                   ),
-                  success: (coursesResponse) {
-                    if (coursesResponse.courses.isEmpty) {
-                      return Center(
-                        child: CustomText(
-                          text: 'لا توجد دورات منشورة',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: AppColors.gray,
-                          ),
-                        ),
-                      );
-                    }
-
+                  success: (InstructorCoursesResponse coursesResponse) {
                     // Filter courses if search query is not empty
-                    final List<CourseModel> filteredCourses =
+                    final List<instructor.CourseModel> filteredCourses =
                         _searchQuery.isEmpty
                             ? coursesResponse.courses
                             : coursesResponse.courses
@@ -182,17 +175,48 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                                     .contains(_searchQuery.toLowerCase()))
                                 .toList();
 
+                    if (filteredCourses.isEmpty) {
+                      // Always allow scroll and refresh even if empty
+                      return RefreshIndicator(
+                        color: AppColors.primary,
+                        onRefresh: () async {
+                          await context
+                              .read<InstructorCoursesCubit>()
+                              .getPublishedCourses();
+                        },
+                        child: ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          children: [
+                            SizedBox(height: 64.h),
+                            Center(
+                              child: CustomText(
+                                text: 'لا توجد دورات منشورة',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: AppColors.gray,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
                     return RefreshIndicator(
+                      color: AppColors.primary,
                       onRefresh: () async {
                         await context
                             .read<InstructorCoursesCubit>()
                             .getPublishedCourses();
                       },
                       child: ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         itemCount: filteredCourses.length,
                         itemBuilder: (context, index) {
-                          final course = filteredCourses[index];
+                          final instructor.CourseModel course =
+                              filteredCourses[index];
                           return GestureDetector(
                             onTap: () {
                               context.goNamed(
@@ -205,31 +229,97 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                               hours: 'عدد الساعات: ${course.durationEstimate}',
                               lectures:
                                   'المستوى: ${_getArabicLevel(course.level)}',
-                              image: InstructorApiConstants.imageUrl(course
-                                      .coverImageUrl
-                                      .contains('default_course_cover')
-                                  ? 'uploads/${course.coverImageUrl}'
-                                  : course
-                                      .coverImageUrl), // Use the course image URL
+                              image: InstructorApiConstants.imageUrl(
+                                  course.coverImageUrl),
+                              verificationStatus: course.verificationStatus,
                               actions: [
                                 Expanded(
-                                  child: CustomButton(
-                                    height: 27.h,
-                                    radius: 58.r,
-                                    labelText: 'تعديل الدورة التدريبية',
-                                    buttonColor: AppColors.background,
-                                    textColor: AppColors.primary,
-                                    borderColor: AppColors.orange,
-                                    onTap: () {
-                                      context
-                                          .read<InstructorCoursesCubit>()
-                                          .navigateToUpdateCourse(
-                                            context,
-                                            course,
-                                          );
-                                    },
-                                    textFontSize: 8.sp,
-                                    fontWeight: FontWeightHelper.light,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // Edit button
+                                      Expanded(
+                                        flex: 5,
+                                        child: CustomButton(
+                                          height: 27.h,
+                                          radius: 58.r,
+                                          labelText: 'تعديل الدورة التدريبية',
+                                          buttonColor: AppColors.background,
+                                          textColor: AppColors.primary,
+                                          borderColor: AppColors.orange,
+                                          onTap: () {
+                                            log('Navigating to edit course with data: $course');
+                                            context.goNamed(
+                                              AppRoute.editCourseName,
+                                              extra: course,
+                                            );
+                                          },
+                                          textFontSize: 8.sp,
+                                          fontWeight: FontWeightHelper.light,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      // Delete button
+                                      Expanded(
+                                        flex: 1,
+                                        child: InkWell(
+                                          onTap: () {
+                                            _showDeleteConfirmationDialog(
+                                                context, course);
+                                          },
+                                          child: Container(
+                                            height: 20.h,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.background,
+                                              borderRadius:
+                                                  BorderRadius.circular(58.r),
+                                              border: Border.all(
+                                                  color: AppColors.red),
+                                            ),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.delete_outline,
+                                                color: AppColors.red,
+                                                size: 16.sp,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      // Enter icon button
+                                      Expanded(
+                                        flex: 1,
+                                        child: InkWell(
+                                          onTap: () {
+                                            context.goNamed(
+                                              AppRoute.trainerCourseDetails,
+                                              pathParameters: {
+                                                'courseid': course.id
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 20.h,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.background,
+                                              borderRadius:
+                                                  BorderRadius.circular(58.r),
+                                              border: Border.all(
+                                                  color: AppColors.primary),
+                                            ),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: AppColors.primary,
+                                                size: 15.sp,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -290,5 +380,88 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
       default:
         return level;
     }
+  }
+
+  void _showDeleteConfirmationDialog(
+      BuildContext context, instructor.CourseModel course) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const CustomText(
+            text: 'حذف الدورة التدريبية',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            'هل أنت متأكد من حذف الدورة التدريبية "${course.title}"؟',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Close the dialog
+              },
+              child: const CustomText(
+                text: 'إلغاء',
+                style: TextStyle(color: AppColors.primary),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                final scaffoldMessenger =
+                    ScaffoldMessenger.of(context); // Get reference here
+
+                Navigator.of(dialogContext).pop(); // Close the dialog
+
+                if (!mounted) return;
+
+                // Add a small delay to ensure the dialog is closed
+                await Future.delayed(const Duration(milliseconds: 100));
+
+                if (!mounted) return;
+
+                scaffoldMessenger.showSnackBar(
+                  const SnackBar(
+                    content: Text('جاري حذف الدورة...'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+
+                final instructorCoursesCubit = (context.mounted)
+                    ? context.read<InstructorCoursesCubit>()
+                    : throw StateError('Context is no longer valid');
+                final success =
+                    await instructorCoursesCubit.deleteCourse(course.id);
+
+                if (!mounted) return;
+
+                scaffoldMessenger.hideCurrentSnackBar();
+
+                if (success) {
+                  scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                      content: Text('تم حذف الدورة بنجاح'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else {
+                  scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                      content: Text('فشل في حذف الدورة'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              child: const CustomText(
+                text: 'حذف',
+                style: TextStyle(color: AppColors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

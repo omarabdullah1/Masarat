@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:masarat/core/helpers/constants.dart';
 import 'package:masarat/core/helpers/shared_pref_helper.dart';
@@ -14,7 +15,6 @@ import 'package:masarat/features/instructor/data/models/course/instructor_course
 import 'package:masarat/features/instructor/data/models/course/update_course_request_body.dart';
 import 'package:masarat/features/instructor/data/models/course/update_course_response.dart';
 
-import '../models/add_lesson/add_lesson_request_body.dart';
 import '../models/add_lesson/add_lesson_response.dart';
 import '../models/category/category_model.dart';
 import '../models/course/create_course_request_body.dart';
@@ -22,6 +22,71 @@ import '../models/course/create_course_response.dart';
 import '../models/lesson/lesson_model.dart';
 
 class InstructorRepo {
+  /// Create course with multipart/form-data (for file upload)
+  Future<ApiResult<CreateCourseResponse>> createCourseMultipart({
+    required String title,
+    required String description,
+    required String category,
+    required String level,
+    required String durationEstimate,
+    required String tags,
+    required double price,
+    required PlatformFile coverImage,
+  }) async {
+    try {
+      final dio = Dio();
+      dio.options.baseUrl = InstructorApiConstants.apiBaseUrl;
+
+      // Retrieve token and add Authorization header
+      final token =
+          await SharedPrefHelper.getSecuredString(SharedPrefKeys.userToken);
+      if (token == null || token.isEmpty) {
+        log('No auth token found for multipart course creation');
+        return ApiResult.failure(
+            ApiErrorHandler.handle('Not authorized, no token'));
+      }
+      dio.options.headers['Authorization'] = 'Bearer $token';
+
+      // Determine contentType based on file extension
+      String? ext = coverImage.extension?.toLowerCase();
+      MediaType? mediaType;
+      if (ext == 'jpg' || ext == 'jpeg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (ext == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else if (ext == 'gif') {
+        mediaType = MediaType('image', 'gif');
+      } else if (ext == 'pdf') {
+        mediaType = MediaType('application', 'pdf');
+      }
+
+      final formData = FormData.fromMap({
+        'title': title,
+        'description': description,
+        'category': category,
+        'level': level,
+        'durationEstimate': durationEstimate,
+        'tags': tags,
+        'price': price,
+        'coverImage': MultipartFile.fromBytes(
+          coverImage.bytes!,
+          filename: coverImage.name,
+          contentType: mediaType,
+        ),
+      });
+
+      final response = await dio.post(
+        InstructorApiConstants.createCourse,
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+      return ApiResult.success(CreateCourseResponse.fromJson(response.data));
+    } catch (error, stackTrace) {
+      log('Create course (multipart) error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
   InstructorRepo(this._apiService);
   final InstructorService _apiService;
 
@@ -33,6 +98,72 @@ class InstructorRepo {
       return ApiResult.success(response);
     } catch (error, stackTrace) {
       log('Create course error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
+  /// Update course with multipart/form-data (for file upload)
+  Future<ApiResult<UpdateCourseResponse>> updateCourseMultipart({
+    required String courseId,
+    required String title,
+    required String description,
+    required String category,
+    required String level,
+    required String durationEstimate,
+    required String tags,
+    required double price,
+    required PlatformFile coverImage,
+  }) async {
+    try {
+      final dio = Dio();
+      dio.options.baseUrl = InstructorApiConstants.apiBaseUrl;
+
+      // Retrieve token and add Authorization header
+      final token =
+          await SharedPrefHelper.getSecuredString(SharedPrefKeys.userToken);
+      if (token == null || token.isEmpty) {
+        log('No auth token found for multipart course update');
+        return ApiResult.failure(
+            ApiErrorHandler.handle('Not authorized, no token'));
+      }
+      dio.options.headers['Authorization'] = 'Bearer $token';
+
+      // Determine contentType based on file extension
+      String? ext = coverImage.extension?.toLowerCase();
+      MediaType? mediaType;
+      if (ext == 'jpg' || ext == 'jpeg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (ext == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else if (ext == 'gif') {
+        mediaType = MediaType('image', 'gif');
+      } else if (ext == 'pdf') {
+        mediaType = MediaType('application', 'pdf');
+      }
+
+      final formData = FormData.fromMap({
+        'title': title,
+        'description': description,
+        'category': category,
+        'level': level,
+        'durationEstimate': durationEstimate,
+        'tags': tags,
+        'price': price,
+        'coverImage': MultipartFile.fromBytes(
+          coverImage.bytes!,
+          filename: coverImage.name,
+          contentType: mediaType,
+        ),
+      });
+
+      final response = await dio.put(
+        '${InstructorApiConstants.updateCourse}/$courseId',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+      return ApiResult.success(UpdateCourseResponse.fromJson(response.data));
+    } catch (error, stackTrace) {
+      log('Update course (multipart) error: $error', stackTrace: stackTrace);
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }
@@ -57,17 +188,6 @@ class InstructorRepo {
       return ApiResult.success(response);
     } catch (error, stackTrace) {
       log('Get categories error: $error', stackTrace: stackTrace);
-      return ApiResult.failure(ApiErrorHandler.handle(error));
-    }
-  }
-
-  Future<ApiResult<AddLessonResponse>> addLesson(
-      AddLessonRequestBody requestBody) async {
-    try {
-      final response = await _apiService.addLesson(requestBody);
-      return ApiResult.success(response);
-    } catch (error, stackTrace) {
-      log('Add Lesson error: $error', stackTrace: stackTrace);
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }
@@ -108,6 +228,16 @@ class InstructorRepo {
       return const ApiResult.success(null);
     } catch (error, stackTrace) {
       log('Delete Lesson error: $error', stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
+  Future<ApiResult<void>> deleteCourse(String courseId) async {
+    try {
+      await _apiService.deleteCourse(courseId);
+      return const ApiResult.success(null);
+    } catch (error, stackTrace) {
+      log('Delete Course error: $error', stackTrace: stackTrace);
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }
   }
@@ -173,14 +303,13 @@ class InstructorRepo {
         final formData = FormData();
         formData.files.add(MapEntry(
           'videoFile',
-          MultipartFile.fromBytes(
-            fileBytes,
+          await MultipartFile.fromFile(
+            videoFile.path,
             filename: filename,
-            // Use smaller chunk size to avoid hanging on large data chunks
-            contentType: MediaType.parse('video/*'),
+            contentType: MediaType.parse(
+                'video/mp4'), // Use the actual MIME type if known
           ),
         ));
-
         log('Sending upload request with stall detection');
         final stopwatch = Stopwatch()..start();
 
@@ -286,5 +415,35 @@ class InstructorRepo {
       ApiErrorHandler.handle(lastError ??
           Exception('Failed to upload video after $attempts attempts')),
     );
+  }
+
+  /// Add lesson with multipart/form-data (video file + resources) using InstructorService
+  Future<ApiResult<AddLessonResponse>> addLessonMultipart({
+    required String title,
+    required String contentType,
+    required String courseId,
+    required int order,
+    required bool isPreviewable,
+    File? videoFile,
+    List<File> resources = const [],
+    String? content,
+  }) async {
+    try {
+      final response = await _apiService.addLessonMultipart(
+        title,
+        contentType,
+        courseId,
+        order.toString(),
+        isPreviewable.toString(),
+        videoFile,
+        resources.isNotEmpty ? resources : null,
+        content,
+      );
+      return ApiResult.success(response);
+    } catch (error, stackTrace) {
+      log('Add Lesson (multipart, service) error: $error',
+          stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
   }
 }

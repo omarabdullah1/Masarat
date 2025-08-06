@@ -18,7 +18,7 @@ class LessonModel {
   final String id;
   final String title;
   final String contentType;
-  final String content;
+  final String? content;
   final int order;
   @JsonKey(fromJson: _durationEstimateFromJson)
   final String durationEstimate;

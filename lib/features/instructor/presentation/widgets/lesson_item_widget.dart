@@ -37,41 +37,20 @@ class LessonItemWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: CustomText(
-                    text: lesson.title,
+                  child: Text(
+                    lesson.title,
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Row(
                   children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1 * 255),
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      child: CustomText(
-                        text: 'ترتيب: ${lesson.order}',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    Gap(8.w),
                     IconButton(
-                      icon: const Icon(Icons.videocam, color: Colors.green),
-                      onPressed: onUploadVideo,
-                      tooltip: 'رفع فيديو',
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
+                      icon: const Icon(Icons.edit, color: AppColors.primary),
                       onPressed: onEdit,
                       tooltip: 'تعديل الدرس',
                     ),
@@ -122,35 +101,44 @@ class LessonItemWidget extends StatelessWidget {
             ),
             Gap(8.h),
 
-            // Content preview
-            CustomText(
-              text: lesson.content,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.gray,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            Gap(8.h),
-
             // Preview badge
-            if (lesson.isPreviewable)
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: Colors.green.withValues(alpha: 0.1 * 255),
-                  borderRadius: BorderRadius.circular(6.r),
-                ),
-                child: CustomText(
-                  text: 'متاح للمعاينة',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.green,
-                    fontWeight: FontWeight.w500,
+            Row(
+              children: [
+                if (lesson.isPreviewable)
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withValues(alpha: 0.1 * 255),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    child: CustomText(
+                      text: 'متاح للمعاينة',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.green,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                Gap(8.w),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1 * 255),
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  child: CustomText(
+                    text: 'ترتيب: ${lesson.order}',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
+              ],
+            ),
           ],
         ),
       ),

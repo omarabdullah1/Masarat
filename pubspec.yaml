@@ -8,6 +8,7 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
+  textfield_tags: 3.0.1
   bloc: ^8.1.4
   cached_network_image: ^3.4.1
   country_picker: ^2.0.25
@@ -67,6 +68,8 @@ dependencies:
   video_player: ^2.8.1
   chewie: ^1.7.5
   flutter_image_compress: ^2.4.0
+  flutter_otp_text_field: ^1.5.1+1
+  collection: ^1.19.0
 
 dev_dependencies:
   bloc_test: ^9.1.7

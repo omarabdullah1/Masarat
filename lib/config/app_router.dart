@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/di/dependency_injection.dart';
+import 'package:masarat/features/auth/forget_password/logic/cubit/forget_password_cubit.dart';
+import 'package:masarat/features/auth/forget_password/ui/screens/forgot_password_screen.dart';
+import 'package:masarat/features/auth/forget_password/ui/screens/otp_verification_screen.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/login/ui/screens/login_screen.dart';
 import 'package:masarat/features/auth/signup/logic/cubit/register_cubit.dart';
@@ -10,6 +13,8 @@ import 'package:masarat/features/auth/signup/ui/screens/sign_up_screen.dart';
 import 'package:masarat/features/auth/ui/screens/onboarding_screen.dart';
 import 'package:masarat/features/home/presentation/pages/home_screen.dart';
 import 'package:masarat/features/home/presentation/pages/my_library.dart';
+import 'package:masarat/features/instructor/data/models/course/course_model.dart'
+    as instructor;
 import 'package:masarat/features/instructor/home/presentation/pages/instructor_home_screen.dart';
 import 'package:masarat/features/instructor/logic/create_course/create_course_cubit.dart';
 import 'package:masarat/features/instructor/logic/instructor_courses/instructor_courses_cubit.dart';
@@ -61,6 +66,23 @@ final GoRouter router = GoRouter(
         return BlocProvider(
           create: (context) => getIt<LoginCubit>(),
           child: LoginScreen(isTrainer: isTrainer),
+        );
+      },
+    ),
+    // Forget Password Route
+    GoRoute(
+      path: AppRoute.forgetPassword,
+      name: AppRoute.forgetPassword,
+      builder: (context, state) => const ForgotPasswordScreen(),
+        ),
+    // OTP Verification Route
+    GoRoute(
+      path: AppRoute.otpVerificationScreen,
+      name: AppRoute.otpVerificationScreen,
+      builder: (context, state) {
+        return BlocProvider(
+          create: (context) => getIt<ForgetPasswordCubit>(),
+          child: const OtpVerificationScreen(),
         );
       },
     ),
@@ -298,6 +320,19 @@ final GoRouter router = GoRouter(
           builder: (context, state) {
             final courseId = state.pathParameters['courseid'];
             return InstructorCourseManagementPage(courseId: courseId!);
+          },
+        ),
+        GoRoute(
+          path: AppRoute.editCourseName,
+          name: AppRoute.editCourseName,
+          builder: (context, state) {
+            final course = state.extra;
+            final instructor.CourseModel? courseModel =
+                course is instructor.CourseModel ? course : null;
+            return BlocProvider(
+              create: (context) => getIt<CreateCourseCubit>(),
+              child: CreateCourseScreen(course: courseModel),
+            );
           },
         ),
       ],

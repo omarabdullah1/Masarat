@@ -290,6 +290,10 @@ class _StudentLessonDetailsScreenState
         ? 'المحاضرة: ${widget.lesson!.title}'
         : 'المحاضرة الأولى: أساسيات المحاسبة';
 
+    // Get lesson content from the API model
+    final lesson = widget.lesson;
+    final String? lessonContent = lesson?.content;
+
     return CustomScaffold(
       haveAppBar: true,
       backgroundColorAppColor: AppColors.background,
@@ -336,7 +340,7 @@ class _StudentLessonDetailsScreenState
                       ),
           ),
 
-          // Lecture Content
+          // Lecture Content & Resources (dynamic)
           Expanded(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -352,33 +356,24 @@ class _StudentLessonDetailsScreenState
                     ),
                   ),
                   SizedBox(height: 16.h),
-                  CustomText(
-                    text:
-                        'تتناول هذه المحاضرة المفاهيم الأساسية للمحاسبة وتشمل:',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: AppColors.text100,
+                  // Show lesson content if available, else fallback
+                  if (lessonContent != null && lessonContent.isNotEmpty)
+                    Text(
+                      lessonContent,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: AppColors.text100,
+                      ),
+                    )
+                  else
+                    CustomText(
+                      text: 'لا يوجد محتوى متاح لهذه المحاضرة.',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: AppColors.text100,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8.h),
-                  _buildListItem('مبادئ المحاسبة الأساسية'),
-                  _buildListItem('أنواع الحسابات والدفاتر المحاسبية'),
-                  _buildListItem('معادلة الميزانية العمومية'),
-                  _buildListItem('مفهوم القيد المزدوج'),
-                  SizedBox(height: 24.h),
-                  CustomText(
-                    text: 'المرفقات والموارد',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.text100,
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  _buildAttachmentItem(
-                      'ملخص المحاضرة (PDF)', Icons.picture_as_pdf),
-                  _buildAttachmentItem('أوراق العمل (XLSX)', Icons.table_chart),
-                  _buildAttachmentItem('تمارين تطبيقية', Icons.assignment),
+                  // No resources/attachments for now
                 ],
               ),
             ),
@@ -410,37 +405,74 @@ class _StudentLessonDetailsScreenState
     );
   }
 
-  Widget _buildAttachmentItem(String title, IconData icon) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha((0.05 * 255).toInt()),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 24.sp, color: AppColors.primary),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: CustomText(
-              text: title,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.text100,
-                fontWeight: FontWeight.w500,
+  // Build a resource/attachment item from API data
+  Widget _buildResourceItem(dynamic resource) {
+    // Try to extract name, type, and url from the resource object
+    // Adjust these keys if your API uses different names
+    final String name =
+        resource['name'] ?? resource['title'] ?? 'مورد بدون اسم';
+    final String url = resource['url'] ?? resource['link'] ?? '';
+    final String type = resource['type'] ?? '';
+
+    // Pick icon based on file type
+    IconData icon;
+    if (type.contains('pdf') || name.toLowerCase().endsWith('.pdf')) {
+      icon = Icons.picture_as_pdf;
+    } else if (type.contains('xls') ||
+        name.toLowerCase().endsWith('.xls') ||
+        name.toLowerCase().endsWith('.xlsx')) {
+      icon = Icons.table_chart;
+    } else if (type.contains('doc') ||
+        name.toLowerCase().endsWith('.doc') ||
+        name.toLowerCase().endsWith('.docx')) {
+      icon = Icons.description;
+    } else if (type.contains('image') ||
+        name.toLowerCase().endsWith('.png') ||
+        name.toLowerCase().endsWith('.jpg') ||
+        name.toLowerCase().endsWith('.jpeg')) {
+      icon = Icons.image;
+    } else {
+      icon = Icons.attachment;
+    }
+
+    return GestureDetector(
+      onTap: url.isNotEmpty
+          ? () {
+              // TODO: Implement file download or open logic
+              debugPrint('Download/open resource: $url');
+            }
+          : null,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha((0.05 * 255).toInt()),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 24.sp, color: AppColors.primary),
+            SizedBox(width: 16.w),
+            Expanded(
+              child: CustomText(
+                text: name,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: AppColors.text100,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-          Icon(Icons.download, size: 20.sp, color: AppColors.gray),
-        ],
+            Icon(Icons.download, size: 20.sp, color: AppColors.gray),
+          ],
+        ),
       ),
     );
   }

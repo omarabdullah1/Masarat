@@ -15,4 +15,6 @@ class AuthenticationApiConstants {
   static const String updateProfile = 'api/v1/users/me';
   static const String delete = 'api/v1/users/delete';
   static const String forget = 'api/v1/auth/forgot-password';
+  static const String sendOtp = 'api/v1/auth/send-otp';
+  static const String resetPasswordOtp = 'api/v1/auth/reset-password-otp';
 }

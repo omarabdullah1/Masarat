@@ -28,7 +28,6 @@ import 'package:masarat/features/instructor/logic/upload_lesson_video/upload_les
 import 'package:masarat/features/instructor/logic/upload_lesson_video/upload_lesson_video_state.dart';
 import 'package:masarat/features/instructor/presentation/widgets/lessons_list_widget.dart';
 import 'package:masarat/features/student/courses/presentation/widgets/add_lecture_button_widget.dart';
-import 'package:masarat/features/student/courses/presentation/widgets/add_lecture_form_widget.dart';
 
 class InstructorCourseManagementPage extends StatefulWidget {
   const InstructorCourseManagementPage({required this.courseId, super.key});
@@ -68,17 +67,42 @@ class _CourseManagementContent extends StatefulWidget {
 }
 
 class _CourseManagementContentState extends State<_CourseManagementContent> {
+  // File pick state for add lesson
+  PlatformFile? selectedVideoFile;
+  List<PlatformFile> selectedResourceFiles = [];
+
+  // Add lesson content type and content controller
+  String selectedContentType = 'video';
+  TextEditingController lessonContentController = TextEditingController();
+
+  Future<void> pickVideoFile() async {
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.any, allowMultiple: false);
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        selectedVideoFile = result.files.first;
+      });
+    }
+  }
+
+  Future<void> pickResourceFiles() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        selectedResourceFiles = result.files;
+      });
+    }
+  }
+
   // State variables
   bool isAddingLecture = false;
   bool isEditingLesson = false;
   LessonModel? lessonBeingEdited;
+  bool isPreviewableAdd = false;
 
   // Controllers for add mode
   final TextEditingController courseNameController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
-  final TextEditingController sourceController = TextEditingController();
   final TextEditingController orderController = TextEditingController();
-  final TextEditingController durationController = TextEditingController();
 
   // Controllers for edit mode
   final TextEditingController editTitleController = TextEditingController();
@@ -99,10 +123,7 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
   void dispose() {
     // Dispose add mode controllers
     courseNameController.dispose();
-    contentController.dispose();
-    sourceController.dispose();
     orderController.dispose();
-    durationController.dispose();
 
     // Dispose edit mode controllers
     editTitleController.dispose();
@@ -121,7 +142,7 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
 
       // Initialize controllers with lesson data
       editTitleController.text = lesson.title;
-      editContentController.text = lesson.content;
+      editContentController.text = lesson.content ?? '';
       editContentTypeController.text = lesson.contentType;
       editOrderController.text = lesson.order.toString();
       editDurationEstimateController.text = lesson.durationEstimate;
@@ -155,10 +176,7 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
       if (result != null && result.files.isNotEmpty) {
         setState(() {
           selectedFile = result.files.first;
-          // Update source controller with file name
-          sourceController.text = selectedFile!.name;
         });
-
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -182,7 +200,7 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
   Future<void> pickVideoForLesson(String lessonId) async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.video,
+        type: FileType.any,
         allowMultiple: false,
       );
 
@@ -195,7 +213,7 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('جاري رفع الفيديو...'),
-            backgroundColor: Colors.blue,
+            backgroundColor: AppColors.primary,
             duration: Duration(seconds: 1),
           ),
         );
@@ -217,46 +235,81 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
     }
   }
 
-  void addLecture() {
-    // Debug: log values to check what's empty
+  void addLecture() async {
     log('Course name: ${courseNameController.text}');
-    log('Content: ${contentController.text}');
     log('Order: ${orderController.text}');
-    log('Duration: ${durationController.text}');
-
-    // Improved validation with specific messages
     String errorMessage = '';
-
     if (courseNameController.text.trim().isEmpty) {
       errorMessage = 'يرجى إدخال عنوان الدرس';
-    } else if (contentController.text.trim().isEmpty) {
-      errorMessage = 'يرجى إدخال رابط المحتوى';
     } else if (orderController.text.trim().isEmpty) {
       errorMessage = 'يرجى إدخال ترتيب الدرس';
     } else if (int.tryParse(orderController.text.trim()) == null) {
       errorMessage = 'ترتيب الدرس يجب أن يكون رقمًا صحيحًا';
-    } else if (durationController.text.trim().isEmpty) {
-      errorMessage = 'يرجى إدخال مدة الدرس المقدرة';
+    }
+
+    if (selectedContentType == 'video') {
+      if (selectedVideoFile == null) {
+        errorMessage = 'يرجى اختيار ملف فيديو';
+      }
+      if (errorMessage.isEmpty &&
+          selectedVideoFile != null &&
+          selectedVideoFile!.bytes == null &&
+          selectedVideoFile!.path != null) {
+        try {
+          final file = File(selectedVideoFile!.path!);
+          final bytes = await file.readAsBytes();
+          selectedVideoFile = PlatformFile(
+            name: selectedVideoFile!.name,
+            size: selectedVideoFile!.size,
+            bytes: bytes,
+            path: selectedVideoFile!.path,
+            readStream: selectedVideoFile!.readStream,
+          );
+        } catch (e) {
+          errorMessage = 'تعذر قراءة بيانات ملف الفيديو. يرجى اختيار ملف آخر.';
+        }
+      }
+    } else if (selectedContentType == 'text') {
+      if (lessonContentController.text.trim().isEmpty) {
+        errorMessage = 'يرجى إدخال محتوى الدرس';
+      }
     }
 
     if (errorMessage.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage)),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+      }
       return;
     }
-
-    // All fields are valid, create the add lesson request
-    final requestBody = AddLessonRequestBody(
+    // if (mounted) {
+    //   showDialog(
+    //     context: context,
+    //     barrierDismissible: false,
+    //     builder: (context) => const Center(
+    //       child: LoadingWidget(
+    //         loadingState: true,
+    //         backgroundColor: AppColors.white,
+    //       ),
+    //     ),
+    //   );
+    // }
+    final addLessonRequest = AddLessonRequestBody(
       title: courseNameController.text.trim(),
-      contentType: 'video', // Default to video, can be made dynamic
-      content: contentController.text.trim(),
+      contentType: selectedContentType,
       courseId: widget.courseId,
       order: int.tryParse(orderController.text.trim()) ?? 1,
-      durationEstimate: durationController.text.trim(),
-      isPreviewable: false, // Default to false, can be made dynamic
-    ); // Call the BLoC to add the lesson
-    context.read<AddLessonCubit>().addLesson(requestBody);
+      isPreviewable: isPreviewableAdd,
+      videoFile: selectedContentType == 'video' ? selectedVideoFile : null,
+      resources: selectedContentType == 'video' ? selectedResourceFiles : null,
+      content: selectedContentType == 'text'
+          ? lessonContentController.text.trim()
+          : null,
+    );
+    // Use AddLessonCubit to add lesson
+    await context.read<AddLessonCubit>().addLesson(addLessonRequest);
+    // The BlocListener will handle UI updates and snackbars
   }
 
   void _updateLesson() {
@@ -325,8 +378,6 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
             ),
             Divider(height: 16.h),
             Gap(8.h),
-
-            // Title
             CustomText(
               text: 'عنوان الدرس',
               style: TextStyle(
@@ -347,8 +398,6 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
               },
             ),
             Gap(16.h),
-
-            // Content Type
             CustomText(
               text: 'نوع المحتوى',
               style: TextStyle(
@@ -358,42 +407,147 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
               ),
             ),
             Gap(8.h),
-            AppTextFormField(
-              controller: editContentTypeController,
-              hintText: 'أدخل نوع المحتوى (فيديو، نص)',
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'يرجى إدخال نوع المحتوى';
-                }
-                return null;
+            DropdownButtonFormField<String>(
+              value: editContentTypeController.text.isNotEmpty
+                  ? editContentTypeController.text
+                  : 'video',
+              focusColor: AppColors.primary,
+              items: const [
+                DropdownMenuItem(value: 'video', child: Text('فيديو')),
+                DropdownMenuItem(value: 'text', child: Text('نص')),
+              ],
+              onChanged: (v) {
+                setState(() {
+                  editContentTypeController.text = v!;
+                });
               },
-            ),
-            Gap(16.h),
-
-            // Content
-            CustomText(
-              text: 'المحتوى',
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeightHelper.medium,
-                color: AppColors.black,
+              decoration: const InputDecoration(
+                hintText: 'اختر نوع المحتوى',
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primary, width: 2),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primary, width: 2),
+                ),
               ),
             ),
-            Gap(8.h),
-            AppTextFormField(
-              controller: editContentController,
-              hintText: 'أدخل محتوى الدرس',
-              maxLines: 5,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'يرجى إدخال محتوى الدرس';
-                }
-                return null;
-              },
-            ),
             Gap(16.h),
-
-            // Order
+            if (editContentTypeController.text == 'video') ...[
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final double iconWidth = 22.sp;
+                  final double gapWidth = 8.w;
+                  final double textMaxWidth =
+                      constraints.maxWidth - iconWidth - gapWidth;
+                  return SizedBox(
+                    width: constraints.maxWidth,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        GestureDetector(
+                          onTap: pickVideoFile,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Icon(Icons.video_file,
+                                  color: AppColors.primary, size: iconWidth),
+                              Gap(gapWidth),
+                              SizedBox(
+                                width: textMaxWidth > 0
+                                    ? textMaxWidth
+                                    : constraints.maxWidth * 0.7,
+                                child: Text(
+                                  selectedVideoFile?.name ?? 'اختر ملف فيديو',
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeightHelper.medium,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              Gap(16.h),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final double iconWidth = 22.sp;
+                  final double gapWidth = 8.w;
+                  final double textMaxWidth =
+                      constraints.maxWidth - iconWidth - gapWidth;
+                  return SizedBox(
+                    width: constraints.maxWidth,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        GestureDetector(
+                          onTap: pickResourceFiles,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Icon(Icons.attach_file,
+                                  color: AppColors.primary, size: iconWidth),
+                              Gap(gapWidth),
+                              SizedBox(
+                                width: textMaxWidth > 0
+                                    ? textMaxWidth
+                                    : constraints.maxWidth * 0.7,
+                                child: Text(
+                                  selectedResourceFiles.isEmpty
+                                      ? 'اختر ملفات الموارد'
+                                      : selectedResourceFiles.length == 1
+                                          ? selectedResourceFiles.first.name
+                                          : '${selectedResourceFiles.length} ملفات مختارة',
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeightHelper.medium,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              Gap(16.h),
+            ],
+            if (editContentTypeController.text == 'text') ...[
+              CustomText(
+                text: 'محتوى الدرس',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeightHelper.medium,
+                  color: AppColors.black,
+                ),
+              ),
+              Gap(8.h),
+              AppTextFormField(
+                controller: editContentController,
+                hintText: 'أدخل محتوى الدرس',
+                maxLines: 5,
+                validator: (value) {
+                  if (editContentTypeController.text == 'text' &&
+                      (value == null || value.trim().isEmpty)) {
+                    return 'يرجى إدخال محتوى الدرس';
+                  }
+                  return null;
+                },
+              ),
+              Gap(16.h),
+            ],
             CustomText(
               text: 'ترتيب الدرس',
               style: TextStyle(
@@ -418,30 +572,6 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
               },
             ),
             Gap(16.h),
-
-            // Duration Estimate
-            CustomText(
-              text: 'المدة التقديرية',
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeightHelper.medium,
-                color: AppColors.black,
-              ),
-            ),
-            Gap(8.h),
-            AppTextFormField(
-              controller: editDurationEstimateController,
-              hintText: 'أدخل المدة التقديرية',
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'يرجى إدخال المدة التقديرية';
-                }
-                return null;
-              },
-            ),
-            Gap(16.h),
-
-            // Is Previewable Switch
             Row(
               children: [
                 Switch(
@@ -465,8 +595,6 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
               ],
             ),
             Gap(24.h),
-
-            // Save Button
             SizedBox(
               width: double.infinity,
               child: CustomButton(
@@ -495,10 +623,7 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
 
                 // Clear controllers
                 courseNameController.clear();
-                contentController.clear();
-                sourceController.clear();
                 orderController.clear();
-                durationController.clear();
 
                 // Refresh lessons list
                 context.read<GetLessonsCubit>().getLessons(widget.courseId);
@@ -560,9 +685,11 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (context) => const LoadingWidget(
-                    loadingState: true,
-                    backgroundColor: AppColors.transparent,
+                  builder: (context) => const Center(
+                    child: LoadingWidget(
+                      loadingState: true,
+                      backgroundColor: AppColors.white,
+                    ),
                   ),
                 );
               },
@@ -609,9 +736,11 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (context) => const LoadingWidget(
-                    loadingState: true,
-                    backgroundColor: AppColors.transparent,
+                  builder: (context) => const Center(
+                    child: LoadingWidget(
+                      loadingState: true,
+                      backgroundColor: AppColors.white,
+                    ),
                   ),
                 );
               },
@@ -693,14 +822,269 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
 
                   // Show add lecture form if adding lecture and not editing
                   if (isAddingLecture && !isEditingLesson)
-                    AddLectureFormWidget(
-                      courseNameController: courseNameController,
-                      contentController: contentController,
-                      sourceController: sourceController,
-                      orderController: orderController,
-                      durationController: durationController,
-                      addLecture: addLecture,
-                      onUploadPressed: pickFile,
+                    Container(
+                      margin: EdgeInsets.all(8.w),
+                      padding: EdgeInsets.all(16.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha((0.1 * 255).toInt()),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            text: 'إضافة درس جديد',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeightHelper.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          Divider(height: 16.h),
+                          Gap(8.h),
+                          CustomText(
+                            text: 'عنوان الدرس',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeightHelper.medium,
+                              color: AppColors.black,
+                            ),
+                          ),
+                          Gap(8.h),
+                          AppTextFormField(
+                            controller: courseNameController,
+                            hintText: 'أدخل عنوان الدرس',
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'يرجى إدخال عنوان الدرس';
+                              }
+                              return null;
+                            },
+                          ),
+                          Gap(16.h),
+                          CustomText(
+                            text: 'نوع المحتوى',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeightHelper.medium,
+                              color: AppColors.black,
+                            ),
+                          ),
+                          Gap(8.h),
+                          DropdownButtonFormField<String>(
+                            value: selectedContentType,
+                            focusColor: AppColors.primary,
+                            items: const [
+                              DropdownMenuItem(
+                                  value: 'video', child: Text('فيديو')),
+                              DropdownMenuItem(
+                                  value: 'text', child: Text('نص')),
+                            ],
+                            onChanged: (v) {
+                              setState(() {
+                                selectedContentType = v!;
+                              });
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'اختر نوع المحتوى',
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: AppColors.primary, width: 2),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: AppColors.primary, width: 2),
+                              ),
+                            ),
+                          ),
+                          Gap(16.h),
+                          if (selectedContentType == 'video') ...[
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                final double iconWidth = 22.sp;
+                                final double gapWidth = 8.w;
+                                final double textMaxWidth =
+                                    constraints.maxWidth - iconWidth - gapWidth;
+                                return SizedBox(
+                                  width: constraints.maxWidth,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: pickVideoFile,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Icon(Icons.video_file,
+                                                color: AppColors.primary,
+                                                size: iconWidth),
+                                            Gap(gapWidth),
+                                            SizedBox(
+                                              width: textMaxWidth > 0
+                                                  ? textMaxWidth
+                                                  : constraints.maxWidth * 0.7,
+                                              child: Text(
+                                                selectedVideoFile?.name ??
+                                                    'اختر ملف فيديو',
+                                                style: TextStyle(
+                                                  fontSize: 16.sp,
+                                                  color: AppColors.primary,
+                                                  fontWeight:
+                                                      FontWeightHelper.medium,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                            Gap(16.h),
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                final double iconWidth = 22.sp;
+                                final double gapWidth = 8.w;
+                                final double textMaxWidth =
+                                    constraints.maxWidth - iconWidth - gapWidth;
+                                return SizedBox(
+                                  width: constraints.maxWidth,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: pickResourceFiles,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Icon(Icons.attach_file,
+                                                color: AppColors.primary,
+                                                size: iconWidth),
+                                            Gap(gapWidth),
+                                            SizedBox(
+                                              width: textMaxWidth > 0
+                                                  ? textMaxWidth
+                                                  : constraints.maxWidth * 0.7,
+                                              child: Text(
+                                                selectedResourceFiles.isEmpty
+                                                    ? 'اختر ملفات الموارد'
+                                                    : selectedResourceFiles
+                                                                .length ==
+                                                            1
+                                                        ? selectedResourceFiles
+                                                            .first.name
+                                                        : '${selectedResourceFiles.length} ملفات مختارة',
+                                                style: TextStyle(
+                                                  fontSize: 16.sp,
+                                                  color: AppColors.primary,
+                                                  fontWeight:
+                                                      FontWeightHelper.medium,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                            Gap(16.h),
+                          ],
+                          if (selectedContentType == 'text') ...[
+                            CustomText(
+                              text: 'محتوى الدرس',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeightHelper.medium,
+                                color: AppColors.black,
+                              ),
+                            ),
+                            Gap(8.h),
+                            AppTextFormField(
+                              controller: lessonContentController,
+                              hintText: 'أدخل محتوى الدرس',
+                              maxLines: 5,
+                              validator: (value) {
+                                if (selectedContentType == 'text' &&
+                                    (value == null || value.trim().isEmpty)) {
+                                  return 'يرجى إدخال محتوى الدرس';
+                                }
+                                return null;
+                              },
+                            ),
+                            Gap(16.h),
+                          ],
+                          CustomText(
+                            text: 'ترتيب الدرس',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeightHelper.medium,
+                              color: AppColors.black,
+                            ),
+                          ),
+                          Gap(8.h),
+                          AppTextFormField(
+                            controller: orderController,
+                            hintText: 'أدخل ترتيب الدرس',
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'يرجى إدخال ترتيب الدرس';
+                              }
+                              if (int.tryParse(value) == null) {
+                                return 'يرجى إدخال رقم صحيح';
+                              }
+                              return null;
+                            },
+                          ),
+                          Gap(16.h),
+                          Row(
+                            children: [
+                              Switch(
+                                value: isPreviewableAdd,
+                                activeColor: AppColors.primary,
+                                onChanged: (val) {
+                                  setState(() {
+                                    isPreviewableAdd = val;
+                                  });
+                                },
+                              ),
+                              Gap(8.w),
+                              CustomText(
+                                text: 'متاح للمعاينة',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeightHelper.regular,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Gap(24.h),
+                          SizedBox(
+                            width: double.infinity,
+                            child: CustomButton(
+                              labelText: 'إضافة الدرس',
+                              onTap: addLecture,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                   // Show edit form if in edit mode
@@ -713,8 +1097,9 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
                         loading: () => SizedBox(
                           height: 200.h,
                           child: const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.primary,
+                            child: LoadingWidget(
+                              loadingState: true,
+                              backgroundColor: AppColors.white,
                             ),
                           ),
                         ),
@@ -796,10 +1181,11 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
               builder: (context, state) {
                 return state.maybeWhen(
                   loading: () => Container(
-                    color: Colors.black.withAlpha((0.3 * 255).toInt()),
+                    color: Colors.black.withAlpha((0.15 * 255).toInt()),
                     child: const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
+                      child: LoadingWidget(
+                        loadingState: true,
+                        backgroundColor: AppColors.white,
                       ),
                     ),
                   ),
@@ -814,8 +1200,9 @@ class _CourseManagementContentState extends State<_CourseManagementContent> {
                   loading: () => Container(
                     color: Colors.black.withAlpha((0.3 * 255).toInt()),
                     child: const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
+                      child: LoadingWidget(
+                        loadingState: true,
+                        backgroundColor: AppColors.white,
                       ),
                     ),
                   ),

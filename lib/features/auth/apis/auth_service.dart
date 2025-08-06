@@ -6,6 +6,9 @@ import 'package:masarat/features/auth/login/data/models/login_request_body.dart'
 import 'package:masarat/features/auth/login/data/models/login_response.dart';
 import 'package:masarat/features/auth/signup/data/models/create_account_request_body.dart';
 import 'package:masarat/features/auth/signup/data/models/create_account_response.dart';
+import 'package:masarat/features/auth/forget_password/data/models/send_otp_request_body.dart';
+import 'package:masarat/features/auth/forget_password/data/models/reset_password_otp_request_body.dart';
+import 'package:masarat/features/auth/forget_password/data/models/success_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'auth_service.g.dart';
@@ -42,10 +45,15 @@ abstract class AuthenticationService {
     @Part(name: 'file') File file,
   );
 
-  // @POST(AuthenticationApiConstants.forget)
-  // Future<ForgetPasswordResponse> forgetPassword(
-  //   @Body() ForgetPasswordRequest forgetPasswordRequest,
-  // );
+  @POST(AuthenticationApiConstants.sendOtp)
+  Future<SuccessResponse> sendOtp(
+    @Body() SendOtpRequestBody sendOtpRequestBody,
+  );
+
+  @POST(AuthenticationApiConstants.resetPasswordOtp)
+  Future<SuccessResponse> resetPasswordWithOtp(
+    @Body() ResetPasswordOtpRequestBody resetPasswordOtpRequestBody,
+  );
 
   // Profile API is now handled by ProfileService
 }
