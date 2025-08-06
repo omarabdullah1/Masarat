@@ -15,7 +15,6 @@ import 'package:masarat/features/instructor/data/models/course/instructor_course
 import 'package:masarat/features/instructor/data/models/course/update_course_request_body.dart';
 import 'package:masarat/features/instructor/data/models/course/update_course_response.dart';
 
-import '../models/add_lesson/add_lesson_request_body.dart';
 import '../models/add_lesson/add_lesson_response.dart';
 import '../models/category/category_model.dart';
 import '../models/course/create_course_request_body.dart';
@@ -193,17 +192,6 @@ class InstructorRepo {
     }
   }
 
-  Future<ApiResult<AddLessonResponse>> addLesson(
-      AddLessonRequestBody requestBody) async {
-    try {
-      final response = await _apiService.addLesson(requestBody);
-      return ApiResult.success(response);
-    } catch (error, stackTrace) {
-      log('Add Lesson error: $error', stackTrace: stackTrace);
-      return ApiResult.failure(ApiErrorHandler.handle(error));
-    }
-  }
-
   Future<ApiResult<InstructorCoursesResponse>> getPublishedCourses({
     String? categoryId,
     String? level,
@@ -246,8 +234,7 @@ class InstructorRepo {
 
   Future<ApiResult<void>> deleteCourse(String courseId) async {
     try {
-      // Use the same endpoint as updateCourse but with DELETE method
-      final response = await _apiService.deleteCourse(courseId);
+      await _apiService.deleteCourse(courseId);
       return const ApiResult.success(null);
     } catch (error, stackTrace) {
       log('Delete Course error: $error', stackTrace: stackTrace);
@@ -316,14 +303,13 @@ class InstructorRepo {
         final formData = FormData();
         formData.files.add(MapEntry(
           'videoFile',
-          MultipartFile.fromBytes(
-            fileBytes,
+          await MultipartFile.fromFile(
+            videoFile.path,
             filename: filename,
-            // Use smaller chunk size to avoid hanging on large data chunks
-            contentType: MediaType.parse('video/*'),
+            contentType: MediaType.parse(
+                'video/mp4'), // Use the actual MIME type if known
           ),
         ));
-
         log('Sending upload request with stall detection');
         final stopwatch = Stopwatch()..start();
 
@@ -429,5 +415,35 @@ class InstructorRepo {
       ApiErrorHandler.handle(lastError ??
           Exception('Failed to upload video after $attempts attempts')),
     );
+  }
+
+  /// Add lesson with multipart/form-data (video file + resources) using InstructorService
+  Future<ApiResult<AddLessonResponse>> addLessonMultipart({
+    required String title,
+    required String contentType,
+    required String courseId,
+    required int order,
+    required bool isPreviewable,
+    File? videoFile,
+    List<File> resources = const [],
+    String? content,
+  }) async {
+    try {
+      final response = await _apiService.addLessonMultipart(
+        title,
+        contentType,
+        courseId,
+        order.toString(),
+        isPreviewable.toString(),
+        videoFile,
+        resources.isNotEmpty ? resources : null,
+        content,
+      );
+      return ApiResult.success(response);
+    } catch (error, stackTrace) {
+      log('Add Lesson (multipart, service) error: $error',
+          stackTrace: stackTrace);
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
   }
 }

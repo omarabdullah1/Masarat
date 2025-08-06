@@ -1,8 +1,6 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -11,6 +9,7 @@ import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/image_url_helper.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CourseCard extends StatelessWidget {
   // Optional text for the secondary action
@@ -97,12 +96,14 @@ class CourseCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(
-                        text: title,
+                      Text(
+                        title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 12.sp,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Gap(5.h),
                       if (havePrice) ...[
@@ -138,7 +139,8 @@ class CourseCard extends StatelessWidget {
                       if (verificationStatus != null) ...[
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 4.h),
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8.w, vertical: 4.h),
                           decoration: BoxDecoration(
                             color: _getStatusColor(verificationStatus!),
                             borderRadius: BorderRadius.circular(12.r),

@@ -242,7 +242,8 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                                     'assets/icons/edit_icon.svg',
                                     width: 16,
                                     height: 16,
-                                    color: Colors.white,
+                                    colorFilter: const ColorFilter.mode(
+                                        AppColors.white, BlendMode.srcIn),
                                   ),
                                 ),
                               ),

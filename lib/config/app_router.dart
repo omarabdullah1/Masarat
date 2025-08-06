@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/di/dependency_injection.dart';
+import 'package:masarat/features/auth/forget_password/logic/cubit/forget_password_cubit.dart';
+import 'package:masarat/features/auth/forget_password/ui/screens/forgot_password_screen.dart';
+import 'package:masarat/features/auth/forget_password/ui/screens/otp_verification_screen.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/login/ui/screens/login_screen.dart';
 import 'package:masarat/features/auth/signup/logic/cubit/register_cubit.dart';
@@ -63,6 +66,23 @@ final GoRouter router = GoRouter(
         return BlocProvider(
           create: (context) => getIt<LoginCubit>(),
           child: LoginScreen(isTrainer: isTrainer),
+        );
+      },
+    ),
+    // Forget Password Route
+    GoRoute(
+      path: AppRoute.forgetPassword,
+      name: AppRoute.forgetPassword,
+      builder: (context, state) => const ForgotPasswordScreen(),
+        ),
+    // OTP Verification Route
+    GoRoute(
+      path: AppRoute.otpVerificationScreen,
+      name: AppRoute.otpVerificationScreen,
+      builder: (context, state) {
+        return BlocProvider(
+          create: (context) => getIt<ForgetPasswordCubit>(),
+          child: const OtpVerificationScreen(),
         );
       },
     ),

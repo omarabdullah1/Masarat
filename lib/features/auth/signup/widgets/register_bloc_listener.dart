@@ -1,8 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:masarat/core/utils/app_colors.dart';
-import 'dart:developer';
 
 import '../../../../../core/widgets/loading_widget.dart';
 import '../../../../core/widgets/styled_toast.dart';
@@ -24,8 +25,10 @@ class RegisterBlocListener extends StatelessWidget {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               showDialog(
                 context: context,
-                builder: (context) => const LoadingWidget(
-                  loadingState: true,
+                builder: (context) => const Center(
+                  child: LoadingWidget(
+                    loadingState: true,
+                  ),
                 ),
               );
             });

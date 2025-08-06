@@ -706,7 +706,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen>
               width: 120.r,
               height: 120.r,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withAlpha((0.1 * 255).toInt()),
                 shape: BoxShape.circle,
               ),
               child: Icon(

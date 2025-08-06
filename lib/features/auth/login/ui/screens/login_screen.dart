@@ -14,9 +14,9 @@ import 'package:masarat/core/widgets/app_text_form_field.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
+import 'package:masarat/features/auth/forget_password/ui/screens/forgot_password_screen.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_cubit.dart';
 import 'package:masarat/features/auth/login/logic/cubit/login_state.dart';
-import 'package:masarat/features/auth/login/ui/screens/forgot_password_screen.dart';
 
 import '../widgets/login_bloc_listener.dart';
 
@@ -53,9 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
               LoginBlocListener(
                 isTrainer: widget.isTrainer,
               ),
-              Gap(10.h),
+              Gap(0.h),
               _buildRememberMeAndForgotPasswordRow(),
-              Gap(10.h),
+              Gap(15.h),
               _buildLoginButton(),
               Gap(30.h),
               _buildDividerWithText(),
@@ -150,25 +150,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildRememberMeAndForgotPasswordRow() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Row(
-          children: [
-            Checkbox(
-              activeColor: AppColors.primary,
-              value: rememberMe,
-              onChanged: (bool? value) {
-                setState(() {
-                  rememberMe = value ?? false;
-                });
-              },
-            ),
-            CustomText(
-              text: 'تذكرني لمدة 30 يوم',
-              style: TextStyles.font10GrayRegular,
-            ),
-          ],
-        ),
         GestureDetector(
           onTap: () {
             Navigator.push(

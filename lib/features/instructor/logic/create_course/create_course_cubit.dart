@@ -14,10 +14,7 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
   final InstructorRepo _instructorRepo;
 
   CreateCourseCubit(this._instructorRepo)
-      : super(const CreateCourseState.initial()) {
-    // Load categories when cubit is created
-    loadCategories();
-  }
+      : super(const CreateCourseState.initial());
 
   // Form controllers
   final TextEditingController titleController = TextEditingController();
@@ -169,7 +166,8 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
   }
 
   // Update course
-  Future<void> updateCourse({required String courseId, PlatformFile? coverImage}) async {
+  Future<void> updateCourse(
+      {required String courseId, PlatformFile? coverImage}) async {
     log('updateCourse method called');
 
     // Log form field values for debugging
@@ -251,7 +249,8 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
       return;
     }
 
-    final result = await _instructorRepo.updateCourse(courseId, updateCourseRequestBody);
+    final result =
+        await _instructorRepo.updateCourse(courseId, updateCourseRequestBody);
 
     result.when(
       success: (course) {

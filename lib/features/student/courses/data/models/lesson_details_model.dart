@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:json_annotation/json_annotation.dart';
 
 // Removed unused imports
@@ -89,7 +91,7 @@ class LessonDetailsModel {
       cdnUrl = '$cdnUrl?token=$token';
     }
 
-    print('Generated M3U URL (CDN format): $cdnUrl');
+    log('Generated M3U URL (CDN format): $cdnUrl');
 
     // This is the correct format based on the provided example:
     // https://vz-d81d8c7d-6eb.b-cdn.net/d234d488-f7d1-4077-b236-3e7cf69c1359/playlist.m3u8
