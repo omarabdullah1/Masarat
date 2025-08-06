@@ -22,6 +22,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../../core/widgets/app_text_form_field.dart';
 import '../../../../../core/widgets/course_card_widget.dart';
 import '../../../../../core/widgets/custom_drawer.dart';
+import '../../../data/models/course/instructor_courses_response.dart';
 
 class InstructorHomeScreen extends StatefulWidget {
   const InstructorHomeScreen({super.key});
@@ -125,6 +126,7 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                 return state.maybeWhen(
                   loading: () => Skeletonizer(
                     child: ListView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       itemCount: 6,
                       itemBuilder: (context, index) {
@@ -162,19 +164,7 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                       },
                     ),
                   ),
-                  success: (coursesResponse) {
-                    if (coursesResponse.courses.isEmpty) {
-                      return Center(
-                        child: CustomText(
-                          text: 'لا توجد دورات منشورة',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: AppColors.gray,
-                          ),
-                        ),
-                      );
-                    }
-
+                  success: (InstructorCoursesResponse coursesResponse) {
                     // Filter courses if search query is not empty
                     final List<instructor.CourseModel> filteredCourses =
                         _searchQuery.isEmpty
@@ -185,6 +175,34 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                                     .contains(_searchQuery.toLowerCase()))
                                 .toList();
 
+                    if (filteredCourses.isEmpty) {
+                      // Always allow scroll and refresh even if empty
+                      return RefreshIndicator(
+                        color: AppColors.primary,
+                        onRefresh: () async {
+                          await context
+                              .read<InstructorCoursesCubit>()
+                              .getPublishedCourses();
+                        },
+                        child: ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          children: [
+                            SizedBox(height: 64.h),
+                            Center(
+                              child: CustomText(
+                                text: 'لا توجد دورات منشورة',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: AppColors.gray,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
                     return RefreshIndicator(
                       color: AppColors.primary,
                       onRefresh: () async {
@@ -193,6 +211,7 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                             .getPublishedCourses();
                       },
                       child: ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         itemCount: filteredCourses.length,
                         itemBuilder: (context, index) {
@@ -216,7 +235,10 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                               actions: [
                                 Expanded(
                                   child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
+                                      // Edit button
                                       Expanded(
                                         flex: 5,
                                         child: CustomButton(
@@ -238,15 +260,16 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                                         ),
                                       ),
                                       SizedBox(width: 8.w),
+                                      // Delete button
                                       Expanded(
                                         flex: 1,
-                                        child: GestureDetector(
+                                        child: InkWell(
                                           onTap: () {
                                             _showDeleteConfirmationDialog(
                                                 context, course);
                                           },
                                           child: Container(
-                                            height: 27.h,
+                                            height: 20.h,
                                             decoration: BoxDecoration(
                                               color: AppColors.background,
                                               borderRadius:
@@ -259,6 +282,38 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
                                                 Icons.delete_outline,
                                                 color: AppColors.red,
                                                 size: 16.sp,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      // Enter icon button
+                                      Expanded(
+                                        flex: 1,
+                                        child: InkWell(
+                                          onTap: () {
+                                            context.goNamed(
+                                              AppRoute.trainerCourseDetails,
+                                              pathParameters: {
+                                                'courseid': course.id
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 20.h,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.background,
+                                              borderRadius:
+                                                  BorderRadius.circular(58.r),
+                                              border: Border.all(
+                                                  color: AppColors.primary),
+                                            ),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: AppColors.primary,
+                                                size: 15.sp,
                                               ),
                                             ),
                                           ),
@@ -327,7 +382,6 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
     }
   }
 
-  // Show confirmation dialog before deleting a course
   void _showDeleteConfirmationDialog(
       BuildContext context, instructor.CourseModel course) {
     showDialog(
@@ -340,8 +394,8 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          content: CustomText(
-            text: 'هل أنت متأكد من حذف الدورة التدريبية "${course.title}"؟',
+          content: Text(
+            'هل أنت متأكد من حذف الدورة التدريبية "${course.title}"؟',
           ),
           actions: [
             TextButton(
@@ -355,30 +409,44 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
             ),
             TextButton(
               onPressed: () async {
+                final scaffoldMessenger =
+                    ScaffoldMessenger.of(context); // Get reference here
+
                 Navigator.of(dialogContext).pop(); // Close the dialog
 
-                // Show loading indicator
-                ScaffoldMessenger.of(context).showSnackBar(
+                if (!mounted) return;
+
+                // Add a small delay to ensure the dialog is closed
+                await Future.delayed(const Duration(milliseconds: 100));
+
+                if (!mounted) return;
+
+                scaffoldMessenger.showSnackBar(
                   const SnackBar(
                     content: Text('جاري حذف الدورة...'),
                     duration: Duration(seconds: 2),
                   ),
                 );
 
-                // Call the delete method from the cubit
-                final success = await context
-                    .read<InstructorCoursesCubit>()
-                    .deleteCourse(course.id);
+                final instructorCoursesCubit = (context.mounted)
+                    ? context.read<InstructorCoursesCubit>()
+                    : throw StateError('Context is no longer valid');
+                final success =
+                    await instructorCoursesCubit.deleteCourse(course.id);
+
+                if (!mounted) return;
+
+                scaffoldMessenger.hideCurrentSnackBar();
 
                 if (success) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  scaffoldMessenger.showSnackBar(
                     const SnackBar(
                       content: Text('تم حذف الدورة بنجاح'),
                       backgroundColor: Colors.green,
                     ),
                   );
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  scaffoldMessenger.showSnackBar(
                     const SnackBar(
                       content: Text('فشل في حذف الدورة'),
                       backgroundColor: Colors.red,

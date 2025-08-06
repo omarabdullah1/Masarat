@@ -10,7 +10,7 @@ LessonModel _$LessonModelFromJson(Map<String, dynamic> json) => LessonModel(
       id: json['_id'] as String,
       title: json['title'] as String,
       contentType: json['contentType'] as String,
-      content: json['content'] as String,
+      content: json['content'] as String?,
       order: (json['order'] as num).toInt(),
       durationEstimate:
           LessonModel._durationEstimateFromJson(json['durationEstimate']),

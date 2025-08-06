@@ -35,6 +35,8 @@ import 'package:masarat/features/student/profile/data/apis/student_profile_servi
 import 'package:masarat/features/student/profile/data/repositories/student_profile_repository.dart';
 import 'package:masarat/features/student/profile/logic/cubit/student_profile_cubit.dart';
 
+import '../../features/auth/forget_password/data/repos/forget_password_repo.dart';
+import '../../features/auth/forget_password/logic/cubit/forget_password_cubit.dart';
 import '../../features/auth/signup/logic/cubit/register_cubit.dart';
 import '../../features/student/cart/logic/student_cart/student_cart_cubit.dart';
 import '../../features/student/payment/presentation/cubits/payment_cubit.dart';
@@ -139,5 +141,11 @@ Future<void> setupGetIt() async {
     ..registerFactory<LessonDetailsCubit>(() => LessonDetailsCubit(getIt()))
     ..registerFactory<StudentCartCubit>(() => StudentCartCubit(getIt()))
     ..registerFactory<PaymentCubit>(
-        () => PaymentCubit(getIt<StudentCartRepo>()));
+        () => PaymentCubit(getIt<StudentCartRepo>()))
+    ..registerLazySingleton<ForgetPasswordRepo>(
+      () => ForgetPasswordRepo(getIt()),
+    )
+    ..registerLazySingleton<ForgetPasswordCubit>(
+      () => ForgetPasswordCubit(getIt<ForgetPasswordRepo>()),
+    );
 }

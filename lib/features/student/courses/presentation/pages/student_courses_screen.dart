@@ -15,6 +15,7 @@ import 'package:masarat/core/widgets/custom_button.dart';
 import 'package:masarat/core/widgets/custom_drawer.dart';
 import 'package:masarat/core/widgets/custom_scaffold.dart';
 import 'package:masarat/core/widgets/custom_text.dart';
+import 'package:masarat/core/widgets/loading_widget.dart';
 import 'package:masarat/features/student/cart/logic/student_cart/student_cart_cubit.dart';
 import 'package:masarat/features/student/cart/logic/student_cart/student_cart_state.dart';
 import 'package:masarat/features/student/courses/logic/training_courses/training_courses_cubit.dart';
@@ -74,20 +75,25 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
                 nonNullMessage.contains('already in') ||
                 nonNullMessage.toLowerCase().contains('already in your cart');
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(nonNullMessage),
-            backgroundColor:
-                isAlreadyInCartMessage || success ? Colors.orange : Colors.red,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(nonNullMessage),
+              backgroundColor: isAlreadyInCartMessage || success
+                  ? Colors.orange
+                  : Colors.red,
+            ),
+          );
+        }
       } else if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
 
         debugPrint('After adding - Success: $success');
 
@@ -108,12 +114,14 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
         // Optionally refresh cart in background (not blocking navigation)
         cartCubit.getCart();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('فشل في إضافة الدورة إلى السلة'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('فشل في إضافة الدورة إلى السلة'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     });
   }
@@ -149,23 +157,27 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
             nonNullMessage.contains('موجودة بالفعل') ||
                 nonNullMessage.contains('already in') ||
                 nonNullMessage.toLowerCase().contains('already in your cart');
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(nonNullMessage),
-            backgroundColor:
-                isAlreadyInCartMessage || success ? Colors.orange : Colors.red,
-          ),
-        );
-        context.goNamed(AppRoute.shoppingCart);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(nonNullMessage),
+              backgroundColor: isAlreadyInCartMessage || success
+                  ? Colors.orange
+                  : Colors.red,
+            ),
+          );
+          context.goNamed(AppRoute.shoppingCart);
+        }
       } else if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        context.goNamed(AppRoute.shoppingCart);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          context.goNamed(AppRoute.shoppingCart);
+        }
 
         debugPrint('After adding - Success: $success');
 
@@ -184,16 +196,20 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
         });
 
         // Navigate to the cart screen immediately after success
-        context.goNamed(AppRoute.shoppingCart);
+        if (context.mounted) {
+          context.goNamed(AppRoute.shoppingCart);
+        }
         // Optionally refresh cart in background (not blocking navigation)
         cartCubit.getCart();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('فشل في إضافة الدورة إلى السلة'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('فشل في إضافة الدورة إلى السلة'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     });
   }
@@ -287,7 +303,10 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
                         child: Text('ابدأ البحث عن الدورات'),
                       ),
                       loading: () => const Center(
-                        child: CircularProgressIndicator(),
+                        child: LoadingWidget(
+                          loadingState: true,
+                          backgroundColor: AppColors.white,
+                        ),
                       ),
                       success: (courses) {
                         if (courses.isEmpty) {
@@ -295,92 +314,101 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
                             child: Text('لا توجد دورات متاحة'),
                           );
                         }
-                        return ListView.builder(
-                          itemCount: courses.length,
-                          itemBuilder: (context, index) {
-                            final course = courses[index];
-                            return GestureDetector(
-                              onTap: () {
-                                context.goNamed(
-                                  AppRoute.courseDetails,
-                                  pathParameters: {'courseid': course.id},
-                                  extra:
-                                      course, // Pass the entire course object
-                                );
-                              },
-                              child: CourseCard(
-                                title: course.title,
-                                hours:
-                                    'عدد الساعات : ${course.durationEstimate}',
-                                lectures:
-                                    'عدد المحاضرات: ${course.lessons.length}',
-                                image: course.coverImageUrl,
-                                actions: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: BlocBuilder<StudentCartCubit,
-                                            StudentCartState>(
-                                          bloc: cartCubit,
-                                          builder: (context, cartState) {
-                                            // Don't check the cart state at all for UI
-                                            // Always show the default appearance of the button
-
-                                            debugPrint(
-                                                'Buy button - Course ${course.id}');
-
-                                            return CustomButton(
-                                              height: 27.h,
-                                              radius: 58.r,
-                                              labelText:
-                                                  'شــراء ${course.price} ر.س',
-                                              buttonColor: AppColors.primary,
-                                              textColor: AppColors.white,
-                                              onTap: () => _addToCartBuy(
-                                                  context, course.id),
-                                              textFontSize: 7.sp,
-                                              fontWeight:
-                                                  FontWeightHelper.light,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(width: 5.w),
-                                      Expanded(
-                                        child: BlocBuilder<StudentCartCubit,
-                                            StudentCartState>(
-                                          bloc: cartCubit,
-                                          builder: (context, cartState) {
-                                            // Don't check the cart state at all for UI
-                                            // Always show the default appearance of the button
-
-                                            debugPrint(
-                                                'Add to cart button - Course ${course.id}');
-
-                                            return CustomButton(
-                                              height: 27.h,
-                                              labelText: 'إضافة للسلة',
-                                              radius: 58.r,
-                                              buttonColor: AppColors.background,
-                                              textColor: AppColors.yellow,
-                                              onTap: () => _addToCart(
-                                                  context, course.id),
-                                              textFontSize: 7.sp,
-                                              borderColor: AppColors.yellow,
-                                              fontWeight:
-                                                  FontWeightHelper.light,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                                onSecondaryAction: () {},
-                                secondaryActionText: 'مشاهدة أول محاضرة مجاناً',
-                              ),
-                            );
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            await context
+                                .read<TrainingCoursesCubit>()
+                                .getCourses();
                           },
+                          child: ListView.builder(
+                            itemCount: courses.length,
+                            itemBuilder: (context, index) {
+                              final course = courses[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  context.goNamed(
+                                    AppRoute.courseDetails,
+                                    pathParameters: {'courseid': course.id},
+                                    extra:
+                                        course, // Pass the entire course object
+                                  );
+                                },
+                                child: CourseCard(
+                                  title: course.title,
+                                  hours:
+                                      'عدد الساعات : ${course.durationEstimate}',
+                                  lectures:
+                                      'عدد المحاضرات: ${course.lessons.length}',
+                                  image: course.coverImageUrl,
+                                  actions: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: BlocBuilder<StudentCartCubit,
+                                              StudentCartState>(
+                                            bloc: cartCubit,
+                                            builder: (context, cartState) {
+                                              // Don't check the cart state at all for UI
+                                              // Always show the default appearance of the button
+
+                                              debugPrint(
+                                                  'Buy button - Course ${course.id}');
+
+                                              return CustomButton(
+                                                height: 27.h,
+                                                radius: 58.r,
+                                                labelText:
+                                                    'شــراء ${course.price} ر.س',
+                                                buttonColor: AppColors.primary,
+                                                textColor: AppColors.white,
+                                                onTap: () => _addToCartBuy(
+                                                    context, course.id),
+                                                textFontSize: 7.sp,
+                                                fontWeight:
+                                                    FontWeightHelper.light,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(width: 5.w),
+                                        Expanded(
+                                          child: BlocBuilder<StudentCartCubit,
+                                              StudentCartState>(
+                                            bloc: cartCubit,
+                                            builder: (context, cartState) {
+                                              // Don't check the cart state at all for UI
+                                              // Always show the default appearance of the button
+
+                                              debugPrint(
+                                                  'Add to cart button - Course ${course.id}');
+
+                                              return CustomButton(
+                                                height: 27.h,
+                                                labelText: 'إضافة للسلة',
+                                                radius: 58.r,
+                                                buttonColor:
+                                                    AppColors.background,
+                                                textColor: AppColors.yellow,
+                                                onTap: () => _addToCart(
+                                                    context, course.id),
+                                                textFontSize: 7.sp,
+                                                borderColor: AppColors.yellow,
+                                                fontWeight:
+                                                    FontWeightHelper.light,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                  onSecondaryAction: () {},
+                                  secondaryActionText:
+                                      'مشاهدة أول محاضرة مجاناً',
+                                ),
+                              );
+                            },
+                          ),
                         );
                       },
                       error: (message) => Center(

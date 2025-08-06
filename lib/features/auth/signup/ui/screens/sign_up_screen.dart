@@ -17,6 +17,8 @@ import 'package:masarat/core/widgets/custom_text.dart';
 import 'package:masarat/features/auth/signup/logic/cubit/register_cubit.dart';
 import 'package:masarat/features/auth/signup/logic/cubit/register_state.dart';
 
+import '../../../../../core/widgets/loading_widget.dart';
+
 class SignUpScreen extends StatefulWidget {
   final bool isTrainer;
 
@@ -47,15 +49,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             // Show loading indicator
             showDialog(
               context: context,
-              barrierDismissible: false,
-              builder: (context) => AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const CircularProgressIndicator(),
-                    Gap(20.h),
-                    const Text('جارٍ إنشاء الحساب...'),
-                  ],
+              builder: (context) => const Center(
+                child: LoadingWidget(
+                  loadingState: true,
+                  backgroundColor: AppColors.white,
                 ),
               ),
             );
@@ -75,6 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 backgroundColor: Colors.green,
               ),
             );
+
             // Navigate to login screen after successful registration
             Future.delayed(const Duration(seconds: 2), () {
               if (context.mounted) {
@@ -234,22 +232,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
             validator: AppValidator.emptyValidator,
             controller: cubit.workEntityController,
           ),
-          _buildAcademicDegreeField(),
           _buildFormField(
             label: 'الهوية',
             hintText: 'أدخل رقم الهوية',
             validator: AppValidator.emptyValidator,
             controller: cubit.idController,
           ),
+          _buildAcademicDegreeField(),
         ],
+
         _buildPasswordField(),
-        _buildFormField(
-          label: 'تأكيد كلمة السر',
-          hintText: 'أعد إدخال كلمة السر',
-          isObscureText: true,
-          validator: AppValidator.passwordValidator,
-          controller: cubit.confirmPasswordController,
-        ),
+        _buildPasswordConfirmationField(),
+        // _buildFormField(
+        //   label: 'تأكيد كلمة السر',
+        //   hintText: 'أعد إدخال كلمة السر',
+        //   isObscureText: true,
+        //   validator: AppValidator.passwordValidator,
+        //   controller: cubit.confirmPasswordController,
+        // ),
       ],
     );
   }
@@ -258,7 +258,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     required String label,
     required String hintText,
     required String? Function(String?) validator,
-    TextEditingController? controller,
+    required TextEditingController? controller,
     Widget? suffixIcon,
     bool? enabled,
     bool isObscureText = false,
@@ -373,6 +373,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
               },
               child: Icon(
                 isPasswordObscured ? Icons.visibility_off : Icons.visibility,
+                color: AppColors.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPasswordConfirmationField() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: CustomText(
+              text: 'تأكيد كلمة السر',
+              style: TextStyles.font12GrayRegular,
+            ),
+          ),
+          Gap(5.h),
+          AppTextFormField(
+            hintText: 'أعد إدخال كلمة السر',
+            isObscureText: isPasswordObscured,
+            validator: AppValidator.passwordValidator,
+            backgroundColor: AppColors.white,
+            controller: cubit.confirmPasswordController,
+            suffixIcon: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isPasswordObscured = !isPasswordObscured;
+                });
+              },
+              child: Icon(
+                isPasswordObscured ? Icons.visibility_off : Icons.visibility,
+                color: AppColors.primary,
               ),
             ),
           ),
@@ -413,11 +451,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       if (cubit.phoneController.text.isEmpty) {
         _showErrorSnackBar('يرجى إدخال رقم التواصل');
-        return;
-      }
-
-      if (cubit.idController.text.isEmpty) {
-        _showErrorSnackBar('يرجى إدخال رقم الهوية');
         return;
       }
 
@@ -464,6 +497,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           _showErrorSnackBar('يرجى إدخال جهة العمل');
           return;
         }
+
+        if (cubit.idController.text.isEmpty) {
+          _showErrorSnackBar('يرجى إدخال رقم الهوية');
+          return;
+        }
       }
 
       // Academic degree file is optional for now since the upload endpoint seems to be missing
@@ -478,7 +516,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: cubit.passwordController.text,
         phone: cubit.phoneController.text,
         email: cubit.emailController.text,
-        idNumber: cubit.idController.text,
+        idNumber: widget.isTrainer ? cubit.idController.text : '',
       );
     }
   }

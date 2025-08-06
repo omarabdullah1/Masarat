@@ -31,9 +31,11 @@ class AddLessonBlocListener extends StatelessWidget {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (context) => const LoadingWidget(
-                  loadingState: true,
-                  backgroundColor: AppColors.transparent,
+                builder: (context) => const Center(
+                  child: LoadingWidget(
+                    loadingState: true,
+                    backgroundColor: AppColors.transparent,
+                  ),
                 ),
               );
             });

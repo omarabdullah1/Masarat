@@ -6,7 +6,6 @@ import 'package:masarat/features/instructor/data/models/course/update_course_req
 import 'package:masarat/features/instructor/data/models/course/update_course_response.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../models/add_lesson/add_lesson_request_body.dart';
 import '../models/add_lesson/add_lesson_response.dart';
 import '../models/category/category_model.dart';
 import '../models/course/create_course_request_body.dart';
@@ -46,11 +45,6 @@ abstract class InstructorService {
   @GET(InstructorApiConstants.categories)
   Future<List<CategoryModel>> getCategories();
 
-  @POST(InstructorApiConstants.addLesson)
-  Future<AddLessonResponse> addLesson(
-    @Body() AddLessonRequestBody addLessonRequestBody,
-  );
-
   @GET('${InstructorApiConstants.getLessons}/{courseId}')
   Future<List<LessonModel>> getLessons(
     @Path("courseId") String courseId,
@@ -78,5 +72,19 @@ abstract class InstructorService {
   Future<dynamic> uploadLessonVideo(
     @Path("lessonId") String lessonId,
     @Part() File videoFile,
+  );
+
+  /// Add lesson with multipart/form-data (video file + resources)
+  @MultiPart()
+  @POST(InstructorApiConstants.addLesson)
+  Future<AddLessonResponse> addLessonMultipart(
+    @Part(name: 'title') String title,
+    @Part(name: 'contentType') String contentType,
+    @Part(name: 'courseId') String courseId,
+    @Part(name: 'order') String order,
+    @Part(name: 'isPreviewable') String isPreviewable,
+    @Part() File? videoFile,
+    @Part() List<File>? resources,
+    @Part(name: 'content') String? content,
   );
 }

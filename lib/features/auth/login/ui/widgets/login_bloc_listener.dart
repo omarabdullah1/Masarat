@@ -27,9 +27,11 @@ class LoginBlocListener extends StatelessWidget {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               showDialog(
                 context: context,
-                builder: (context) => const LoadingWidget(
-                  loadingState: true,
-                  backgroundColor: AppColors.transparent,
+                builder: (context) => const Center(
+                  child: LoadingWidget(
+                    loadingState: true,
+                    backgroundColor: AppColors.white,
+                  ),
                 ),
               );
             });

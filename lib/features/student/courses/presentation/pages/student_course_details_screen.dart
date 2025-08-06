@@ -179,8 +179,8 @@ class StudentCourseDetailsScreen extends StatelessWidget {
 
   // Course Description
   Widget _buildCourseDescription(String description) {
-    return CustomText(
-      text: description,
+    return Text(
+      description,
       style: TextStyle(
         fontSize: 14.sp,
         color: Colors.black87,
@@ -271,30 +271,36 @@ class StudentCourseDetailsScreen extends StatelessWidget {
                 nonNullMessage.toLowerCase().contains('already in your cart');
 
         // Show the specific error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(nonNullMessage),
-            backgroundColor: isAlreadyInCartMessage || success
-                ? Colors.orange // Orange for "already in cart" warnings
-                : Colors.red, // Red for actual errors
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(nonNullMessage),
+              backgroundColor: isAlreadyInCartMessage || success
+                  ? Colors.orange // Orange for "already in cart" warnings
+                  : Colors.red, // Red for actual errors
+            ),
+          );
+        }
       } else if (success) {
         // Normal success case
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
       } else {
         // Generic failure case (shouldn't reach here if errors are properly handled)
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('فشل في إضافة الدورة إلى السلة'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('فشل في إضافة الدورة إلى السلة'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     });
   }
@@ -327,23 +333,27 @@ class StudentCourseDetailsScreen extends StatelessWidget {
             nonNullMessage.contains('موجودة بالفعل') ||
                 nonNullMessage.contains('already in') ||
                 nonNullMessage.toLowerCase().contains('already in your cart');
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(nonNullMessage),
-            backgroundColor:
-                isAlreadyInCartMessage || success ? Colors.orange : Colors.red,
-          ),
-        );
-        context.goNamed(AppRoute.shoppingCart);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(nonNullMessage),
+              backgroundColor: isAlreadyInCartMessage || success
+                  ? Colors.orange
+                  : Colors.red,
+            ),
+          );
+          context.goNamed(AppRoute.shoppingCart);
+        }
       } else if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        context.goNamed(AppRoute.shoppingCart);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تمت إضافة الدورة إلى السلة بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          context.goNamed(AppRoute.shoppingCart);
+        }
 
         debugPrint('After adding - Success: $success');
 
@@ -363,16 +373,20 @@ class StudentCourseDetailsScreen extends StatelessWidget {
         });
 
         // Navigate to the cart screen immediately after success
-        context.goNamed(AppRoute.shoppingCart);
+        if (context.mounted) {
+          context.goNamed(AppRoute.shoppingCart);
+        }
         // Optionally refresh cart in background (not blocking navigation)
         cartCubit.getCart();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('فشل في إضافة الدورة إلى السلة'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('فشل في إضافة الدورة إلى السلة'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     });
   }

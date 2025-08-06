@@ -102,7 +102,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     hintText: 'أدخل وصف الدورة',
                     controller: cubit.descriptionController,
                     validator: _requiredValidator,
-                    maxLines: 3,
+                    maxLines: 6,
                   ),
 
                   // Category Dropdown
@@ -223,7 +223,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+              border: Border.all(
+                  color: AppColors.primary.withAlpha((0.2 * 255).toInt())),
             ),
             child: _coverImage == null
                 ? (isEditMode && widget.course?.coverImageUrl != null
@@ -300,7 +301,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                  border: Border.all(
+                      color: AppColors.primary.withAlpha((0.2 * 255).toInt())),
                 ),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
@@ -326,10 +328,12 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.08),
+                              color: AppColors.primary
+                                  .withAlpha((0.08 * 255).toInt()),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                  color: AppColors.primary.withOpacity(0.2)),
+                                  color: AppColors.primary
+                                      .withAlpha((0.2 * 255).toInt())),
                             ),
                             child: TextField(
                               controller:
@@ -522,25 +526,28 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
         ),
         Gap(8.h),
         BlocBuilder<CreateCourseCubit, CreateCourseState>(
-          buildWhen: (previous, current) =>
-              current is LoadingCategories ||
-              current is CategoriesLoaded ||
-              current is CategoriesError ||
-              previous is LoadingCategories,
           builder: (context, state) {
             return state.maybeWhen(
-              loadingCategories: () => _buildLoadingCategoriesWidget(),
-              categoriesLoaded: (categories) =>
-                  _buildCategoryDropdownWidget(categories),
-              categoriesError: (error) => _buildCategoryErrorWidget(error),
+              loadingCategories: () {
+                log('Category State: loadingCategories');
+                return _buildLoadingCategoriesWidget();
+              },
+              categoriesLoaded: (categories) {
+                log('Category State: categoriesLoaded');
+                return _buildCategoryDropdownWidget(categories);
+              },
+              categoriesError: (error) {
+                log('Category State: categoriesError');
+                return _buildCategoryErrorWidget(error);
+              },
               orElse: () {
-                // Access categories directly from cubit as a fallback
+                log('Category State: fallback orElse');
                 final categories = cubit.categories;
-
-                // Show loading if categories are empty (assuming they're being loaded)
                 if (categories.isEmpty) {
+                  log('Category State: fallback loading (categories empty)');
                   return _buildLoadingCategoriesWidget();
                 } else {
+                  log('Category State: fallback loaded (categories present)');
                   return _buildCategoryDropdownWidget(categories);
                 }
               },

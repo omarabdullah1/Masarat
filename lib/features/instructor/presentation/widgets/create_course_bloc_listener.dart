@@ -14,8 +14,7 @@ import 'package:masarat/features/instructor/logic/instructor_courses/instructor_
 
 class CreateCourseBlocListener extends StatelessWidget {
   final bool isEditMode;
-  const CreateCourseBlocListener({Key? key, this.isEditMode = false})
-      : super(key: key);
+  const CreateCourseBlocListener({super.key, this.isEditMode = false});
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +32,10 @@ class CreateCourseBlocListener extends StatelessWidget {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (context) => const LoadingWidget(
-                  loadingState: true,
+                builder: (context) => const Center(
+                  child: LoadingWidget(
+                    loadingState: true,
+                  ),
                 ),
               );
             });
@@ -61,7 +62,18 @@ class CreateCourseBlocListener extends StatelessWidget {
               // Navigate to instructor home screen after success
               if (context.mounted) {
                 GoRouter.of(context).go(AppRoute.instructorCoursesManagement);
-                context.read<InstructorCoursesCubit>().getPublishedCourses();
+                // Ensure InstructorCoursesCubit is available in the widget tree
+                // before attempting to read it.
+                // This typically means it should be provided higher up in the widget tree.
+                // For example, in a MultiBlocProvider or a direct BlocProvider.
+                // If it's already provided, this line should work.
+                // If not, you need to add BlocProvider<InstructorCoursesCubit> somewhere above this widget.
+                try {
+                  context.read<InstructorCoursesCubit>().getPublishedCourses();
+                } catch (e) {
+                  log('Error: Could not find InstructorCoursesCubit: $e');
+                  // Optionally, show a user-friendly error or handle it gracefully
+                }
               }
             });
           },

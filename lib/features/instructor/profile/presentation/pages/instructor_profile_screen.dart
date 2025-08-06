@@ -334,7 +334,7 @@ class _ProfileFormState extends State<_ProfileForm> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).toInt()),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -460,7 +460,8 @@ class _ProfileFormState extends State<_ProfileForm> {
                             AppImage.editIcon,
                             width: 16,
                             height: 16,
-                            color: Colors.white,
+                            colorFilter: const ColorFilter.mode(
+                                AppColors.white, BlendMode.srcIn),
                           ),
                         ),
                       ),

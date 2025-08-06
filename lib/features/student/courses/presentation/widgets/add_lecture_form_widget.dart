@@ -4,21 +4,25 @@ import 'package:masarat/core/utils/app_colors.dart';
 class AddLectureFormWidget extends StatelessWidget {
   const AddLectureFormWidget({
     required this.courseNameController,
-    required this.contentController,
-    required this.sourceController,
+    required this.orderController,
     required this.addLecture,
+    required this.onPickVideo,
+    required this.onPickResources,
+    required this.isPreviewable,
+    required this.onPreviewableChanged,
+    this.selectedVideoName,
+    this.selectedResourceNames = const [],
     super.key,
-    this.orderController,
-    this.durationController,
-    this.onUploadPressed,
   });
   final TextEditingController courseNameController;
-  final TextEditingController contentController;
-  final TextEditingController sourceController;
-  final TextEditingController? orderController;
-  final TextEditingController? durationController;
+  final TextEditingController orderController;
   final VoidCallback addLecture;
-  final VoidCallback? onUploadPressed;
+  final VoidCallback onPickVideo;
+  final VoidCallback onPickResources;
+  final String? selectedVideoName;
+  final List<String> selectedResourceNames;
+  final bool isPreviewable;
+  final ValueChanged<bool> onPreviewableChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +58,12 @@ class AddLectureFormWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            // Order field
             TextField(
-              controller: contentController,
-              maxLines: 3,
+              controller: orderController,
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: 'رابط المحتوى (فيديو/صوت)',
+                labelText: 'ترتيب الدرس',
                 iconColor: AppColors.primary,
                 fillColor: AppColors.white,
                 labelStyle: TextStyle(color: AppColors.gray),
@@ -75,69 +80,56 @@ class AddLectureFormWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            if (orderController != null)
-              TextField(
-                controller: orderController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'ترتيب الدرس',
-                  iconColor: AppColors.primary,
-                  fillColor: AppColors.white,
-                  labelStyle: TextStyle(color: AppColors.gray),
-                  filled: true,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.primary),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.primary),
+            // Is Previewable switch
+            Row(
+              children: [
+                Switch(
+                  value: isPreviewable,
+                  onChanged: onPreviewableChanged,
+                  activeColor: AppColors.primary,
+                ),
+                const SizedBox(width: 8),
+                const Text('متاح للمعاينة',
+                    style: TextStyle(fontSize: 14, color: AppColors.gray)),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Video file picker
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    selectedVideoName != null && selectedVideoName!.isNotEmpty
+                        ? 'ملف الفيديو: $selectedVideoName'
+                        : 'لم يتم اختيار ملف فيديو',
+                    style: const TextStyle(fontSize: 14, color: AppColors.gray),
                   ),
                 ),
-              ),
-            if (orderController != null) const SizedBox(height: 16),
-            if (durationController != null)
-              TextField(
-                controller: durationController,
-                decoration: const InputDecoration(
-                  labelText: 'مدة الدرس المقدرة (مثال: 10 دقائق)',
-                  iconColor: AppColors.primary,
-                  fillColor: AppColors.white,
-                  labelStyle: TextStyle(color: AppColors.gray),
-                  filled: true,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.primary),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.primary),
+                IconButton(
+                  icon: const Icon(Icons.video_file, color: AppColors.primary),
+                  onPressed: onPickVideo,
+                  tooltip: 'اختر ملف فيديو',
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            // Resources file picker
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    selectedResourceNames.isNotEmpty
+                        ? 'ملفات الموارد: ${selectedResourceNames.join(", ")}'
+                        : 'لم يتم اختيار ملفات موارد',
+                    style: const TextStyle(fontSize: 14, color: AppColors.gray),
                   ),
                 ),
-              ),
-            if (durationController != null) const SizedBox(height: 16),
-            TextField(
-              controller: sourceController,
-              decoration: InputDecoration(
-                labelText: 'مصادر إضافية (اختياري)',
-                iconColor: AppColors.primary,
-                fillColor: AppColors.white,
-                labelStyle: const TextStyle(color: AppColors.gray),
-                filled: true,
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.upload, color: AppColors.primary),
-                  onPressed: onUploadPressed,
+                IconButton(
+                  icon: const Icon(Icons.attach_file, color: AppColors.primary),
+                  onPressed: onPickResources,
+                  tooltip: 'اختر ملفات موارد',
                 ),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.primary),
-                ),
-                border: const OutlineInputBorder(),
-              ),
+              ],
             ),
             const SizedBox(height: 16),
             Center(

@@ -29,11 +29,3 @@ CheckoutRootResponse _$CheckoutRootResponseFromJson(
       redirectUrl: json['redirectUrl'] as String,
       orderId: json['orderId'] as String,
     );
-
-Map<String, dynamic> _$CheckoutRootResponseToJson(
-        CheckoutRootResponse instance) =>
-    <String, dynamic>{
-      'success': instance.success,
-      'redirectUrl': instance.redirectUrl,
-      'orderId': instance.orderId,
-    };
