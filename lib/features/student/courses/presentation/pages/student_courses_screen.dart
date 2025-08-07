@@ -315,6 +315,7 @@ class _StudentCoursesScreenState extends State<StudentCoursesScreen> {
                           );
                         }
                         return RefreshIndicator(
+                          color: AppColors.primary,
                           onRefresh: () async {
                             await context
                                 .read<TrainingCoursesCubit>()
