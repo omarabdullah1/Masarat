@@ -1,9 +1,17 @@
 # Masarat Mobile App
 
-[![Flutter Version](https://img.shields.io/badge/Flutter-3.19.0-blue.svg)](https://flutter.dev/)
-[![Dart Version](https://img.shields.io/badge/Dart-3.3.0-blue.svg)](https://dart.dev/)
+[![Flutter](https://img.shields.io/badge/Flutter-3.19.0-blue.svg?style=for-the-badge&logo=flutter)](https://flutter.dev/)
+[![Dart](https://img.shields.io/badge/Dart-3.3.0-blue.svg?style=for-the-badge&logo=dart)](https://dart.dev/)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-25D366?style=for-the-badge&logo=apple)](https://flutter.dev/)
+[![Download on the App Store](https://img.shields.io/badge/Download_on_the_App_Store-0D96F6?style=for-the-badge&logo=apple&logoColor=white)](https://apps.apple.com/us/app/wardaya/id6741480542)
 
 Masarat is a comprehensive learning platform mobile application built with Flutter. It supports multiple user roles including students and instructors, offering a feature-rich educational experience.
+
+---
+
+## 🤩 App Preview
+
+![Masarat](https://github.com/user-attachments/assets/2abb970e-44ce-436a-8d53-63384f401b12)
 
 ---
 
