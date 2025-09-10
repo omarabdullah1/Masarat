@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:masarat/features/auth/apis/auth_service.dart';
+import 'package:masarat/features/auth/apis/delete_account_request_body.dart';
 import 'package:masarat/features/instructor/profile/data/apis/instructor_profile_service.dart';
 import 'package:masarat/features/instructor/profile/data/models/instructor_profile_response.dart';
 
 class InstructorProfileRepository {
   final InstructorProfileService _profileService;
+  final AuthenticationService _authService;
 
-  InstructorProfileRepository(this._profileService);
+  InstructorProfileRepository(this._profileService, this._authService);
 
   Future<InstructorProfileResponse> getProfile() async {
     final response = await _profileService.getProfile();
@@ -53,5 +56,23 @@ class InstructorProfileRepository {
       return InstructorProfileResponse.fromJson(response['user']);
     }
     throw Exception('Invalid response format');
+  }
+
+  Future<void> deleteAccount(String password) async {
+    try {
+      final requestBody = DeleteAccountRequestBody(password: password);
+      await _authService.deleteAccount(requestBody);
+    } catch (e) {
+      // Extract only the message from the API response
+      if (e is DioException && e.response?.data != null) {
+        final responseData = e.response!.data;
+        if (responseData is Map<String, dynamic> &&
+            responseData.containsKey('message')) {
+          throw Exception(responseData['message']);
+        }
+      }
+      // If we can't extract the message, rethrow the original error
+      rethrow;
+    }
   }
 }

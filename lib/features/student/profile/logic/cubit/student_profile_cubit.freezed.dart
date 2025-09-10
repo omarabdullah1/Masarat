@@ -23,6 +23,7 @@ mixin _$StudentProfileState {
     required TResult Function(StudentProfileResponse profile) loaded,
     required TResult Function(String message) error,
     required TResult Function() updateSuccess,
+    required TResult Function() deleteSuccess,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -32,6 +33,7 @@ mixin _$StudentProfileState {
     TResult? Function(StudentProfileResponse profile)? loaded,
     TResult? Function(String message)? error,
     TResult? Function()? updateSuccess,
+    TResult? Function()? deleteSuccess,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -41,6 +43,7 @@ mixin _$StudentProfileState {
     TResult Function(StudentProfileResponse profile)? loaded,
     TResult Function(String message)? error,
     TResult Function()? updateSuccess,
+    TResult Function()? deleteSuccess,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -51,6 +54,7 @@ mixin _$StudentProfileState {
     required TResult Function(_Loaded value) loaded,
     required TResult Function(_Error value) error,
     required TResult Function(_UpdateSuccess value) updateSuccess,
+    required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,6 +64,7 @@ mixin _$StudentProfileState {
     TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Error value)? error,
     TResult? Function(_UpdateSuccess value)? updateSuccess,
+    TResult? Function(_DeleteSuccess value)? deleteSuccess,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -69,6 +74,7 @@ mixin _$StudentProfileState {
     TResult Function(_Loaded value)? loaded,
     TResult Function(_Error value)? error,
     TResult Function(_UpdateSuccess value)? updateSuccess,
+    TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -141,6 +147,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(StudentProfileResponse profile) loaded,
     required TResult Function(String message) error,
     required TResult Function() updateSuccess,
+    required TResult Function() deleteSuccess,
   }) {
     return initial();
   }
@@ -153,6 +160,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(StudentProfileResponse profile)? loaded,
     TResult? Function(String message)? error,
     TResult? Function()? updateSuccess,
+    TResult? Function()? deleteSuccess,
   }) {
     return initial?.call();
   }
@@ -165,6 +173,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(StudentProfileResponse profile)? loaded,
     TResult Function(String message)? error,
     TResult Function()? updateSuccess,
+    TResult Function()? deleteSuccess,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -181,6 +190,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Loaded value) loaded,
     required TResult Function(_Error value) error,
     required TResult Function(_UpdateSuccess value) updateSuccess,
+    required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
     return initial(this);
   }
@@ -193,6 +203,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Error value)? error,
     TResult? Function(_UpdateSuccess value)? updateSuccess,
+    TResult? Function(_DeleteSuccess value)? deleteSuccess,
   }) {
     return initial?.call(this);
   }
@@ -205,6 +216,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Loaded value)? loaded,
     TResult Function(_Error value)? error,
     TResult Function(_UpdateSuccess value)? updateSuccess,
+    TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -264,6 +276,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(StudentProfileResponse profile) loaded,
     required TResult Function(String message) error,
     required TResult Function() updateSuccess,
+    required TResult Function() deleteSuccess,
   }) {
     return loading();
   }
@@ -276,6 +289,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(StudentProfileResponse profile)? loaded,
     TResult? Function(String message)? error,
     TResult? Function()? updateSuccess,
+    TResult? Function()? deleteSuccess,
   }) {
     return loading?.call();
   }
@@ -288,6 +302,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(StudentProfileResponse profile)? loaded,
     TResult Function(String message)? error,
     TResult Function()? updateSuccess,
+    TResult Function()? deleteSuccess,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -304,6 +319,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Loaded value) loaded,
     required TResult Function(_Error value) error,
     required TResult Function(_UpdateSuccess value) updateSuccess,
+    required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
     return loading(this);
   }
@@ -316,6 +332,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Error value)? error,
     TResult? Function(_UpdateSuccess value)? updateSuccess,
+    TResult? Function(_DeleteSuccess value)? deleteSuccess,
   }) {
     return loading?.call(this);
   }
@@ -328,6 +345,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Loaded value)? loaded,
     TResult Function(_Error value)? error,
     TResult Function(_UpdateSuccess value)? updateSuccess,
+    TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -414,6 +432,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(StudentProfileResponse profile) loaded,
     required TResult Function(String message) error,
     required TResult Function() updateSuccess,
+    required TResult Function() deleteSuccess,
   }) {
     return loaded(profile);
   }
@@ -426,6 +445,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(StudentProfileResponse profile)? loaded,
     TResult? Function(String message)? error,
     TResult? Function()? updateSuccess,
+    TResult? Function()? deleteSuccess,
   }) {
     return loaded?.call(profile);
   }
@@ -438,6 +458,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(StudentProfileResponse profile)? loaded,
     TResult Function(String message)? error,
     TResult Function()? updateSuccess,
+    TResult Function()? deleteSuccess,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -454,6 +475,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_Loaded value) loaded,
     required TResult Function(_Error value) error,
     required TResult Function(_UpdateSuccess value) updateSuccess,
+    required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
     return loaded(this);
   }
@@ -466,6 +488,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Error value)? error,
     TResult? Function(_UpdateSuccess value)? updateSuccess,
+    TResult? Function(_DeleteSuccess value)? deleteSuccess,
   }) {
     return loaded?.call(this);
   }
@@ -478,6 +501,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_Loaded value)? loaded,
     TResult Function(_Error value)? error,
     TResult Function(_UpdateSuccess value)? updateSuccess,
+    TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -572,6 +596,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function(StudentProfileResponse profile) loaded,
     required TResult Function(String message) error,
     required TResult Function() updateSuccess,
+    required TResult Function() deleteSuccess,
   }) {
     return error(message);
   }
@@ -584,6 +609,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function(StudentProfileResponse profile)? loaded,
     TResult? Function(String message)? error,
     TResult? Function()? updateSuccess,
+    TResult? Function()? deleteSuccess,
   }) {
     return error?.call(message);
   }
@@ -596,6 +622,7 @@ class _$ErrorImpl implements _Error {
     TResult Function(StudentProfileResponse profile)? loaded,
     TResult Function(String message)? error,
     TResult Function()? updateSuccess,
+    TResult Function()? deleteSuccess,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -612,6 +639,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function(_Loaded value) loaded,
     required TResult Function(_Error value) error,
     required TResult Function(_UpdateSuccess value) updateSuccess,
+    required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
     return error(this);
   }
@@ -624,6 +652,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Error value)? error,
     TResult? Function(_UpdateSuccess value)? updateSuccess,
+    TResult? Function(_DeleteSuccess value)? deleteSuccess,
   }) {
     return error?.call(this);
   }
@@ -636,6 +665,7 @@ class _$ErrorImpl implements _Error {
     TResult Function(_Loaded value)? loaded,
     TResult Function(_Error value)? error,
     TResult Function(_UpdateSuccess value)? updateSuccess,
+    TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -703,6 +733,7 @@ class _$UpdateSuccessImpl implements _UpdateSuccess {
     required TResult Function(StudentProfileResponse profile) loaded,
     required TResult Function(String message) error,
     required TResult Function() updateSuccess,
+    required TResult Function() deleteSuccess,
   }) {
     return updateSuccess();
   }
@@ -715,6 +746,7 @@ class _$UpdateSuccessImpl implements _UpdateSuccess {
     TResult? Function(StudentProfileResponse profile)? loaded,
     TResult? Function(String message)? error,
     TResult? Function()? updateSuccess,
+    TResult? Function()? deleteSuccess,
   }) {
     return updateSuccess?.call();
   }
@@ -727,6 +759,7 @@ class _$UpdateSuccessImpl implements _UpdateSuccess {
     TResult Function(StudentProfileResponse profile)? loaded,
     TResult Function(String message)? error,
     TResult Function()? updateSuccess,
+    TResult Function()? deleteSuccess,
     required TResult orElse(),
   }) {
     if (updateSuccess != null) {
@@ -743,6 +776,7 @@ class _$UpdateSuccessImpl implements _UpdateSuccess {
     required TResult Function(_Loaded value) loaded,
     required TResult Function(_Error value) error,
     required TResult Function(_UpdateSuccess value) updateSuccess,
+    required TResult Function(_DeleteSuccess value) deleteSuccess,
   }) {
     return updateSuccess(this);
   }
@@ -755,6 +789,7 @@ class _$UpdateSuccessImpl implements _UpdateSuccess {
     TResult? Function(_Loaded value)? loaded,
     TResult? Function(_Error value)? error,
     TResult? Function(_UpdateSuccess value)? updateSuccess,
+    TResult? Function(_DeleteSuccess value)? deleteSuccess,
   }) {
     return updateSuccess?.call(this);
   }
@@ -767,6 +802,7 @@ class _$UpdateSuccessImpl implements _UpdateSuccess {
     TResult Function(_Loaded value)? loaded,
     TResult Function(_Error value)? error,
     TResult Function(_UpdateSuccess value)? updateSuccess,
+    TResult Function(_DeleteSuccess value)? deleteSuccess,
     required TResult orElse(),
   }) {
     if (updateSuccess != null) {
@@ -778,4 +814,133 @@ class _$UpdateSuccessImpl implements _UpdateSuccess {
 
 abstract class _UpdateSuccess implements StudentProfileState {
   const factory _UpdateSuccess() = _$UpdateSuccessImpl;
+}
+
+/// @nodoc
+abstract class _$$DeleteSuccessImplCopyWith<$Res> {
+  factory _$$DeleteSuccessImplCopyWith(
+          _$DeleteSuccessImpl value, $Res Function(_$DeleteSuccessImpl) then) =
+      __$$DeleteSuccessImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$DeleteSuccessImplCopyWithImpl<$Res>
+    extends _$StudentProfileStateCopyWithImpl<$Res, _$DeleteSuccessImpl>
+    implements _$$DeleteSuccessImplCopyWith<$Res> {
+  __$$DeleteSuccessImplCopyWithImpl(
+      _$DeleteSuccessImpl _value, $Res Function(_$DeleteSuccessImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of StudentProfileState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$DeleteSuccessImpl implements _DeleteSuccess {
+  const _$DeleteSuccessImpl();
+
+  @override
+  String toString() {
+    return 'StudentProfileState.deleteSuccess()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$DeleteSuccessImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(StudentProfileResponse profile) loaded,
+    required TResult Function(String message) error,
+    required TResult Function() updateSuccess,
+    required TResult Function() deleteSuccess,
+  }) {
+    return deleteSuccess();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(StudentProfileResponse profile)? loaded,
+    TResult? Function(String message)? error,
+    TResult? Function()? updateSuccess,
+    TResult? Function()? deleteSuccess,
+  }) {
+    return deleteSuccess?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(StudentProfileResponse profile)? loaded,
+    TResult Function(String message)? error,
+    TResult Function()? updateSuccess,
+    TResult Function()? deleteSuccess,
+    required TResult orElse(),
+  }) {
+    if (deleteSuccess != null) {
+      return deleteSuccess();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Error value) error,
+    required TResult Function(_UpdateSuccess value) updateSuccess,
+    required TResult Function(_DeleteSuccess value) deleteSuccess,
+  }) {
+    return deleteSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Error value)? error,
+    TResult? Function(_UpdateSuccess value)? updateSuccess,
+    TResult? Function(_DeleteSuccess value)? deleteSuccess,
+  }) {
+    return deleteSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Error value)? error,
+    TResult Function(_UpdateSuccess value)? updateSuccess,
+    TResult Function(_DeleteSuccess value)? deleteSuccess,
+    required TResult orElse(),
+  }) {
+    if (deleteSuccess != null) {
+      return deleteSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _DeleteSuccess implements StudentProfileState {
+  const factory _DeleteSuccess() = _$DeleteSuccessImpl;
 }

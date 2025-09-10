@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:masarat/config/app_route.dart';
+import 'package:masarat/core/helpers/shared_pref_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/widgets/app_text_form_field.dart';
 import 'package:masarat/core/widgets/custom_button.dart';
@@ -103,6 +106,25 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                 ),
               );
             },
+            deleteSuccess: () async {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('تم حذف الحساب بنجاح'),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+
+              // Clear all shared preferences and secured data
+              await SharedPrefHelper.clearAllData();
+              await SharedPrefHelper.clearAllSecuredData();
+
+              // Navigate to onboarding screen
+              if (context.mounted) {
+                context.go(AppRoute.onboarding);
+              }
+            },
           );
         },
         builder: (context, state) {
@@ -116,6 +138,16 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
               error: (msg) => msg,
               orElse: () => 'حدث خطأ غير متوقع',
             );
+
+            // Don't show error screen for delete account errors - let the listener handle it as toast
+            if (errorMsg.contains('كلمة المرور غير صحيحة') ||
+                errorMsg.contains('فشل في حذف الحساب') ||
+                errorMsg.contains('Incorrect password') ||
+                errorMsg.contains('Account deletion failed')) {
+              // Return the normal form instead of error screen
+              return _buildNormalForm(context, cubit, state);
+            }
+
             return CustomScaffold(
               haveAppBar: true,
               backgroundColorAppColor: AppColors.background,
@@ -167,191 +199,240 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
             orElse: () {},
           );
 
-          return CustomScaffold(
-            haveAppBar: true,
-            backgroundColorAppColor: AppColors.background,
-            backgroundColor: AppColors.background,
-            drawerIconColor: AppColors.primary,
-            drawer: const CustomDrawer(),
-            actions: [
-              IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: Icon(
-                  Icons.arrow_forward_ios_sharp,
-                  color: Theme.of(context).iconTheme.color,
-                  size: 20.sp,
-                ),
-              ),
-            ],
-            body: RefreshIndicator(
-              color: AppColors.primary,
-              onRefresh: () async {
-                await cubit.fetchProfile();
-              },
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          return _buildNormalForm(context, cubit, state);
+        },
+      ),
+    );
+  }
+
+  Widget _buildNormalForm(BuildContext context, StudentProfileCubit cubit,
+      StudentProfileState state) {
+    // Only update controllers if loaded and mounted, but NOT on updateSuccess
+    state.maybeWhen(
+      loaded: (profile) {
+        if (mounted) _updateControllersWithProfile(profile);
+      },
+      // Do nothing on updateSuccess to keep form values
+      updateSuccess: () {},
+      orElse: () {},
+    );
+
+    return CustomScaffold(
+      haveAppBar: true,
+      backgroundColorAppColor: AppColors.background,
+      backgroundColor: AppColors.background,
+      drawerIconColor: AppColors.primary,
+      drawer: const CustomDrawer(),
+      actions: [
+        IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(
+            Icons.arrow_forward_ios_sharp,
+            color: Theme.of(context).iconTheme.color,
+            size: 20.sp,
+          ),
+        ),
+      ],
+      body: RefreshIndicator(
+        color: AppColors.primary,
+        onRefresh: () async {
+          await cubit.fetchProfile();
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gap(20.h),
+              // Profile Image and Edit Icon with upload
+              Center(
+                child: Stack(
                   children: [
-                    Gap(20.h),
-                    // Profile Image and Edit Icon with upload
-                    Center(
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.primary,
+                          width: 2,
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        radius: 50.r,
+                        backgroundColor: Colors.white,
+                        backgroundImage: selectedProfileImage != null
+                            ? FileImage(selectedProfileImage!)
+                            : null,
+                        child: selectedProfileImage == null
+                            ? const Icon(
+                                Icons.person,
+                                size: 50,
                                 color: AppColors.primary,
-                                width: 2,
-                              ),
-                            ),
-                            child: CircleAvatar(
-                              radius: 50.r,
-                              backgroundColor: Colors.white,
-                              backgroundImage: selectedProfileImage != null
-                                  ? FileImage(selectedProfileImage!)
-                                  : null,
-                              child: selectedProfileImage == null
-                                  ? const Icon(
-                                      Icons.person,
-                                      size: 50,
-                                      color: AppColors.primary,
-                                    )
-                                  : null,
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: GestureDetector(
-                              onTap: pickProfileImage,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/edit_icon.svg',
-                                    width: 16,
-                                    height: 16,
-                                    colorFilter: const ColorFilter.mode(
-                                        AppColors.white, BlendMode.srcIn),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                              )
+                            : null,
                       ),
                     ),
-                    Gap(16.h),
-                    // Name
-                    Center(
-                      child: Text(
-                        '${firstNameController.text} ${lastNameController.text}',
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Gap(20.h),
-                    // Status Section (placeholder)
-                    // TODO: Implement buildStatusSection() if needed
-                    // buildStatusSection(),
-                    // Section Title
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.h),
-                      child: Text(
-                        'المعلومات الأساسية',
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    // ...existing code for form fields and buttons...
-                    AppTextFormField(
-                      controller: firstNameController,
-                      hintText: "الاسم الأول",
-                      validator: (value) => value?.isEmpty == true
-                          ? "الرجاء إدخال الاسم الأول"
-                          : null,
-                    ),
-                    Gap(20.h),
-                    AppTextFormField(
-                      controller: lastNameController,
-                      hintText: "اسم العائلة",
-                      validator: (value) => value?.isEmpty == true
-                          ? "الرجاء إدخال اسم العائلة"
-                          : null,
-                    ),
-                    Gap(20.h),
-                    AppTextFormField(
-                      controller: emailController,
-                      hintText: "البريد الإلكتروني",
-                      validator: (value) => value?.isEmpty == true
-                          ? "الرجاء إدخال البريد الإلكتروني"
-                          : null,
-                    ),
-                    Gap(20.h),
-                    // Phone field removed as it is not present in the response
-                    Gap(30.h),
-                    CustomButton(
-                      onTap: () {
-                        cubit.updateProfile(
-                          firstName: firstNameController.text,
-                          lastName: lastNameController.text,
-                          email: emailController.text,
-                          profileImage: selectedProfileImage,
-                        );
-                        ScaffoldMessenger.of(context).clearSnackBars();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('تم تحديث الملف الشخصي بنجاح'),
-                            backgroundColor: Colors.green,
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                      },
-                      height: 45.h,
-                      labelText: 'حفظ التعديلات',
-                      textFontSize: 16.sp,
-                      textColor: AppColors.white,
-                    ),
-                    Gap(20.h),
-                    Center(
+                    Positioned(
+                      right: 0,
+                      top: 0,
                       child: GestureDetector(
-                        onTap: () {
-                          // TODO: Implement delete account
-                        },
-                        child: Text(
-                          'حذف الحساب نهائياً',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.red,
-                            decoration: TextDecoration.underline,
+                        onTap: pickProfileImage,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 2,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: SvgPicture.asset(
+                              'assets/icons/edit_icon.svg',
+                              width: 16,
+                              height: 16,
+                              colorFilter: const ColorFilter.mode(
+                                  AppColors.white, BlendMode.srcIn),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    Gap(20.h),
                   ],
                 ),
               ),
-            ),
-          );
-        },
+              Gap(16.h),
+              // Name
+              Center(
+                child: Text(
+                  '${firstNameController.text} ${lastNameController.text}',
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Gap(20.h),
+              // Status Section (placeholder)
+              // TODO: Implement buildStatusSection() if needed
+              // buildStatusSection(),
+              // Section Title
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Text(
+                  'المعلومات الأساسية',
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              // ...existing code for form fields and buttons...
+              AppTextFormField(
+                controller: firstNameController,
+                hintText: "الاسم الأول",
+                validator: (value) =>
+                    value?.isEmpty == true ? "الرجاء إدخال الاسم الأول" : null,
+              ),
+              Gap(20.h),
+              AppTextFormField(
+                controller: lastNameController,
+                hintText: "اسم العائلة",
+                validator: (value) =>
+                    value?.isEmpty == true ? "الرجاء إدخال اسم العائلة" : null,
+              ),
+              Gap(20.h),
+              AppTextFormField(
+                controller: emailController,
+                hintText: "البريد الإلكتروني",
+                validator: (value) => value?.isEmpty == true
+                    ? "الرجاء إدخال البريد الإلكتروني"
+                    : null,
+              ),
+              Gap(20.h),
+              // Phone field removed as it is not present in the response
+              Gap(30.h),
+              CustomButton(
+                onTap: () {
+                  cubit.updateProfile(
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                    email: emailController.text,
+                    profileImage: selectedProfileImage,
+                  );
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('تم تحديث الملف الشخصي بنجاح'),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+                height: 45.h,
+                labelText: 'حفظ التعديلات',
+                textFontSize: 16.sp,
+                textColor: AppColors.white,
+              ),
+              Gap(20.h),
+              Center(
+                child: GestureDetector(
+                  onTap: () async {
+                    final passwordController = TextEditingController();
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('حذف الحساب'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                                'هل أنت متأكد من حذف حسابك؟ هذا الإجراء لا يمكن التراجع عنه.'),
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                labelText: 'كلمة المرور',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: const Text('إلغاء'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: const Text('حذف'),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (confirmed == true &&
+                        passwordController.text.isNotEmpty) {
+                      cubit.deleteAccount(passwordController.text);
+                    }
+                  },
+                  child: Text(
+                    'حذف الحساب نهائياً',
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: Colors.red,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+              Gap(20.h),
+            ],
+          ),
+        ),
       ),
     );
   }

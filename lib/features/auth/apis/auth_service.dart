@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:masarat/features/auth/apis/auth_api_constants.dart';
+import 'package:masarat/features/auth/apis/delete_account_request_body.dart';
+import 'package:masarat/features/auth/forget_password/data/models/reset_password_otp_request_body.dart';
+import 'package:masarat/features/auth/forget_password/data/models/send_otp_request_body.dart';
+import 'package:masarat/features/auth/forget_password/data/models/success_response.dart';
 import 'package:masarat/features/auth/login/data/models/login_request_body.dart';
 import 'package:masarat/features/auth/login/data/models/login_response.dart';
 import 'package:masarat/features/auth/signup/data/models/create_account_request_body.dart';
 import 'package:masarat/features/auth/signup/data/models/create_account_response.dart';
-import 'package:masarat/features/auth/forget_password/data/models/send_otp_request_body.dart';
-import 'package:masarat/features/auth/forget_password/data/models/reset_password_otp_request_body.dart';
-import 'package:masarat/features/auth/forget_password/data/models/success_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'auth_service.g.dart';
@@ -53,6 +54,11 @@ abstract class AuthenticationService {
   @POST(AuthenticationApiConstants.resetPasswordOtp)
   Future<SuccessResponse> resetPasswordWithOtp(
     @Body() ResetPasswordOtpRequestBody resetPasswordOtpRequestBody,
+  );
+
+  @DELETE(AuthenticationApiConstants.deleteAccount)
+  Future<dynamic> deleteAccount(
+    @Body() DeleteAccountRequestBody deleteRequestBody,
   );
 
   // Profile API is now handled by ProfileService

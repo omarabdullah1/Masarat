@@ -60,7 +60,8 @@ Future<void> setupGetIt() async {
       StudentProfileService(studentDio,
           baseUrl: StudentApiConstants.apiBaseUrl));
   getIt.registerLazySingleton<StudentProfileRepository>(() =>
-      StudentProfileRepository(getIt<StudentProfileService>(), studentDio));
+      StudentProfileRepository(getIt<StudentProfileService>(), studentDio,
+          getIt<AuthenticationService>()));
   getIt.registerLazySingleton<StudentProfileCubit>(
       () => StudentProfileCubit(getIt<StudentProfileRepository>()));
 
@@ -70,8 +71,9 @@ Future<void> setupGetIt() async {
     instructorDio.options.baseUrl = InstructorApiConstants.apiBaseUrl;
     return InstructorProfileService(instructorDio);
   });
-  getIt.registerFactory<InstructorProfileRepository>(
-      () => InstructorProfileRepository(getIt<InstructorProfileService>()));
+  getIt.registerFactory<InstructorProfileRepository>(() =>
+      InstructorProfileRepository(
+          getIt<InstructorProfileService>(), getIt<AuthenticationService>()));
   getIt.registerFactory<InstructorProfileCubit>(
       () => InstructorProfileCubit(getIt<InstructorProfileRepository>()));
 

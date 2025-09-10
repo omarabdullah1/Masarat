@@ -79,4 +79,24 @@ class InstructorProfileCubit extends Cubit<InstructorProfileState> {
       emit(const InstructorProfileState.error('An unexpected error occurred'));
     }
   }
+
+  Future<void> deleteAccount(String password) async {
+    try {
+      emit(const InstructorProfileState.loading());
+      await _repository.deleteAccount(password);
+      emit(const InstructorProfileState.deleteSuccess());
+    } catch (e) {
+      // Clean up the error message - remove "Exception:" prefix if present
+      String errorMessage = e.toString().replaceFirst('Exception: ', '');
+
+      // Provide user-friendly Arabic messages
+      if (errorMessage.contains('Incorrect password')) {
+        errorMessage = 'كلمة المرور غير صحيحة';
+      } else if (errorMessage.contains('Account deletion failed')) {
+        errorMessage = 'فشل في حذف الحساب';
+      }
+
+      emit(InstructorProfileState.error(errorMessage));
+    }
+  }
 }

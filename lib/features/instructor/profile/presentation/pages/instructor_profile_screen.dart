@@ -6,7 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:masarat/config/app_route.dart';
 import 'package:masarat/core/di/dependency_injection.dart';
+import 'package:masarat/core/helpers/shared_pref_helper.dart';
 import 'package:masarat/core/utils/app_colors.dart';
 import 'package:masarat/core/utils/app_validator.dart';
 import 'package:masarat/core/utils/constants/app_images.dart';
@@ -118,6 +121,26 @@ class _InstructorProfileContentState extends State<_InstructorProfileContent> {
                 ),
               );
             },
+            deleteSuccess: () async {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('تم حذف الحساب بنجاح'),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+
+              // Clear all shared preferences and secured data
+              await SharedPrefHelper.clearAllData();
+              await SharedPrefHelper.clearAllSecuredData();
+
+              // Navigate to onboarding screen
+              if (context.mounted) {
+                context.go(AppRoute
+                    .onboarding); // ignore: use_build_context_synchronously
+              }
+            },
           );
         },
         builder: (context, state) {
@@ -182,9 +205,27 @@ class _InstructorProfileContentState extends State<_InstructorProfileContent> {
                     profile: profile,
                   );
                 },
-                error: (message) => SizedBox(
+                error: (message) {
+                  // Don't show error screen for delete account errors - let the listener handle it as toast
+                  if (message.contains('كلمة المرور غير صحيحة') ||
+                      message.contains('فشل في حذف الحساب') ||
+                      message.contains('Incorrect password') ||
+                      message.contains('Account deletion failed')) {
+                    // Return the normal form instead of error screen
+                    final cubit = context.read<InstructorProfileCubit>();
+                    final currentProfile = cubit.profile;
+                    return _ProfileForm(
+                      profile: currentProfile ?? InstructorProfileResponse(),
+                    );
+                  }
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height - 100,
+                    child: Center(child: Text(message)),
+                  );
+                },
+                deleteSuccess: () => SizedBox(
                   height: MediaQuery.of(context).size.height - 100,
-                  child: Center(child: Text(message)),
+                  child: const Center(child: Text('تم حذف الحساب بنجاح')),
                 ),
                 orElse: () => const Center(
                   child: LoadingWidget(loadingState: true),
@@ -643,8 +684,45 @@ class _ProfileFormState extends State<_ProfileForm> {
             Gap(20.h),
             // Delete Account
             GestureDetector(
-              onTap: () {
-                // Handle account deletion
+              onTap: () async {
+                final passwordController = TextEditingController();
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('حذف الحساب'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                            'هل أنت متأكد من حذف حسابك؟ هذا الإجراء لا يمكن التراجع عنه.'),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            labelText: 'كلمة المرور',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('إلغاء'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('حذف'),
+                      ),
+                    ],
+                  ),
+                );
+                if (confirmed == true && passwordController.text.isNotEmpty) {
+                  context
+                      .read<InstructorProfileCubit>()
+                      .deleteAccount(passwordController.text);
+                }
               },
               child: const Text(
                 'حذف الحساب نهائياً',

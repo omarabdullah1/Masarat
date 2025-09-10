@@ -13,6 +13,7 @@ class AuthenticationApiConstants {
       'api/v1/auth/upload-academic-degree';
   static const String getProfile = 'api/v1/auth/me';
   static const String updateProfile = 'api/v1/users/me';
+  static const String deleteAccount = 'api/v1/users/me';
   static const String delete = 'api/v1/users/delete';
   static const String forget = 'api/v1/auth/forgot-password';
   static const String sendOtp = 'api/v1/auth/send-otp';
